@@ -67,16 +67,6 @@ problems as possible on a given file or directory:
 	<info>php %command.full_name% /path/to/dir</info>
 	<info>php %command.full_name% /path/to/file</info>
 
-The <comment>--level</comment> option limits the converters to apply on the
-project:
-
-	<info>php %command.full_name% /path/to/project --level=psr0</info>
-	<info>php %command.full_name% /path/to/project --level=psr1</info>
-	<info>php %command.full_name% /path/to/project --level=psr2</info>
-	<info>php %command.full_name% /path/to/project --level=all</info>
-
-By default, all PSR-2 converters and some additional ones are run.
-
 The <comment>--converters</comment> option lets you choose the exact converters to
 apply (the converter names must be separated by a comma):
 
@@ -89,6 +79,8 @@ using <comment>-name</comment>:
 
 A combination of <comment>--dry-run</comment>, <comment>--verbose</comment> and <comment>--diff</comment> will
 display summary of proposed changes, leaving your files unchanged.
+
+All converters apply by default.
 
 Choose from the list of available converters:
 
@@ -122,7 +114,7 @@ and directories that need to be analyzed:
 	;
 
 	return sankar\ST\Config\Config::create()
-		->converters(array('indentation', 'elseif'))
+		->converters(array('if', 'for'))
 		->finder(\$finder)
 	;
 EOF

@@ -39,8 +39,7 @@ class ReadmeCommand extends Command
 		$header = <<<EOF
 PHP Smarty to Twig Converter
 ==========================
-
-Converts templates in the smarty templating language to the twig templating language.
+toTwig is an utility to convert smarty template engine to twig template engine.
 
 Installation
 ------------
@@ -48,39 +47,39 @@ Installation
 ### Locally
 
 Download the
-[`smarty2twig.phar`](http://cs.sensiolabs.org/get/smarty2twig.phar) file and
+[`toTwig.phar`](https://raw.github.com/sankarsuda/toTwig/master/toTwig.phar) file and
 store it somewhere on your computer.
 
 ### Globally (manual)
 
-You can run these commands to easily acces `smarty2twig` from anywhere on your system:
+You can run these commands to easily acces `toTwig` from anywhere on your system:
 
-	\$ sudo wget http://cs.sensiolabs.org/get/smarty2twig.phar -O /usr/local/bin/smarty2twig
+	\$ sudo wget https://raw.github.com/sankarsuda/toTwig/master/toTwig.phar -O /usr/local/bin/toTwig
 
 or with curl:
 
-	\$ sudo curl http://cs.sensiolabs.org/get/smarty2twig.phar -o /usr/local/bin/smarty2twig
+	\$ sudo curl https://raw.github.com/sankarsuda/toTwig/master/toTwig.phar -o /usr/local/bin/toTwig
 
 then:
 
-	\$ sudo chmod a+x /usr/local/bin/smarty2twig
+	\$ sudo chmod a+x /usr/local/bin/toTwig
 
-Then, just run `smarty2twig`
+Then, just run `toTwig`
 
 Update
 ------
 
 ### Locally
 
-The `self-update` command tries to update smarty2twig itself:
+The `self-update` command tries to update toTwig itself:
 
-	\$ php smarty2twig.phar self-update
+	\$ php toTwig.phar self-update
 
 ### Globally (manual)
 
-You can update smarty2twig through this command:
+You can update toTwig through this command:
 
-	\$ sudo smarty2twig self-update
+	\$ sudo toTwig self-update
 
 Usage
 -----
@@ -93,7 +92,7 @@ Contribute
 ----------
 
 The tool comes with quite a few built-in converters and finders, but everyone is
-more than welcome to [contribute](https://github.com/sankarsuda/smarty2twig) more
+more than welcome to [contribute](https://github.com/sankarsuda/toTwig) more
 of them.
 
 ### Converter
@@ -112,7 +111,7 @@ EOF;
 
 		$command = $this->getApplication()->get('convert');
 		$help = $command->getHelp();
-		$help = str_replace('%command.full_name%', 'smarty2twig.phar '.$command->getName(), $help);
+		$help = str_replace('%command.full_name%', 'toTwig.phar '.$command->getName(), $help);
 		$help = str_replace('%command.name%', $command->getName(), $help);
 		$help = preg_replace('#</?(comment|info)>#', '`', $help);
 		$help = preg_replace('#^(\s+)`(.+)`$#m', '$1$2', $help);
@@ -121,5 +120,11 @@ EOF;
 		$output->writeln($header);
 		$output->writeln($help);
 		$output->write($footer);
+
+		$content = $header."\n";
+		$content .= $help ."\n";
+		$content .= $footer;
+
+		@file_put_contents('README.md', $content);
 	}
 }

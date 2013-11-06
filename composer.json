@@ -19,5 +19,5 @@
     "autoload": {
         "psr-0": { "sankar\\ST": "." }
     },
-    "bin": ["smarty2twig"]
+    "bin": ["toTwig"]
 }
