@@ -55,6 +55,7 @@ class ConvertCommand extends Command
 				new InputArgument('path', InputArgument::REQUIRED, 'The path'),
 				new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration name', null),
 				new InputOption('converters', '', InputOption::VALUE_REQUIRED, 'A list of converters to run'),
+				new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension'),
 				new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
 				new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified'),
 				new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt')
@@ -188,7 +189,7 @@ EOF
 
 		$config->converters($converters);
 
-		$changed = $this->converter->convert($config, $input->getOption('dry-run'), $input->getOption('diff'));
+		$changed = $this->converter->convert($config, $input->getOption('dry-run'), $input->getOption('diff'), $input->getOption('ext'));
 
 		$i = 1;
 		switch ($input->getOption('format')) {

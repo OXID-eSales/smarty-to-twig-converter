@@ -28,7 +28,7 @@ class CompileCommand extends Command
 	{
 		$this
 			->setName('compile')
-			->setDescription('Compiles the fixer as a phar file')
+			->setDescription('Compiles the converter as a phar file')
 		;
 	}
 

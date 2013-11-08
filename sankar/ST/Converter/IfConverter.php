@@ -59,51 +59,56 @@ class IfConverter extends ConverterAbstract
 		return 'Convert smarty if/else/elseif to twig';
 	}
 
-	private function replaceIf($content){
+	private function replaceIf($content)
+	{
 
 		$pattern = "#\{if\b\s*([^{}]+)?\}#i";
+		$string  = '{%% if %s %%}';
 
-		return preg_replace_callback($pattern, function($matches) {
+		return $this->replace($pattern, $content, $string);
+	}
 
-			$match   = $matches[1];
-			$search  = $matches[0];
+	private function replaceElseIf($content)
+	{
 
-			foreach ($this->alt as $key => $value) {
-				$match = str_replace(" $key ", " $value ", $match);
-			}
+		$pattern = "#\{elseif\b\s*([^{}]+)?\}#i";
+		$string  = '{%% elseif %s %%}';
 
-			$replace = "{% if ";
-			$replace .= $match;
-			$replace .= " %}";
-			$search = str_replace($search, $replace, $search);
-
-			return $search;
-
-		}, $content);
+		return $this->replace($pattern, $content, $string);
 
 	}
 
-	private function replaceElseIf($content){
 
-		$pattern = "#\{elseif\b\s*([^{}]+)?\}#i";
+	private function replace($pattern, $content, $string)
+	{
+		return preg_replace_callback($pattern, function($matches) use ($string) {
 
+				$match   = $matches[1];
+				$search  = $matches[0];
+
+				foreach ($this->alt as $key => $value) {
+					$match = str_replace(" $key ", " $value ", $match);
+				}
+
+				// Replace $vars
+				$match = $this->replaceVariable($match);
+
+				$string = sprintf($string,$match);
+				
+				return str_replace($search, $string, $search);
+
+			}, $content);
+	}
+
+	private function replaceVariable($string)
+	{
+		$pattern = '/\$([\w\.\-\>\[\]]+)/';
 		return preg_replace_callback($pattern, function($matches) {
+			// Convert Object to dot
+	        $matches[1] = str_replace('->', '.',$matches[1]);
 
-			$match   = $matches[1];
-			$search  = $matches[0];
-
-			foreach ($this->alt as $key => $value) {
-				$match = str_replace(" $key ", " $value ", $match);
-			}
-
-			$replace = "{% elseif ";
-			$replace .= $match;
-			$replace .= " %}";
-			$search = str_replace($search, $replace, $search);
-
-			return $search;
-
-		}, $content);
-
+			return str_replace($matches[0],$matches[1],$matches[0]);
+			
+		}, $string);
 	}
 }

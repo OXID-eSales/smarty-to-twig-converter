@@ -32,7 +32,7 @@ class ForConverter extends ConverterAbstract
 		$content = $this->replaceForEachElse($content);
 
 		foreach ($this->replacements as $k=>$v) {
-			$content = preg_replace($k, $v, $content);
+			$content = preg_replace('/'.$k.'/', $v, $content);
 		}
 
 		return $content;
@@ -71,32 +71,42 @@ class ForConverter extends ConverterAbstract
 
 		// $pattern = "#\{foreach\b\s*(?:(?!}).)+?\}#";
 		$pattern = "#\{foreach\b\s*([^{}]+)?\}#i";
+		$string  = '{% for :key :item in :from %}';
 
-		return preg_replace_callback($pattern, function($matches) {
+		return preg_replace_callback($pattern, function($matches) use( $string ) {
 
 			$match   = $matches[1];
 			$search  = $matches[0];
+			$replace = array();
 
 			// {foreach $users as $user}
 			if (preg_match("/(.*)(?:as)(.*)/i", $match,$mcs)) {
 
-				$replace = "{% for ".$this->val($mcs[2])." in ".$this->val($mcs[1])." %}";
-				$search = str_replace($search, $replace, $search);
+				// {foreach $users as $k => $val}
+				if (preg_match("/(.*)\=\>(.*)/", $mcs[2],$match)) {
+					$replace['key'] .= $this->variable($match[1]).',';
+					$mcs[2] = $match[2];
+				} 
+				$replace['item'] = $this->variable($mcs[2]);
+				$replace['from'] = $this->variable($mcs[1]);
+
 			} else {
 
 				$attr = $this->attributes($match);
-				$replace = "{% for ";
 
 				if ($attr['key']) {
-					$replace .= $attr['key'].',';
+					$replace['key'] = $attr['key'].',';
 				}
-				$replace .= $this->val($attr['item'])." in ".$this->val($attr['from'])." %}";
-				$search = str_replace($search, $replace, $search);
 
+				$replace['item'] = $this->variable($attr['item']);
+				$replace['from'] = $this->variable($attr['from']);
 			}
 
-			//{foreach from=$data item="entry"}
-			return $search;
+			$string  = $this->vsprintf($string,$replace);
+	        // Replace more than one space to single space
+	        $string = preg_replace('!\s+!', ' ', $string);
+
+	        return str_replace($search, $string, $search);
 
 		}, $content);
 

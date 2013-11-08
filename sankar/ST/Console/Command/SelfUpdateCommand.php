@@ -16,8 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @author Igor Wiedler <igor@wiedler.ch>
- * @author Stephane PY <py.stephane1@gmail.com>
+ * @author sankar <sankar.suda@gmail.com>
  */
 class SelfUpdateCommand extends Command
 {
@@ -28,12 +27,12 @@ class SelfUpdateCommand extends Command
 	{
 		$this
 			->setName('self-update')
-			->setDescription('Update php-cs-fixer.phar to the latest version.')
+			->setDescription('Update toTwig.phar to the latest version.')
 			->setHelp(<<<EOT
-The <info>self-update</info> command replace your php-cs-fixer.phar
+The <info>self-update</info> command replace your toTwig.phar
 by the latest version from cs.sensiolabs.org.
 
-<info>php php-cs-fixer.phar self-update</info>
+<info>php toTwig.phar self-update</info>
 
 EOT
 			)
@@ -45,7 +44,7 @@ EOT
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$remoteFilename = "http://cs.sensiolabs.org/get/php-cs-fixer.phar";
+		$remoteFilename = "https://raw.github.com/sankarsuda/toTwig/master/toTwig.phar";
 		$localFilename  = $_SERVER['argv'][0];
 		$tempFilename   = basename($localFilename, '.phar').'-temp.phar';
 
@@ -67,6 +66,6 @@ EOT
 			$output->writeln('<error>Please re-run the self-update command to try again.</error>');
 		}
 
-		$output->writeln("<info>php-cs-fixer updated.</info>");
+		$output->writeln("<info>toTwig updated.</info>");
 	}
 }

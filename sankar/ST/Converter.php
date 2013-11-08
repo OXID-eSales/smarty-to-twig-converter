@@ -83,7 +83,7 @@ class Converter
 	 * @param Boolean         $dryRun Whether to simulate the changes or not
 	 * @param Boolean         $diff   Whether to provide diff
 	 */
-	public function convert(ConfigInterface $config, $dryRun = false, $diff = false)
+	public function convert(ConfigInterface $config, $dryRun = false, $diff = false, $outputExt='')
 	{
 		$this->sortConverters();
 
@@ -94,7 +94,7 @@ class Converter
 				continue;
 			}
 
-			if ($fixInfo = $this->conVertFile($file, $converter, $dryRun, $diff)) {
+			if ($fixInfo = $this->conVertFile($file, $converter, $dryRun, $diff, $outputExt)) {
 				if ($file instanceof FinderSplFileInfo) {
 					$changed[$file->getRelativePathname()] = $fixInfo;
 				} else {
@@ -106,7 +106,7 @@ class Converter
 		return $changed;
 	}
 
-	public function conVertFile(\SplFileInfo $file, array $converter, $dryRun, $diff)
+	public function conVertFile(\SplFileInfo $file, array $converter, $dryRun, $diff, $outputExt)
 	{
 		$new = $old = file_get_contents($file->getRealpath());
 		$appliedConverters = array();
@@ -125,7 +125,15 @@ class Converter
 
 		if ($new != $old) {
 			if (!$dryRun) {
-				file_put_contents($file->getRealpath(), $new);
+				
+				$filename = $file->getRealpath();
+
+				$ext = strrchr($filename, '.');
+				if ($outputExt) {
+					$filename = rtrim($filename,$ext).'.'.trim($outputExt,'.');
+				}
+
+				file_put_contents($filename, $new);
 			}
 
 			$fixInfo = array('appliedConverters' => $appliedConverters);

@@ -16,9 +16,6 @@ namespace sankar\ST;
  */
 abstract class ConverterAbstract
 {
-	const PSR0_LEVEL = 1;
-	const PSR1_LEVEL = 3;
-	const PSR2_LEVEL = 7;
 	const ALL_LEVEL  = 15;
 
 	/**
@@ -61,38 +58,77 @@ abstract class ConverterAbstract
 
 
     /**
-     * Returns true if the file is supported by this fixer.
+     * Returns true if the file is supported by this converter.
      *
-     * @return Boolean true if the file is supported by this fixer, false otherwise
+     * @return Boolean true if the file is supported by this converter, false otherwise
      */
     public function supports(\SplFileInfo $file)
     {
     	return true;
     }
 
+    /**
+     * Method to extract key/value pairs out of a string with xml style attributes
+     *
+     * @param   string  $string String containing xml style attributes
+     * @return  array   Key/Value pairs for the attributes
+     */
+    protected function attributes( $string )
+    {
+        //Initialize variables
+        $attr       = array();
+        $retarray   = array();
+        $pattern    = '/(?:([\w:-]+)\s*=\s*)?(".*?"|\'.*?\'|(?:[$\w:-]+))/';
+        // Lets grab all the key/value pairs using a regular expression
+        preg_match_all( $pattern, $string, $attr );
+        if (is_array($attr)) {
+            $numPairs = count($attr[1]);
+            for ($i = 0; $i < $numPairs; $i++) {
+               
+                $value = trim($attr[2][$i]);
+                $key   = ($attr[1][$i]) ? trim($attr[1][$i]) : trim(trim($value,'"'),"'");
 
-	/**
-	 * Returns the attribues array from string
-	 *
-	 * @param string $string
-	 * @return array
-	 */
-	protected function attributes($string){
+                $retarray[$key] = $value;
+            }
+        }
+        return $retarray;
+    }
 
-		$items = explode(' ',$string);
-		$attr  = array();
-		foreach ($items as $item) {
-			$item = explode('=', $item);
-			$attr[trim($item[0])] = trim($item[1]);
-		}
-		return $attr;
-	}
 	/**
 	 * Sanitize value, remove $,' or " from string
 	 * @param string $string
 	 */
-	protected function val($string)
+	protected function variable($string)
 	{
 		return str_replace(array('$','"',"'"),'',trim($string));
+	}
+
+	/**
+	 * Sanitize variable, remove $,' or " from string
+	 * @param string $string
+	 */
+	protected function value($string)
+	{
+		$string = trim(trim($string),"'");
+		$string = ($string{0} == '$') ? ltrim($string,'$') : "'".str_replace("'", "\'", $string)."'";
+		$string = str_replace(array('"',"''"), "'", $string);
+
+		return $string;
+	}
+
+	/**
+	 * Replace named args in string
+	 * 
+	 * @param  string $string
+	 * @param  array $args 
+	 * @return string         Formated string
+	 */
+	protected function vsprintf($string, $args)
+	{
+		$pattern = '/:([a-zA-Z0-9_-]+)/';
+		return preg_replace_callback($pattern, function($matches) use ($args) {
+
+		    return str_replace($matches[0],$args[$matches[1]],$matches[0]);
+		}, $string);
 	}
 }
