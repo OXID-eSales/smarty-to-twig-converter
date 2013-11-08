@@ -68,7 +68,11 @@ All converters apply by default.
 
 Choose from the list of available converters:
 
- * **variable** Convert smarty variable {$var.name} to twig {{var.name}}
+ * **include**  Convert smarty include to twig include
+
+ * **assign**   Convert smarty {assign} to twig {% set foo = 'foo' %}
+
+ * **variable** Convert smarty variable {$var.name} to twig {{ var.name }}
 
  * **comment**  Convert smarty comments {* *} to twig {# #}
 
