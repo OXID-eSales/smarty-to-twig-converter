@@ -9,12 +9,12 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Config;
+namespace toTwig\Config;
 
-use sankar\ST\ConverterAbstract;
-use sankar\ST\FinderInterface;
-use sankar\ST\ConfigInterface;
-use sankar\ST\Finder\DefaultFinder;
+use toTwig\ConverterAbstract;
+use toTwig\FinderInterface;
+use toTwig\ConfigInterface;
+use toTwig\Finder\DefaultFinder;
 
 /**
  * @author sankara <sankar.suda@gmail.com>

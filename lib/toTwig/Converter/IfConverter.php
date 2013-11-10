@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Converter;
+namespace toTwig\Converter;
 
-use sankar\ST\ConverterAbstract;
+use toTwig\ConverterAbstract;
 
 /**
  * @author sankar <sankar.suda@gmail.com>

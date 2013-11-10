@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Converter;
+namespace toTwig\Converter;
 
-use sankar\ST\ConverterAbstract;
+use toTwig\ConverterAbstract;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
@@ -21,12 +21,12 @@ class MiscConverter extends ConverterAbstract
 
 	// Lookup tables for performing some token
 	// replacements not addressed in the grammar.
-	private $replacements = [
+	private $replacements = array(
 		'\{ldelim\}' => '',
 		'\{rdelim\}' => '',
 		'\{literal\}' => '{# literal #}',
 		'\{\\/literal\}' => '{# /literal #}'
-	];
+	);
 
 	public function convert(\SplFileInfo $file, $content)
 	{

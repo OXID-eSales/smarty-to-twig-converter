@@ -9,10 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Finder;
+namespace toTwig\Finder;
 
 use Symfony\Component\Finder\Finder;
-use sankar\ST\FinderInterface;
+use toTwig\FinderInterface;
 
 /**
  * @author sankar <sankar.suda@gmail.com>

@@ -9,14 +9,14 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Console;
+namespace toTwig\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
-use sankar\ST\Console\Command\ConvertCommand;
-use sankar\ST\Console\Command\CompileCommand;
-use sankar\ST\Console\Command\ReadmeCommand;
-use sankar\ST\Console\Command\SelfUpdateCommand;
-use sankar\ST\Converter;
+use toTwig\Console\Command\ConvertCommand;
+use toTwig\Console\Command\CompileCommand;
+use toTwig\Console\Command\ReadmeCommand;
+use toTwig\Console\Command\SelfUpdateCommand;
+use toTwig\Converter;
 
 /**
  * @author sankar <sankar.suda@gmail.com>

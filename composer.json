@@ -1,5 +1,5 @@
 {
-    "name": "sankar/samrty2twig",
+    "name": "sankar/toTwig",
     "type": "application",
     "description": "A script to convert smarty template engine to twig",
     "license": "MIT",
@@ -14,10 +14,11 @@
         "symfony/console": "~2.1",
         "symfony/filesystem": "~2.1",
         "symfony/finder": "~2.1",
-        "sebastian/diff": "1.0.*@dev"
+        "sebastian/diff": "1.0.*@dev",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
-        "psr-0": { "sankar\\ST": "." }
+        "psr-0": { "toTwig\\": "lib/" }
     },
     "bin": ["toTwig"]
 }

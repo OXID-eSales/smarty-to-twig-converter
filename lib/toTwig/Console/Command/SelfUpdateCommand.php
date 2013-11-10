@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Console\Command;
+namespace toTwig\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

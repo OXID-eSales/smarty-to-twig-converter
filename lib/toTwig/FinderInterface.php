@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST;
+namespace toTwig;
 
 /**
  * @author sankar <sankar.suda@gmail.com>

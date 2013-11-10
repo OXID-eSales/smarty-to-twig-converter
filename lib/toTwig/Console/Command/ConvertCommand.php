@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Console\Command;
+namespace toTwig\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,10 +17,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Config\Config;
-use sankar\ST\ConfigInterface;
+use toTwig\Converter;
+use toTwig\ConverterAbstract;
+use toTwig\Config\Config;
+use toTwig\ConfigInterface;
 
 /**
  * @author sankar <sankar.suda@gmail.com>
@@ -104,17 +104,17 @@ fixed but without actually modifying them:
 Instead of using command line options to customize the converter, you can save the
 configuration in a <comment>.php_st</comment> file in the root directory of
 your project. The file must return an instance of
-`sankar\ST\ConfigInterface`, which lets you configure the converters, the files,
+`toTwig\ConfigInterface`, which lets you configure the converters, the files,
 and directories that need to be analyzed:
 
 	<?php
 
-	\$finder = sankar\ST\Finder\DefaultFinder::create()
+	\$finder = toTwig\Finder\DefaultFinder::create()
 		->exclude('somefile')
 		->in(__DIR__)
 	;
 
-	return sankar\ST\Config\Config::create()
+	return toTwig\Config\Config::create()
 		->converters(array('if', 'for'))
 		->finder(\$finder)
 	;

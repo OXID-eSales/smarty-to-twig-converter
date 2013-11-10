@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST;
+namespace toTwig;
 
 use SebastianBergmann\Diff;
 use Symfony\Component\Finder\Finder;
@@ -34,7 +34,7 @@ class Converter
 	public function registerBuiltInConverters()
 	{
 		foreach (Finder::create()->files()->in(__DIR__.'/Converter') as $file) {
-			$class = 'sankar\\ST\\Converter\\'.basename($file, '.php');
+			$class = 'toTwig\\Converter\\'.basename($file, '.php');
 			$this->addConverter(new $class());
 		}
 	}
@@ -61,7 +61,7 @@ class Converter
 	public function registerBuiltInConfigs()
 	{
 		foreach (Finder::create()->files()->in(__DIR__.'/Config') as $file) {
-			$class = 'sankar\\ST\\Config\\'.basename($file, '.php');
+			$class = 'toTwig\\Config\\'.basename($file, '.php');
 			$this->addConfig(new $class());
 		}
 	}

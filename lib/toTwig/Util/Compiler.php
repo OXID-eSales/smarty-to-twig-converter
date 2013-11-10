@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Util;
+namespace toTwig\Util;
 
 use Symfony\Component\Finder\Finder;
 
@@ -83,7 +83,7 @@ class Compiler
 
     protected function getFiles()
     {
-        $iterator = Finder::create()->files()->exclude('Tests')->name('*.php')->in(array('vendor', 'sankar'));
+        $iterator = Finder::create()->files()->exclude('tests')->name('*.php')->in(array('vendor', 'lib'));
 
         return array_merge(array('LICENSE'), iterator_to_array($iterator));
     }

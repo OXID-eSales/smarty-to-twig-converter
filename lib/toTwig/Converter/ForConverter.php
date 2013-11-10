@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Converter;
+namespace toTwig\Converter;
 
-use sankar\ST\ConverterAbstract;
+use toTwig\ConverterAbstract;
 
 /**
  * @author sankar <sankar.suda@gmail.com>
@@ -20,10 +20,10 @@ class ForConverter extends ConverterAbstract
 {
 	// Lookup tables for performing some token
 	// replacements not addressed in the grammar.
-	private $replacements = [
+	private $replacements = array(
 		'smarty\.foreach.*\.index' => 'loop.index0',
 		'smarty\.foreach.*\.iteration' => 'loop.index'
-	];
+	);
 
 	public function convert(\SplFileInfo $file, $content)
 	{

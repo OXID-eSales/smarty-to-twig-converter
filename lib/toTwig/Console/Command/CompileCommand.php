@@ -9,12 +9,12 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Console\Command;
+namespace toTwig\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use sankar\ST\Util\Compiler;
+use toTwig\Util\Compiler;
 
 /**
  * @author sankar <sankar.suda@gmail.com>

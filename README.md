@@ -48,18 +48,18 @@ Usage
 The `convert` command tries to fix as much coding standards
 problems as possible on a given file or directory:
 
-	php toTwig.phar convert /path/to/dir
-	php toTwig.phar convert /path/to/file
+	`php toTwig.phar convert /path/to/dir`
+	`php toTwig.phar convert /path/to/file`
 
 The `--converters` option lets you choose the exact converters to
 apply (the converter names must be separated by a comma):
 
-	php toTwig.phar convert /path/to/dir --converters=for,if,misc
+	`php toTwig.phar convert /path/to/dir --converters=for,if,misc`
 
 You can also blacklist the converters you don't want if this is more convenient,
 using `-name`:
 
-	php toTwig.phar convert /path/to/dir --converters=-for,-if
+	`php toTwig.phar convert /path/to/dir --converters=-for,-if`
 
 A combination of `--dry-run`, `--verbose` and `--diff` will
 display summary of proposed changes, leaving your files unchanged.
@@ -86,8 +86,8 @@ Choose from the list of available converters:
 The `--config` option customizes the files to analyse, based
 on some well-known directory structures:
 
-	# For the Symfony 2.1 branch
-	php toTwig.phar convert /path/to/sf21 --config=sf21
+	`# For the Symfony 2.1 branch`
+	`php toTwig.phar convert /path/to/sf21 --config=sf21`
 
 Choose from the list of available configurations:
 
@@ -96,22 +96,22 @@ Choose from the list of available configurations:
 The `--dry-run` option displays the files that need to be
 fixed but without actually modifying them:
 
-	php toTwig.phar convert /path/to/code --dry-run
+	`php toTwig.phar convert /path/to/code --dry-run`
 
 Instead of using command line options to customize the converter, you can save the
 configuration in a `.php_st` file in the root directory of
 your project. The file must return an instance of
-`sankar\ST\ConfigInterface`, which lets you configure the converters, the files,
+`toTwig\ConfigInterface`, which lets you configure the converters, the files,
 and directories that need to be analyzed:
 
 	<?php
 
-	$finder = sankar\ST\Finder\DefaultFinder::create()
+	$finder = toTwig\Finder\DefaultFinder::create()
 		->exclude('somefile')
 		->in(__DIR__)
 	;
 
-	return sankar\ST\Config\Config::create()
+	return toTwig\Config\Config::create()
 		->converters(array('if', 'for'))
 		->finder($finder)
 	;
