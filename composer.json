@@ -1,5 +1,5 @@
 {
-    "name": "sankar/toTwig",
+    "name": "sankar/to-twig",
     "type": "application",
     "description": "A script to convert smarty template engine to twig",
     "license": "MIT",
