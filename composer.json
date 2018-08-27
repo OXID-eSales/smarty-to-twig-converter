@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": "^7.0",
         "symfony/console": "~2.1",
         "symfony/filesystem": "~2.1",
         "symfony/finder": "~2.1",
-        "sebastian/diff": "1.0.*@dev",
-        "phpunit/phpunit": "3.7.*"
+        "sebastian/diff": "3.0.*",
+        "phpunit/phpunit": "7.3.*"
     },
     "autoload": {
         "psr-0": { "toTwig\\": "app/" }
