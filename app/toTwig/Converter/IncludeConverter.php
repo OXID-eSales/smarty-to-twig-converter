@@ -40,7 +40,7 @@ class IncludeConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\{include\b\s*([^{}]+)?\}/';
+        $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
         $string = '{% include :template :with :vars %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

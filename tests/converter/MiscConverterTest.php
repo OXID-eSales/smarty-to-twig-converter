@@ -42,16 +42,16 @@ class MiscConverterTest extends TestCase
     {
         return [
             [
-                '{ldelim}', ''
+                '[{ldelim}]', ''
             ],
             [
-                '{rdelim}', ''
+                '[{rdelim}]', ''
             ],
             [
-                '{literal}', '{# literal #}'
+                '[{literal}]', '{# literal #}'
             ],
             [
-                '{/literal}', '{# /literal #}'
+                '[{/literal}]', '{# /literal #}'
             ]
         ];
     }

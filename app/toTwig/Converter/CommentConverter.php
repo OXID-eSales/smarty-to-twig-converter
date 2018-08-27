@@ -20,7 +20,7 @@ class CommentConverter extends ConverterAbstract
 {
     public function convert(\SplFileInfo $file, $content)
     {
-        return str_replace(['{*', '*}'], ['{#', '#}'], $content);
+        return str_replace(['[{*', '*}]'], ['{#', '#}'], $content);
     }
 
     public function getPriority()

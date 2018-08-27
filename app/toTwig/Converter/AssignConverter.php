@@ -43,7 +43,7 @@ class AssignConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\{assign\b\s*([^{}]+)?\}/';
+        $pattern = '/\[\{assign\b\s*([^{}]+)?\}\]/';
         $string = '{% set :key = :value %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

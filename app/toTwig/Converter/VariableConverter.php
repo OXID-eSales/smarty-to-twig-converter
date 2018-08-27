@@ -42,7 +42,7 @@ class VariableConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\{([^{}]+)?\}/';
+        $pattern = '/\[\{([^{}]+)?\}\]/';
         return preg_replace_callback($pattern, function ($matches) {
 
             $match = $matches[1];

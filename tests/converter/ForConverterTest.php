@@ -43,16 +43,16 @@ class ForConverterTest extends TestCase
     {
         return [
             [
-                "{foreach \$myColors as \$color}\nfoo\n{/foreach}",
+                "[{foreach \$myColors as \$color}]\nfoo\n[{/foreach}]",
                 "{% for color in \$myColors %}\nfoo\n{% endfor %}"
             ], [
-                "{foreach \$contact as \$key => \$value}\nfoo\n{/foreach}",
+                "[{foreach \$contact as \$key => \$value}]\nfoo\n[{/foreach}]",
                 "{% for key, value in \$contact %}\nfoo\n{% endfor %}"
             ], [
-                "{foreach name=outer item=contact from=\$contacts}\nfoo\n{/foreach}",
+                "[{foreach name=outer item=contact from=\$contacts}]\nfoo\n[{/foreach}]",
                 "{% for contact in \$contacts %}\nfoo\n{% endfor %}"
             ], [
-                "{foreach key=key item=item from=\$contact}\nfoo\n{foreachelse}\nbar\n{/foreach}",
+                "[{foreach key=key item=item from=\$contact}]\nfoo\n[{foreachelse}]\nbar\n[{/foreach}]",
                 "{% for key, item in \$contact %}\nfoo\n{% else %}\nbar\n{% endfor %}"
             ],
         ];

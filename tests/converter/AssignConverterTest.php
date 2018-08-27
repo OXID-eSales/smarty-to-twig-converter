@@ -42,19 +42,19 @@ class AssignConverterTest extends TestCase
     {
         return [
             [
-                "{assign var=\"name\" value=\"Bob\"}",
+                "[{assign var=\"name\" value=\"Bob\"}]",
                 "{% set name = \"Bob\" %}"
             ],
             [
-                "{assign var=\"name\" value=\$bob}",
+                "[{assign var=\"name\" value=\$bob}]",
                 "{% set name = \$bob %}"
             ],
             [
-                "{assign \"name\" \"Bob\"}",
+                "[{assign \"name\" \"Bob\"}]",
                 "{% set name = \"Bob\" %}"
             ],
             [
-                "{assign var=\"foo\" \"bar\" scope=\"global\"}",
+                "[{assign var=\"foo\" \"bar\" scope=\"global\"}]",
                 "{% set foo = \"bar\" %}"
             ],
         ];

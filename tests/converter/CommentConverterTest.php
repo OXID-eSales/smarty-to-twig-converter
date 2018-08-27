@@ -43,7 +43,7 @@ class CommentConverterTest extends TestCase
     {
         return [
             [
-                '{* foo *}',
+                '[{* foo *}]',
                 '{# foo #}'
             ]
         ];

@@ -25,9 +25,9 @@ class IfConverter extends ConverterAbstract
         // Replace {elseif }
         $content = $this->replaceElseIf($content);
         // Replace {else}
-        $content = preg_replace('#\{/if\s*\}#', "{% endif %}", $content);
+        $content = preg_replace('#\[\{/if\s*\}\]#', "{% endif %}", $content);
         // Replace {/if}
-        $content = preg_replace('#\{else\s*\}#', "{% else %}", $content);
+        $content = preg_replace('#\[\{else\s*\}\]#', "{% else %}", $content);
 
         return $content;
     }
@@ -49,7 +49,7 @@ class IfConverter extends ConverterAbstract
 
     private function replaceIf($content)
     {
-        $pattern = "#\{if\b\s*([^{}]+)?\}#i";
+        $pattern = "#\[\{if\b\s*([^{}]+)?\}\]#i";
         $string = '{%% if %s %%}';
 
         return $this->replace($pattern, $content, $string);
@@ -57,7 +57,7 @@ class IfConverter extends ConverterAbstract
 
     private function replaceElseIf($content)
     {
-        $pattern = "#\{elseif\b\s*([^{}]+)?\}#i";
+        $pattern = "#\[\{elseif\b\s*([^{}]+)?\}\]#i";
         $string = '{%% elseif %s %%}';
 
         return $this->replace($pattern, $content, $string);
