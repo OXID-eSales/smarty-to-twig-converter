@@ -11,15 +11,15 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\AssignConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\AssignConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class AssignConverterTest extends \PHPUnit_Framework_TestCase
+class AssignConverterTest extends TestCase
 {
+    /** @var AssignConverter */
     protected $converter;
 
     public function setUp()
@@ -27,43 +27,41 @@ class AssignConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter = new AssignConverter();
     }
     /**
-     * @covers sankar\ST\Converter\AssignConverter::convert
+     * @covers \toTwig\Converter\AssignConverter::convert
      * @dataProvider Provider
      */
     public function testThatAssignIsConverted($smarty,$twig)
     {
-
         // Test the above cases
         $this->assertSame($twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
-       
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                        '{assign var="name" value="Bob"}',
-                        '{% set name = \'Bob\' %}'
-                    ),
-                array( 
-                        '{assign var="name" value=$bob}',
-                        '{% set name = bob %}'
-                    ),                
-                array(
-                        '{assign "name" "Bob"}',
-                        '{% set name = \'Bob\' %}'
-                    ),
-                array( 
-                        '{assign var="foo" "bar" scope="global"}',
-                        '{% set foo = \'bar\' %}'
-                    )
-            );
+        return [
+            [
+                "{assign var=\"name\" value=\"Bob\"}",
+                "{% set name = \"Bob\" %}"
+            ],
+            [
+                "{assign var=\"name\" value=\$bob}",
+                "{% set name = \$bob %}"
+            ],
+            [
+                "{assign \"name\" \"Bob\"}",
+                "{% set name = \"Bob\" %}"
+            ],
+            [
+                "{assign var=\"foo\" \"bar\" scope=\"global\"}",
+                "{% set foo = \"bar\" %}"
+            ],
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\AssignConverter::getName
+     * @covers \toTwig\Converter\AssignConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -71,7 +69,7 @@ class AssignConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\AssignConverter::getDescription
+     * @covers \toTwig\Converter\AssignConverter::getDescription
      */
     public function testThatHaveDescription()
     {

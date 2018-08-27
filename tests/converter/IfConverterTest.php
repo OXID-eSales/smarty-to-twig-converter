@@ -11,73 +11,72 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\IfConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\IfConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class IfConverterTest extends \PHPUnit_Framework_TestCase
+class IfConverterTest extends TestCase
 {
+    /** @var IfConverter */
     protected $converter;
 
     public function setUp()
     {
         $this->converter = new IfConverter();
     }
+
     /**
-     * @covers sankar\ST\Converter\IfConverter::convert
+     * @covers       \toTwig\Converter\IfConverter::convert
      * @dataProvider Provider
      */
-    public function testThatIfIsConverted($smarty,$twig)
+    public function testThatIfIsConverted($smarty, $twig)
     {
-
         // Test the above cases
         $this->assertSame($twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
-       
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                        // Test an if statement (no else or elseif)
-                        '{if !foo or foo.bar or foo|bar:foo[\'hello\']}\nfoo\n{/if}',
-                        '{% if not foo or foo.bar or foo|bar(foo[\'hello\']) %}\nfoo\n{% endif %}'
-                    ),
-                array(
-                        // Test an if with an else and a single logical operation.
-                        '{if foo}\nbar\n{else}\nfoo{/if}',
-                        "{% if foo %}\nbar\n{% else %}\nfoo{% endif %}"
-                    ),
-                array( 
-                        // Test an if with an else and an elseif and two logical operations
-                        '{if foo and awesome.string|banana:"foo" $a"}\nbar\n{elseif awesome.sauce[1] and blue and \'hello\'}\nfoo{/if}',
-                        '{% if foo and awesome.string|banana("foo" %s"|format(a)) %}\nbar\n{% elseif awesome.sauce[1] and blue and \'hello\' %}\nfoo{% endif %}'
-                    ), 
-                array(
-                        // Test an if with an elseif and else clause.
-                        '{if foo|bar:3 or !foo[3]}\nbar\n{elseif awesome.sauce[1] and blue and \'hello\'}\nfoo\n{else}bar{/if}',
-                        '{% if foo|bar(3) or not foo[3] %}\nbar\n{% elseif awesome.sauce[1] and blue and \'hello\' %}\nfoo\n{% else %}bar{% endif %}'
-                    ),
-                array(
-                        // Test an if statement with parenthesis.
-                        '{if (foo and bar) or foo and (bar or (foo and bar))}\nbar\n{else}\nfoo{/if}', 
-                        '{% if (foo and bar) or foo and (bar or (foo and bar)) %}\nbar\n{% else %}\nfoo{% endif %}'
-                    ),
-                array( 
-                        // Test an elseif statement with parenthesis.
-                        '{if foo}\nbar\n{elseif (foo and bar) or foo and (bar or (foo and bar))}\nfoo{/if}',
-                        '{% if foo %}\nbar\n{% elseif (foo and bar) or foo and (bar or (foo and bar)) %}\nfoo{% endif %}' 
-                    )
-            );
+        return [
+            [
+                // Test an if statement (no else or elseif)
+                "{if !foo or foo.bar or foo|bar:foo[\'hello\']}\nfoo\n{/if}",
+                "{% if !foo or foo.bar or foo|bar:foo[\'hello\'] %}\nfoo\n{% endif %}"
+            ],
+            [
+                // Test an if with an else and a single logical operation.
+                "{if foo}\nbar\n{else}\nfoo\n{/if}",
+                "{% if foo %}\nbar\n{% else %}\nfoo\n{% endif %}"
+            ],
+            [
+                // Test an if with an else and an elseif and two logical operations
+                "{if foo and awesome.string|banana:\"foo\" \$a\"}\nbar\n{elseif awesome.sauce[1] and blue and 'hello'}\nfoo\n{/if}",
+                "{% if foo and awesome.string|banana:\"foo\" \$a\" %}\nbar\n{% elseif awesome.sauce[1] and blue and 'hello' %}\nfoo\n{% endif %}"
+            ],
+            [
+                // Test an if with an elseif and else clause.
+                "{if foo|bar:3 or !foo[3]}\nbar\n{elseif awesome.sauce[1] and blue and 'hello'}\nfoo\n{else}\nbar\n{/if}",
+                "{% if foo|bar:3 or !foo[3] %}\nbar\n{% elseif awesome.sauce[1] and blue and 'hello' %}\nfoo\n{% else %}\nbar\n{% endif %}"
+            ],
+            [
+                // Test an if statement with parenthesis.
+                "{if (foo and bar) or foo and (bar or (foo and bar))}\nbar\n{else}\nfoo\n{/if}",
+                "{% if (foo and bar) or foo and (bar or (foo and bar)) %}\nbar\n{% else %}\nfoo\n{% endif %}"
+            ],
+            [
+                // Test an elseif statement with parenthesis.
+                "{if foo}\nbar\n{elseif (foo and bar) or foo and (bar or (foo and bar))}\nfoo\n{/if}",
+                "{% if foo %}\nbar\n{% elseif (foo and bar) or foo and (bar or (foo and bar)) %}\nfoo\n{% endif %}"
+            ]
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\IfConverter::getName
+     * @covers \toTwig\Converter\IfConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -85,7 +84,7 @@ class IfConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\IfConverter::getDescription
+     * @covers \toTwig\Converter\IfConverter::getDescription
      */
     public function testThatHaveDescription()
     {

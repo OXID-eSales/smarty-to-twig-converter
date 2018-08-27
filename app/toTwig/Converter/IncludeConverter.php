@@ -18,63 +18,59 @@ use toTwig\ConverterAbstract;
  */
 class IncludeConverter extends ConverterAbstract
 {
+    public function convert(\SplFileInfo $file, $content)
+    {
+        return $this->replace($content);
+    }
 
-	public function convert(\SplFileInfo $file, $content)
-	{
-		return $this->replace($content);
-	}
+    public function getPriority()
+    {
+        return 100;
+    }
 
-	public function getPriority()
-	{
-		return 100;
-	}
+    public function getName()
+    {
+        return 'include';
+    }
 
-	public function getName()
-	{
-		return 'include';
-	}
+    public function getDescription()
+    {
+        return 'Convert smarty include to twig include';
+    }
 
-	public function getDescription()
-	{
-		return 'Convert smarty include to twig include';
-	}
+    private function replace($content)
+    {
+        $pattern = '/\{include\b\s*([^{}]+)?\}/';
+        $string = '{% include :template :with :vars %}';
 
-	private function replace($content)
-	{
-		$pattern = '/\{include\b\s*([^{}]+)?\}/';
-		$string = '{% include :template :with :vars %}';
+        return preg_replace_callback($pattern, function ($matches) use ($string) {
 
-		return preg_replace_callback($pattern, function($matches) use ($string) {
+            $match = $matches[1];
+            $attr = $this->attributes($match);
 
-	        $match   = $matches[1];
-	        $attr    = $this->attributes($match);
+            $replace = array();
+            $replace['template'] = $attr['file'];
 
-	        $replace = array();
-	        $replace['template'] = $attr['file'];
+            // If we have any other variables
+            if (count($attr) > 1) {
+                $replace['with'] = 'with';
+                unset($attr['file']); // We won't need in vars
 
-	        // If we have any other variables
-	        if (count($attr) > 1) {
-	            $replace['with'] = 'with';
-	            unset($attr['file']); // We won't need in vars
+                $vars = array();
+                foreach ($attr as $key => $value) {
+                    $vars[] = "'" . $key . "' : " . $value;
+                }
 
-	             $vars = array();
-	            foreach ($attr as $key => $value) {
-	            	$value  = $this->value($value);
-	                $vars[] = "'".$key."' : ".$value;
-	            }
+                $replace['vars'] = '{' . implode(', ', $vars) . '}';
+            }
 
-	            $replace['vars'] = '{'.implode(', ',$vars).'}';
-	        }
+            $string = $this->vsprintf($string, $replace);
 
-	        $string  = $this->vsprintf($string,$replace);
+            // Replace more than one space to single space
+            $string = preg_replace('!\s+!', ' ', $string);
 
-	        // Replace more than one space to single space
-	        $string = preg_replace('!\s+!', ' ', $string);
+            return str_replace($matches[0], $string, $matches[0]);
 
-	        return str_replace($matches[0], $string, $matches[0]);
-
-	      },$content);
-
-	}
-
+        }, $content);
+    }
 }

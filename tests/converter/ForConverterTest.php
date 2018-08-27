@@ -11,59 +11,55 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\ForConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\ForConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class ForConverterTest extends \PHPUnit_Framework_TestCase
+class ForConverterTest extends TestCase
 {
+    /** @var ForConverter */
     protected $converter;
 
     public function setUp()
     {
         $this->converter = new ForConverter();
     }
+
     /**
-     * @covers sankar\ST\Converter\ForConverter::convert
+     * @covers       \toTwig\Converter\ForConverter::convert
      * @dataProvider Provider
      */
-    public function testThatForIsConverted($smarty,$twig)
+    public function testThatForIsConverted($smarty, $twig)
     {
-
         // Test the above cases
         $this->assertSame($twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
-       
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                        '{foreach $myColors as $color}\nfoo{/foreach}',
-                        '{% for color in myColors %}\nfoo\n{% endfor %}'
-                    ),
-                array(
-                        '{foreach $contact as $key => $value}\nfoo{/foreach}',
-                        '{% for key,value in contact %}\nfoo{% endfor %}'
-                    ),
-                array( 
-                        '{foreach name=outer item=contact from=$contacts}\nfoo{/foreach}',
-                        '{% for contact in contacts %}\nfoo{% endfor %}'
-                    ), 
-                array(
-                        '{foreach key=key item=item from=$contact}\nfoo\n{foreachelse}bar{/foreach}',
-                        '{% for key,item in contact %}\nfoo\n{% else %}bar{% endfor %}'
-                    ),
-            );
+        return [
+            [
+                "{foreach \$myColors as \$color}\nfoo\n{/foreach}",
+                "{% for color in \$myColors %}\nfoo\n{% endfor %}"
+            ], [
+                "{foreach \$contact as \$key => \$value}\nfoo\n{/foreach}",
+                "{% for key, value in \$contact %}\nfoo\n{% endfor %}"
+            ], [
+                "{foreach name=outer item=contact from=\$contacts}\nfoo\n{/foreach}",
+                "{% for contact in \$contacts %}\nfoo\n{% endfor %}"
+            ], [
+                "{foreach key=key item=item from=\$contact}\nfoo\n{foreachelse}\nbar\n{/foreach}",
+                "{% for key, item in \$contact %}\nfoo\n{% else %}\nbar\n{% endfor %}"
+            ],
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\ForConverter::getName
+     * @covers \toTwig\Converter\ForConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -71,7 +67,7 @@ class ForConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\ForConverter::getDescription
+     * @covers \toTwig\Converter\ForConverter::getDescription
      */
     public function testThatHaveDescription()
     {
