@@ -42,24 +42,32 @@ class VariableConverterTest extends TestCase
     {
         return [
             [
-                '[{$var}]',
-                '{{ $var }}'
+                "[{\$var}]",
+                "{{ var }}"
             ],
             [
-                '[{$contacts.fax}]',
-                '{{ $contacts.fax }}'
+                "[{\$contacts.fax}]",
+                "{{ contacts.fax }}"
             ],
             [
-                '[{$contacts[0]}]',
-                '{{ $contacts[0] }}'
+                "[{\$contacts[0]}]",
+                "{{ contacts[0] }}"
             ],
             [
-                '[{$contacts[2][0]}]',
-                '{{ $contacts[2][0] }}'
+                "[{\$contacts[2][0]}]",
+                "{{ contacts[2][0] }}"
             ],
             [
-                '[{$person->name}]',
-                '{{ $person->name }}'
+                "[{\$person->name}]",
+                "{{ person.name }}"
+            ],
+            [
+                "[{\$oViewConf->getImageUrl(\$sLangImg)}]",
+                "{{ oViewConf.getImageUrl(sLangImg) }}"
+            ],
+            [
+                "[{\$_cur->link|oxaddparams:\$oView->getDynUrlParams()}]",
+                "{{ _cur.link|oxaddparams(oView.getDynUrlParams()) }}"
             ]
         ];
     }

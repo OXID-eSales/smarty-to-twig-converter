@@ -76,42 +76,49 @@ abstract class ConverterAbstract
     protected function attributes($string)
     {
         //Initialize variables
-        $attr = [];
-        $retarray = [];
-        $pattern = '/(?:([\w:-]+)\s*=\s*)?(".*?"|\'.*?\'|(?:[$\w:-]+))/';
+        $attr = $pairs = [];
+        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?[^\s}]*))/';
+
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
         if (is_array($attr)) {
             $numPairs = count($attr[1]);
-            for ($i = 0; $i < $numPairs; $i++) {
 
+            for ($i = 0; $i < $numPairs; $i++) {
                 $value = trim($attr[2][$i]);
                 $key = ($attr[1][$i]) ? trim($attr[1][$i]) : trim(trim($value, '"'), "'");
 
-                $retarray[$key] = $value;
+                $pairs[$key] = $value;
             }
         }
-        return $retarray;
-    }
 
-    /**
-     * Sanitize value, remove $,' or " from string
-     * @param string $string
-     */
-    protected function variable($string)
-    {
-        return str_replace(['$', '"', "'"], '', trim($string));
+        return $pairs;
     }
 
     /**
      * Sanitize variable, remove $,' or " from string
+     *
      * @param string $string
+     *
+     * @return mixed
+     */
+    protected function variable($string)
+    {
+        return trim(trim($string), '$"\'');
+    }
+
+    /**
+     * Sanitize value, remove $,' or " from string
+     *
+     * @param string $string
+     *
+     * @return string
      */
     protected function value($string)
     {
-        $string = trim(trim($string), "'");
-        $string = ($string{0} == '$') ? ltrim($string, '$') : "'" . str_replace("'", "\'", $string) . "'";
-        $string = str_replace(['"', "''"], "'", $string);
+        $string = ltrim($string, '$');
+        $string = str_replace("->", ".", $string);
+        $string = str_replace("($", "(", $string);
 
         return $string;
     }
