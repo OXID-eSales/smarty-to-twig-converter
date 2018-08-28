@@ -78,7 +78,7 @@ abstract class ConverterAbstract
         //Initialize variables
         $attr = [];
         $retarray = [];
-        $pattern = '/(?:([\w:-]+)\s*=\s*)?(".*?"|\'.*?\'|(?:[$\w:-]+))/';
+        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?[^\s}]*))/';
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
         if (is_array($attr)) {

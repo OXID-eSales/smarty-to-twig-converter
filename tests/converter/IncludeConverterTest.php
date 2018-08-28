@@ -28,28 +28,25 @@ class IncludeConverterTest extends TestCase
     }
 
     /**
-     * @covers       \toTwig\Converter\IncludeConverter::convert
+     * @covers \toTwig\Converter\IncludeConverter::convert
      * @dataProvider Provider
+     *
+     * @param $smarty
+     * @param $twig
      */
     public function testThatIncludeIsConverted($smarty, $twig)
     {
         // Test the above cases
-        $this->assertSame($twig,
-            $this->converter->convert($this->getFileMock(), $smarty)
-        );
+        /** @var \SplFileInfo $fileMock */
+        $fileMock = $this->getFileMock();
+        $this->assertSame($twig, $this->converter->convert($fileMock, $smarty));
     }
 
     public function Provider()
     {
         return [
-            [
-                "[{include file='page_header.tpl'}]",
-                "{% include 'page_header.tpl' %}"
-            ],
-            [
-                '[{include file=\'footer.tpl\' foo=\'bar\' links=$links}]',
-                '{% include \'footer.tpl\' with {\'foo\' : \'bar\', \'links\' : $links} %}'
-            ]
+            ["[{include file='page_header.tpl'}]", "{% include 'page_header.tpl' %}"],
+            ['[{include file=\'footer.tpl\' foo=\'bar\' links=$links}]', '{% include \'footer.tpl\' with {foo : \'bar\', links : $links} %}']
         ];
     }
 
@@ -71,8 +68,6 @@ class IncludeConverterTest extends TestCase
 
     private function getFileMock()
     {
-        return $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder('\SplFileInfo')->disableOriginalConstructor()->getMock();
     }
 }
