@@ -34,18 +34,17 @@ class CaptureConverterTest extends TestCase
 
     public function testConvertAppend()
     {
-        $dummySmartyTemplate = <<<TEMPLATE
-[{capture append="var"}]
-bar
-[{/capture}]
-TEMPLATE;
+        $dummySmartyTemplate = '
+            [{capture append="var"}]
+            bar
+            [{/capture}]
+        ';
         $actual = $this->converter->convertAppend($dummySmartyTemplate);
-        $expected = <<<EXPECTED
-{% set var %}
-{{ var }}
-bar
-{% endset %}
-EXPECTED;
+        $expected = '
+            {% set var %}{{ var }}
+            bar
+            {% endset %}
+        ';
         $this->assertEquals($expected, $actual);
     }
 

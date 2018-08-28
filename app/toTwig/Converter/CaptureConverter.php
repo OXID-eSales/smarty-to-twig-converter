@@ -111,15 +111,9 @@ class CaptureConverter extends ConverterAbstract
         } else {
             throw new \Exception('It seems that template has errors');
         }
-        $strippedOpeningTag = str_replace([$this->smartyAppend, $this->smartyClosingTag], [$this->twigSet, $this->twigLogicClosingTag . "\n" . '{{ ' . $contentVariableName . ' }}'], $content);
+        $strippedOpeningTag = str_replace([$this->smartyAppend, $this->smartyClosingTag], [$this->twigSet, $this->twigLogicClosingTag . '{{ ' . $contentVariableName . ' }}'], $content);
         $strippedClosingTag = str_replace($this->smartyEndCapture, $this->twigEndSet, $strippedOpeningTag);
-        $exploadedTemplate = explode(PHP_EOL, $strippedClosingTag);
-        $templateTrimmed = [];
-        foreach($exploadedTemplate as $line) {
-            $templateTrimmed[] = trim($line);
-        }
-        $return = implode(PHP_EOL, $templateTrimmed);
-        return $return;
+        return $strippedClosingTag;
     }
 
 }
