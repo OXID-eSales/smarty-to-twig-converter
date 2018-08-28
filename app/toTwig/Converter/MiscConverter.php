@@ -25,7 +25,10 @@ class MiscConverter extends ConverterAbstract
         '\[\{ldelim\}\]' => '',
         '\[\{rdelim\}\]' => '',
         '\[\{literal\}\]' => '{# literal #}',
-        '\[\{\\/literal\}\]' => '{# /literal #}'
+        '\[\{\\/literal\}\]' => '{# /literal #}',
+        '\[\{strip\}\]' => '{% spaceless %}',
+        '\[\{\\/strip\}\]' => '{% endspaceless %}',
+
     );
 
     public function convert(\SplFileInfo $file, $content)
@@ -49,6 +52,6 @@ class MiscConverter extends ConverterAbstract
 
     public function getDescription()
     {
-        return 'Convert smarty general tags like {ldelim} {rdelim} {literal}';
+        return 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
     }
 }

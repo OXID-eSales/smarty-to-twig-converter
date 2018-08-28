@@ -52,6 +52,10 @@ class MiscConverterTest extends TestCase
             ],
             [
                 '[{/literal}]', '{# /literal #}'
+            ],
+            [
+                "[{strip}]\n<tag1>\n\t<tag2>\n\t\tcontent\n\t\t</tag2>\n\t</tag1>\n[{/strip}]",
+                "{% spaceless %}\n<tag1>\n\t<tag2>\n\t\tcontent\n\t\t</tag2>\n\t</tag1>\n{% endspaceless %}"
             ]
         ];
     }
