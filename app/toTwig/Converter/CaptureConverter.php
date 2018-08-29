@@ -13,13 +13,13 @@ use toTwig\ConverterAbstract;
 class CaptureConverter extends ConverterAbstract
 {
 
-    public $smartyAppend = '[{capture append="';
-    public $smartyCapture = '[{capture name="';
-    public $smartyEndCapture = '[{/capture}]';
-    public $smartyClosingTag = '"}]';
-    public $twigSet = '{% set ';
-    public $twigEndSet = '{% endset %}';
-    public $twigLogicClosingTag = ' %}';
+    private $smartyAppend = '[{capture append="';
+    private $smartyCapture = '[{capture name="';
+    private $smartyEndCapture = '[{/capture}]';
+    private $smartyClosingTag = '"}]';
+    private $twigSet = '{% set ';
+    private $twigEndSet = '{% endset %}';
+    private $twigLogicClosingTag = ' %}';
 
     /**
      * Returns the priority of the converter.

@@ -25,7 +25,7 @@ class CaptureConverterTest extends TestCase
 
     public function testDetectAppend()
     {
-        $converted_appends = $this->converter->detectAppend('foo ' . $this->converter->smartyAppend . ' bar');
+        $converted_appends = $this->converter->detectAppend('foo [{capture append="bar"');
         $this->assertTrue($converted_appends);
 
         $converted_appends = $this->converter->detectAppend('foo bar');
