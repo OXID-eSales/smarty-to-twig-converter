@@ -10,9 +10,9 @@ namespace toTwig\Converter;
 
 class InsertConverter extends IncludeConverter
 {
-    public $pattern = '/\[\{insert\b\s*([^{}]+)?\}\]/';
-    public $string = '{% include :template :with :vars %}';
-    public $attrName = 'name';
+    protected $pattern = '/\[\{insert\b\s*([^{}]+)?\}\]/';
+    protected $string = '{% include :template :with :vars %}';
+    protected $attrName = 'name';
 
     public function getName()
     {

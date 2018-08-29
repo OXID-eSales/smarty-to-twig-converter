@@ -18,9 +18,9 @@ use toTwig\ConverterAbstract;
  */
 class IncludeConverter extends ConverterAbstract
 {
-    public $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
-    public $string = '{% include :template :with :vars %}';
-    public $attrName = 'file';
+    protected $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
+    protected $string = '{% include :template :with :vars %}';
+    protected $attrName = 'file';
 
     public function convert(\SplFileInfo $file, $content)
     {
