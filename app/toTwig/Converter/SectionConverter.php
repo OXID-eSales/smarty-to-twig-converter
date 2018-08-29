@@ -13,6 +13,13 @@ use toTwig\ConverterAbstract;
 class SectionConverter extends ConverterAbstract
 {
 
+    /**
+     * Function converts smarty {section} tags to twig {for}
+     *
+     * @param \SplFileInfo $file
+     * @param string $content
+     * @return null|string|string[]
+     */
     public function convert(\SplFileInfo $file, $content)
     {
         $contentReplacedOpeningTag = $this->replaceSectionOpeningTag($content);
@@ -21,21 +28,36 @@ class SectionConverter extends ConverterAbstract
         return $content;
     }
 
+    /**
+     * @return int
+     */
     public function getPriority()
     {
         return 0;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'section';
     }
 
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return 'Convert smarty {section} to twig {for}';
     }
 
+    /**
+     * Function converts opening tag of smarty {section} to twig {for}
+     *
+     * @param $content
+     * @return null|string|string[]
+     */
     private function replaceSectionOpeningTag($content)
     {
         $pattern = '/\[\{section\b\s*([^{}]+)?\}\]/';
@@ -61,6 +83,12 @@ class SectionConverter extends ConverterAbstract
         }, $content);
     }
 
+    /**
+     * Function converts closing tag of smarty {section} to twig {for}
+     *
+     * @param $content
+     * @return null|string|string[]
+     */
     private function replaceSectionClosingTag($content)
     {
         $search = '#\[\{/section\s*\}\]#';
