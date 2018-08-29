@@ -14,11 +14,17 @@ class InsertConverter extends IncludeConverter
     protected $string = '{% include :template :with :vars %}';
     protected $attrName = 'name';
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'insert';
     }
 
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return 'Convert smarty insert to twig include';
