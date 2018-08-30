@@ -106,6 +106,8 @@ class ForConverter extends ConverterAbstract
                 $replace['from'] = $attr['from'];
             }
 
+            $replace['from'] = $this->value($replace['from']);
+
             $string = $this->vsprintf($string, $replace);
             // Replace more than one space to single space
             $string = preg_replace('!\s+!', ' ', $string);

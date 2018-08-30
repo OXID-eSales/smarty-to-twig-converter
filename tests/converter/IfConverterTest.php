@@ -44,32 +44,32 @@ class IfConverterTest extends TestCase
         return [
             [
                 // Test an if statement (no else or elseif)
-                "[{if !foo or foo.bar or foo|bar:foo[\'hello\']}]\nfoo\n[{/if}]",
-                "{% if !foo or foo.bar or foo|bar:foo[\'hello\'] %}\nfoo\n{% endif %}"
+                "[{if !\$foo or \$foo->bar or \$foo|bar:foo[\"hello\"]}]\nfoo\n[{/if}]",
+                "{% if not foo or foo.bar or foo|bar(foo[\"hello\"]) %}\nfoo\n{% endif %}"
             ],
             [
                 // Test an if with an else and a single logical operation.
-                "[{if foo}]\nbar\n[{else}]\nfoo\n[{/if}]",
+                "[{if \$foo}]\nbar\n[{else}]\nfoo\n[{/if}]",
                 "{% if foo %}\nbar\n{% else %}\nfoo\n{% endif %}"
             ],
             [
                 // Test an if with an else and an elseif and two logical operations
-                "[{if foo and awesome.string|banana:\"foo\" \$a\"}]\nbar\n[{elseif awesome.sauce[1] and blue and 'hello'}]\nfoo\n[{/if}]",
-                "{% if foo and awesome.string|banana:\"foo\" \$a\" %}\nbar\n{% elseif awesome.sauce[1] and blue and 'hello' %}\nfoo\n{% endif %}"
+                "[{if \$foo and \$awesome->string|banana:\"foo\"}]\nbar\n[{elseif \$awesome->sauce[1] and \$blue and \"hello\"}]\nfoo\n[{/if}]",
+                "{% if foo and awesome.string|banana(\"foo\") %}\nbar\n{% elseif awesome.sauce[1] and blue and \"hello\" %}\nfoo\n{% endif %}"
             ],
             [
                 // Test an if with an elseif and else clause.
-                "[{if foo|bar:3 or !foo[3]}]\nbar\n[{elseif awesome.sauce[1] and blue and 'hello'}]\nfoo\n[{else}]\nbar\n[{/if}]",
-                "{% if foo|bar:3 or !foo[3] %}\nbar\n{% elseif awesome.sauce[1] and blue and 'hello' %}\nfoo\n{% else %}\nbar\n{% endif %}"
+                "[{if \$foo|bar:3 or !\$foo[3]}]\nbar\n[{elseif \$awesome->sauce[1] and blue and \"hello\"}]\nfoo\n[{else}]\nbar\n[{/if}]",
+                "{% if foo|bar(3) or not foo[3] %}\nbar\n{% elseif awesome.sauce[1] and blue and \"hello\" %}\nfoo\n{% else %}\nbar\n{% endif %}"
             ],
             [
                 // Test an if statement with parenthesis.
-                "[{if (foo and bar) or foo and (bar or (foo and bar))}]\nbar\n[{else}]\nfoo\n[{/if}]",
+                "[{if (\$foo and \$bar) or \$foo and (\$bar or (\$foo and \$bar))}]\nbar\n[{else}]\nfoo\n[{/if}]",
                 "{% if (foo and bar) or foo and (bar or (foo and bar)) %}\nbar\n{% else %}\nfoo\n{% endif %}"
             ],
             [
                 // Test an elseif statement with parenthesis.
-                "[{if foo}]\nbar\n[{elseif (foo and bar) or foo and (bar or (foo and bar))}]\nfoo\n[{/if}]",
+                "[{if \$foo}]\nbar\n[{elseif (\$foo and \$bar) or \$foo and (\$bar or (\$foo and \$bar))}]\nfoo\n[{/if}]",
                 "{% if foo %}\nbar\n{% elseif (foo and bar) or foo and (bar or (foo and bar)) %}\nfoo\n{% endif %}"
             ]
         ];

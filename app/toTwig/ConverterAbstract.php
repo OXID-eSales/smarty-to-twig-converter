@@ -116,11 +116,73 @@ abstract class ConverterAbstract
      */
     protected function value($string)
     {
+        $string = rtrim(ltrim($string));
+
+        if (empty($string)) {
+            return $string;
+        }
+
+        // Handle "($var"
+        if ($string[0] == "(") {
+            return "(" . $this->value(ltrim($string, "("));
+        }
+
+        // Handle "!$var"
+        if (preg_match("/(?<=[(\\s]|^)!(?=[$]?\\w*)/", $string)) {
+            return "not " . $this->value(ltrim($string, "!"));
+        }
+
         $string = ltrim($string, '$');
         $string = str_replace("->", ".", $string);
-        $string = str_replace("($", "(", $string);
+
+        // Handle function arguments
+        $string = preg_replace_callback("/\([^)]*\)/", function($matches) {
+            $expression = $matches[0];
+            $expression = rtrim(ltrim($expression, "("), ")");
+
+            $parts = explode(",", $expression);
+            foreach ($parts as &$part) {
+                $part = $this->value($part);
+            }
+
+            return sprintf("(%s)", implode(", ", $parts));
+        }, $string);
+
+        // Handle filters [{$var|filter:$var->from:'to'}]
+        $string = preg_replace_callback("/\|\w+\:[^\s}|]*/", function ($matches) {
+            $expression = $matches[0];
+            $expression = ltrim($expression, "|");
+
+            $parts = explode(":", $expression);
+
+            $value = array_shift($parts);
+            $value = $this->value($value);
+
+            foreach ($parts as &$part) {
+                $part = $this->value($part);
+            }
+
+            return sprintf("|$value(%s)", implode(", ", $parts));
+        }, $string);
 
         return $string;
+    }
+
+    /**
+     * Explodes expression to parts and converts them separately
+     *
+     * @param $expression
+     *
+     * @return string
+     */
+    protected function convertExpression($expression)
+    {
+        $parts = explode(" ", $expression);
+        foreach ($parts as &$part) {
+            $part = $this->value($part);
+        }
+
+        return implode(" ", $parts);
     }
 
     /**
