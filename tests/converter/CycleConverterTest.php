@@ -70,12 +70,12 @@ class CycleConverterTest extends TestCase
             [
                 // Extra parameters
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true}]",
-                "{{ oxcycle([\"val1\", \"val2\", \"val3\"], { print: 'false', advance: 'false', reset: 'true' }) }}"
+                "{{ oxcycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) }}"
             ],
             [
                 // Extra parameters with assign
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true assign=\"var\"}]",
-                "{% set var = oxcycle([\"val1\", \"val2\", \"val3\"], { print: 'false', advance: 'false', reset: 'true' }) %}"
+                "{% set var = oxcycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) %}"
             ]
         ];
     }
