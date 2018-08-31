@@ -37,46 +37,22 @@ class CounterConverter extends ConverterAbstract
         $pattern = '/\[\{counter\b\s*([^{}]+)?\}\]/';
         $string = '{% set :name = ( :name | default(:start) ) :direction :skip %}:print:assign';
 
-        return preg_replace_callback($pattern, function ($matches) use ($string) {
+        return preg_replace_callback($pattern, function($matches) use ($string) {
 
-            if(!isset($matches[1]) && $matches[0]){
+            if(!isset($matches[1]) && $matches[0]) {
                 $match = $matches[0];
             } else {
                 $match = $matches[1];
             }
 
             $attr = $this->attributes($match);
-            if(!isset($attr['name'])) {
-                $attr['name'] = 'default'; //default name in Smarty
-            } else {
-                $attr['name'] = $this->variable($attr['name']);
-            }
-            if(!isset($attr['start'])) {
-                $attr['start'] = 0; //default initial number in Smarty is 1, but since we increment after 1st call, we want this to be 0
-            } else {
-                $attr['start'] = (int)$attr['start'] - 1;
-            }
-            if(!isset($attr['skip'])) {
-                $attr['skip'] = 1; //default interval in Smarty
-            } else {
-                $attr['skip'] = (int)$attr['skip'];
-            }
-            if(isset($attr['print']) && $attr['print'] == 'true') {
-                $attr['print'] = ' {{ ' . $attr['name'] . ' }}';
-            } else {
-                $attr['print'] = '';
-            }
-            if(isset($attr['direction']) && $attr['direction'] == 'down') {
-                $attr['direction'] = '-';
-            } else {
-                $attr['direction'] = '+';
-            }
-            if(isset($attr['assign'])) {
-                $attr['assign'] = ' {% set ' . $this->variable($attr['assign']) . ' = ' . $attr['name'] . ' %}';
-            }
 
-            $replace = $attr;
-
+            $replace['name'] = $this->getNameAttribute($attr);
+            $replace['start'] = $this->getStartAttribute($attr);
+            $replace['skip'] = $this->getSkipAttribute($attr);
+            $replace['print'] = $this->getPrintAttribute($attr, $replace['name']);
+            $replace['direction'] = $this->getDirectionAttribute($attr);
+            $replace['assign'] = $this->getAssignAttribute($attr, $replace['name']);
 
             $string = $this->vsprintf($string, $replace);
 
@@ -86,5 +62,64 @@ class CounterConverter extends ConverterAbstract
             return str_replace($matches[0], $string, $matches[0]);
 
         }, $content);
+    }
+
+    private function getNameAttribute($attr)
+    {
+        if(!isset($attr['name'])) {
+            $name = 'default'; //default name in Smarty
+        } else {
+            $name = $this->variable($attr['name']);
+        }
+        return $name;
+    }
+
+    private function getStartAttribute($attr)
+    {
+        if(!isset($attr['start'])) {
+            $start = 0; //default initial number in Smarty is 1, but since we increment after 1st call, we want this to be 0
+        } else {
+            $start = (int)$attr['start'] - 1;
+        }
+        return $start;
+    }
+
+    private function getSkipAttribute($attr)
+    {
+        if(!isset($attr['skip'])) {
+            $skip = 1; //default interval in Smarty
+        } else {
+            $skip = (int)$attr['skip'];
+        }
+        return $skip;
+    }
+
+    private function getPrintAttribute($attr, $name)
+    {
+        if(isset($attr['print']) && $attr['print'] == 'true') {
+            $print = ' {{ ' . $name . ' }}';
+        } else {
+            $print = '';
+        }
+        return $print;
+    }
+
+    private function getDirectionAttribute($attr)
+    {
+        if(isset($attr['direction']) && $attr['direction'] == 'down') {
+            $direction = '-';
+        } else {
+            $direction = '+';
+        }
+        return $direction;
+    }
+
+    private function getAssignAttribute($attr, $name)
+    {
+        $assign = '';
+        if(isset($attr['assign'])) {
+            $assign = ' {% set ' . $this->variable($attr['assign']) . ' = ' . $name . ' %}';
+        }
+        return $assign;
     }
 }
