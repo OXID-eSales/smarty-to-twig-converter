@@ -84,7 +84,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return array
      */
-    function extractAdditionalParametersArray($attributes)
+    private function extractAdditionalParametersArray($attributes)
     {
         $extraParameters = [];
         foreach ($attributes as $name => $value) {
@@ -103,7 +103,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return string
      */
-    function composeArgumentsString($valuesArray, $extraParameters)
+    private function composeArgumentsString($valuesArray, $extraParameters)
     {
         $argumentsString = "";
         if (!empty($valuesArray) || !empty($extraParameters)) {
