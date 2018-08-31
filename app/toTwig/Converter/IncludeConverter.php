@@ -18,6 +18,10 @@ use toTwig\ConverterAbstract;
  */
 class IncludeConverter extends ConverterAbstract
 {
+    protected $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
+    protected $string = '{% include :template :with :vars %}';
+    protected $attrName = 'file';
+
     public function convert(\SplFileInfo $file, $content)
     {
         return $this->replace($content);
@@ -40,21 +44,20 @@ class IncludeConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
-        $string = '{% include :template :with :vars %}';
-
+        $pattern = $this->pattern;
+        $string = $this->string;
         return preg_replace_callback($pattern, function ($matches) use ($string) {
 
             $match = $matches[1];
             $attr = $this->attributes($match);
 
             $replace = array();
-            $replace['template'] = $attr['file'];
+            $replace['template'] = $attr[$this->attrName];
 
             // If we have any other variables
             if (count($attr) > 1) {
                 $replace['with'] = 'with';
-                unset($attr['file']); // We won't need in vars
+                unset($attr[$this->attrName]); // We won't need in vars
 
                 $vars = array();
                 foreach ($attr as $key => $value) {

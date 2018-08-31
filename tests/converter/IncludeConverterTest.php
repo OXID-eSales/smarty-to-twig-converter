@@ -28,15 +28,18 @@ class IncludeConverterTest extends TestCase
     }
 
     /**
-     * @covers       \toTwig\Converter\IncludeConverter::convert
+     * @covers \toTwig\Converter\IncludeConverter::convert
      * @dataProvider Provider
+     *
+     * @param $smarty
+     * @param $twig
      */
     public function testThatIncludeIsConverted($smarty, $twig)
     {
         // Test the above cases
-        $this->assertSame($twig,
-            $this->converter->convert($this->getFileMock(), $smarty)
-        );
+        /** @var \SplFileInfo $fileMock */
+        $fileMock = $this->getFileMock();
+        $this->assertSame($twig, $this->converter->convert($fileMock, $smarty));
     }
 
     public function Provider()
@@ -71,8 +74,6 @@ class IncludeConverterTest extends TestCase
 
     private function getFileMock()
     {
-        return $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder('\SplFileInfo')->disableOriginalConstructor()->getMock();
     }
 }
