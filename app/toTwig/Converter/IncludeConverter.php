@@ -61,7 +61,7 @@ class IncludeConverter extends ConverterAbstract
 
                 $vars = array();
                 foreach ($attr as $key => $value) {
-                    $vars[] =  $key . " : " . $value;
+                    $vars[] = $this->variable($key) . ": " . $this->value($value);
                 }
 
                 $replace['vars'] = '{' . implode(', ', $vars) . '}';

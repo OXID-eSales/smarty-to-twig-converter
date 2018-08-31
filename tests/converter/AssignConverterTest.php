@@ -47,7 +47,7 @@ class AssignConverterTest extends TestCase
             ],
             [
                 "[{assign var=\"name\" value=\$bob}]",
-                "{% set name = \$bob %}"
+                "{% set name = bob %}"
             ],
             [
                 "[{assign \"name\" \"Bob\"}]",
@@ -57,6 +57,14 @@ class AssignConverterTest extends TestCase
                 "[{assign var=\"foo\" \"bar\" scope=\"global\"}]",
                 "{% set foo = \"bar\" %}"
             ],
+            [
+                "[{assign var=\"where\" value=\$oView->getListFilter()}]",
+                "{% set where = oView.getListFilter() %}"
+            ],
+            [
+                "[{assign var=\"template_title\" value=\"MY_WISH_LIST\"|oxmultilangassign}]",
+                "{% set template_title = \"MY_WISH_LIST\"|oxmultilangassign %}"
+            ]
         ];
     }
 
