@@ -28,44 +28,13 @@ class CycleConverter extends ConverterAbstract
             $match = isset($matches[1]) ? $matches[1] : "";
             $attributes = $this->attributes($match);
 
-            // Collect values into array
-            $valuesArray = [];
-            if (isset($attributes['values'])) {
-                $values = trim($attributes['values'], "\"");
-                unset($attributes['values']);
-                $delimiter = isset($attributes['delimiter']) ? trim($attributes['delimiter'], "\"") : ",";
-                unset($attributes['delimiter']);
-                foreach (explode($delimiter, $values) as $value) {
-                    $valuesArray[] = "\"$value\"";
-                }
-            }
+            $valuesArray = $this->extractValuesArray($attributes);
+            $extraParameters = $this->extractAdditionalParametersArray($attributes);
 
-            // Extract assignment variable
-            $assignVar = null;
-            if (isset($attributes['assign'])) {
-                $assignVar = $this->variable($attributes['assign']);
-                unset($attributes['assign']);
-            }
-
-            // Collect additional parameters into array
-            $extraParameters = [];
-            foreach ($attributes as $name => $value) {
-                $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
-            }
-
-            // Collect oxcycle arguments
-            $argumentsString = "";
-            if (!empty($extraParameters) || !empty($valuesArray)) {
-                $arguments = [];
-                $arguments[] = "[" . implode(", ", $valuesArray) . "]";
-                if (!empty($extraParameters)) {
-                    $arguments[] = "{ " . implode(", ", $extraParameters) . " }";
-                }
-
-                $argumentsString = implode(", ", $arguments);
-            }
+            $argumentsString = $this->composeArgumentsString($valuesArray, $extraParameters);
 
             // Different approaches for syntax with and without assignment
+            $assignVar = $this->extractAssignVariableName($attributes);
             if ($assignVar) {
                 $twigTag = "{% set $assignVar = oxcycle($argumentsString) %}";
             } else {
@@ -74,6 +43,80 @@ class CycleConverter extends ConverterAbstract
 
             return $twigTag;
         }, $content);
+    }
+
+    /**
+     * @param $attributes
+     *
+     * @return array
+     */
+    private function extractValuesArray($attributes)
+    {
+        $valuesArray = [];
+        if (isset($attributes['values'])) {
+            $values = trim($attributes['values'], "\"");
+            $delimiter = isset($attributes['delimiter']) ? trim($attributes['delimiter'], "\"") : ",";
+
+            foreach (explode($delimiter, $values) as $value) {
+                $valuesArray[] = "\"$value\"";
+            }
+        }
+        return $valuesArray;
+    }
+
+    /**
+     * @param $attributes
+     *
+     * @return string
+     */
+    private function extractAssignVariableName($attributes)
+    {
+        $assignVar = null;
+        if (isset($attributes['assign'])) {
+            $assignVar = $this->variable($attributes['assign']);
+        }
+
+        return $assignVar;
+    }
+
+    /**
+     * @param $attributes
+     *
+     * @return array
+     */
+    function extractAdditionalParametersArray($attributes)
+    {
+        $extraParameters = [];
+        foreach ($attributes as $name => $value) {
+            // Skip already handled attributes
+            if (in_array($name, ['values', 'delimiter', 'assign'])) continue;
+
+            $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
+        }
+
+        return $extraParameters;
+    }
+
+    /**
+     * @param $valuesArray
+     * @param $extraParameters
+     *
+     * @return string
+     */
+    function composeArgumentsString($valuesArray, $extraParameters)
+    {
+        $argumentsString = "";
+        if (!empty($valuesArray) || !empty($extraParameters)) {
+            $arguments = [];
+            $arguments[] = "[" . implode(", ", $valuesArray) . "]";
+            if (!empty($extraParameters)) {
+                $arguments[] = "{ " . implode(", ", $extraParameters) . " }";
+            }
+
+            $argumentsString = implode(", ", $arguments);
+        }
+
+        return $argumentsString;
     }
 
     /**
