@@ -136,13 +136,13 @@ class MathConverterTest extends TestCase
     }
 
     /**
-     * @covers \toTwig\Converter\IncludeConverter::convert
+     * @covers \toTwig\Converter\MAthConverter::convert
      * @dataProvider Provider
      *
      * @param $smarty
      * @param $twig
      */
-    public function testThatIncludeIsConverted($smarty, $twig)
+    public function testThatMAthIsConverted($smarty, $twig)
     {
         // Test the above cases
         /** @var \SplFileInfo $fileMock */
