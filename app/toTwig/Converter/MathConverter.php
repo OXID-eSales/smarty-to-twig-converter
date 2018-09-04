@@ -50,8 +50,7 @@ class MathConverter extends ConverterAbstract
     private function replace($content)
     {
         $pattern = '/\[\{math\b\s*([^{}]+)?\}\]/';
-        $string = '{{ :equation }}';
-        return preg_replace_callback($pattern, function($matches) use ($string) {
+        return preg_replace_callback($pattern, function($matches) {
 
             $match = $this->getMatch($matches);
             $attr = $this->attributes($match);
@@ -62,9 +61,7 @@ class MathConverter extends ConverterAbstract
                 $vars['format_string'] = $attr['format'];
             }
             $replace['assign'] = $this->getAssignAttribute($attr);
-            if($replace['assign']) {
-                $string = '{% set :assign = :equation %}';
-            }
+            $string = $this->getStringForPregReplace($replace);
             $equationTemplate = $this->translateEquationTemplate($attr, $vars);
             $formattedEquation = $this->mathEquationSprintf($equationTemplate, $vars);
             $replace['equation'] = $formattedEquation;
@@ -90,6 +87,26 @@ class MathConverter extends ConverterAbstract
         return $match;
     }
 
+    /**
+     * Get string with pattern to be replaced by preg_replace.
+     *
+     * @param $replace
+     * @return string
+     */
+    private function getStringForPregReplace($replace) {
+        if($replace['assign']) {
+            $string = '{% set :assign = :equation %}';
+        } else {
+            $string = '{{ :equation }}';
+        }
+        return $string;
+    }
+
+    /**
+     * @param $attr
+     * @param $vars
+     * @return mixed|null|string|string[]
+     */
     private function translateEquationTemplate($attr, $vars)
     {
         $equationTemplate = $this->variable($attr['equation']);
