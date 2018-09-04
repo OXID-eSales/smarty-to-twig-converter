@@ -201,4 +201,23 @@ abstract class ConverterAbstract
             }
         }, $string);
     }
+
+    /**
+     * Replace named args in string
+     *
+     * @param  string $string
+     * @param  array $args
+     * @return string         Formated string
+     */
+    protected function mathEquationSprintf($string, $args)
+    {
+        $pattern = '/([a-zA-Z0-9]+)/';
+        return preg_replace_callback($pattern, function ($matches) use ($args) {
+            if (isset($args[$matches[1]])) {
+                return str_replace($matches[0], $args[$matches[1]], $matches[0]);
+            } else {
+                return $matches[0];
+            }
+        }, $string);
+    }
 }
