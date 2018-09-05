@@ -20,5 +20,8 @@
     "autoload": {
         "psr-0": { "toTwig\\": "app/" }
     },
+    "autoload-dev": {
+        "psr-4": { "sankar\\ST\\Tests\\": "tests/" }
+    },
     "bin": ["toTwig"]
 }
