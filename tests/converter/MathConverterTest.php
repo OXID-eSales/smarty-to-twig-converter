@@ -29,6 +29,10 @@ class MathConverterTest extends TestCase
                 "{{ 1 + 2 }}"
             ],
             [
+                "[{math equation=\"x + y\" x=\$a y=\$b}]",
+                "{{ a + b }}"
+            ],
+            [
                 "[{math equation=\"x - y\" x=1 y=2}]",
                 "{{ 1 - 2 }}"
             ],
