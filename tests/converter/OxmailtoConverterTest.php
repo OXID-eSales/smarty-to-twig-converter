@@ -55,8 +55,8 @@ class OxmailtoConverterTest extends TestCase
                 "{{ oxmailto(oxcmp_shop.oxshops__oxinfoemail.value, { encode: \"javascript\" }) }}"
             ],
             [
-                "[{oxmailto address='me@example.com' subject='Subject of email' extra='class='email''}]",
-                "{{ oxmailto('me@example.com', { subject: 'Subject of email', extra: 'class='email'' }) }}"
+                "[{oxmailto address='me@example.com' subject='Subject of email' extra=\"class='email'\"}]",
+                "{{ oxmailto('me@example.com', { subject: 'Subject of email', extra: \"class='email'\" }) }}"
             ]
         ];
     }
