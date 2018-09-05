@@ -19,7 +19,7 @@ class CounterConverter extends ConverterAbstract
 
     public function getPriority()
     {
-        return 0;
+        return 1000;
     }
 
     public function getName()
@@ -34,7 +34,7 @@ class CounterConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\[\{counter\b\s*([^{}]+)?\}\]/';
+        $pattern = '/\[\{\s*counter\b\s*([^{}]+)?\s*\}\]/';
         $string = '{% set :name = ( :name | default(:start) ) :direction :skip %}:print:assign';
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
@@ -48,10 +48,10 @@ class CounterConverter extends ConverterAbstract
             $attr = $this->attributes($match);
 
             $replace['name'] = $this->getNameAttribute($attr);
-            $replace['start'] = $this->getStartAttribute($attr);
-            $replace['skip'] = $this->getSkipAttribute($attr);
-            $replace['print'] = $this->getPrintAttribute($attr, $replace['name']);
             $replace['direction'] = $this->getDirectionAttribute($attr);
+            $replace['skip'] = $this->getSkipAttribute($attr);
+            $replace['start'] = $this->getStartAttribute($attr, $replace['direction'], $replace['skip']);
+            $replace['print'] = $this->getPrintAttribute($attr, $replace['name']);
             $replace['assign'] = $this->getAssignAttribute($attr, $replace['name']);
 
             $string = $this->vsprintf($string, $replace);
@@ -67,21 +67,21 @@ class CounterConverter extends ConverterAbstract
     private function getNameAttribute($attr)
     {
         if(!isset($attr['name'])) {
-            $name = 'default'; //default name in Smarty
+            $name = 'defaultCounter'; //default name in Smarty
         } else {
             $name = $this->variable($attr['name']);
         }
         return $name;
     }
 
-    private function getStartAttribute($attr)
+    private function getDirectionAttribute($attr)
     {
-        if(!isset($attr['start'])) {
-            $start = 0; //default initial number in Smarty is 1, but since we increment after 1st call, we want this to be 0
+        if(isset($attr['direction']) && ($attr['direction'] == 'down' || $attr['direction'] == '"down"')) {
+            $direction = '-';
         } else {
-            $start = (int)$attr['start'] - 1;
+            $direction = '+';
         }
-        return $start;
+        return $direction;
     }
 
     private function getSkipAttribute($attr)
@@ -94,6 +94,20 @@ class CounterConverter extends ConverterAbstract
         return $skip;
     }
 
+    private function getStartAttribute($attr, $direction, $skip)
+    {
+        if(!isset($attr['start'])) {
+            $start = 0; //default initial number in Smarty is 1, but since we increment after 1st call, we want this to be 0
+        } else {
+            if($direction == '+') { //if counter is to be incremented we need to subtract incrementation size from start attribute.
+                $start = (int)$attr['start'] - (int)$skip;
+            } else {
+                $start = (int)$attr['start'] + (int)$skip;
+            }
+        }
+        return $start;
+    }
+
     private function getPrintAttribute($attr, $name)
     {
         if(isset($attr['print']) && $attr['print'] == 'true') {
@@ -102,16 +116,6 @@ class CounterConverter extends ConverterAbstract
             $print = '';
         }
         return $print;
-    }
-
-    private function getDirectionAttribute($attr)
-    {
-        if(isset($attr['direction']) && $attr['direction'] == 'down') {
-            $direction = '-';
-        } else {
-            $direction = '+';
-        }
-        return $direction;
     }
 
     private function getAssignAttribute($attr, $name)

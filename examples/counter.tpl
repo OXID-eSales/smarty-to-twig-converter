@@ -1,4 +1,4 @@
-[{counter}]
+[{ counter }]
 
 [{counter name="foo"}]
 

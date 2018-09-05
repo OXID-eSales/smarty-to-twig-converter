@@ -37,7 +37,11 @@ class CounterConverterTest extends TestCase
         return [
             [
                 '[{counter}]',
-                '{% set default = ( default | default(0) ) + 1 %}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %}'
+            ],
+            [
+                '[{ counter }]',
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %}'
             ],
             [
                 '[{counter name="foo"}]',
@@ -45,31 +49,39 @@ class CounterConverterTest extends TestCase
             ],
             [
                 '[{counter start=2}]',
-                '{% set default = ( default | default(1) ) + 1 %}'
+                '{% set defaultCounter = ( defaultCounter | default(1) ) + 1 %}'
             ],
             [
                 '[{counter skip=2}]',
-                '{% set default = ( default | default(0) ) + 2 %}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 2 %}'
             ],
             [
                 '[{counter print=true}]',
-                '{% set default = ( default | default(0) ) + 1 %} {{ default }}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %} {{ defaultCounter }}'
             ],
             [
                 '[{counter print=false}]',
-                '{% set default = ( default | default(0) ) + 1 %}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %}'
             ],
             [
                 '[{counter direction=up}]',
-                '{% set default = ( default | default(0) ) + 1 %}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %}'
             ],
             [
                 '[{counter direction=down}]',
-                '{% set default = ( default | default(0) ) - 1 %}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) - 1 %}'
+            ],
+            [
+                '[{counter direction="up"}]',
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %}'
+            ],
+            [
+                '[{counter direction="down"}]',
+                '{% set defaultCounter = ( defaultCounter | default(0) ) - 1 %}'
             ],
             [
                 '[{counter assign="foo"}]',
-                '{% set default = ( default | default(0) ) + 1 %} {% set foo = default %}'
+                '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %} {% set foo = defaultCounter %}'
             ],
             [
                 '[{counter name="mini_basket_countdown_nr" assign="countdown_nr"}]',
@@ -77,7 +89,7 @@ class CounterConverterTest extends TestCase
             ],
             [
                 '[{counter name="foo" start=3 skip=4 direction=down print=true assign="bar"}]',
-                '{% set foo = ( foo | default(2) ) - 4 %} {{ foo }} {% set bar = foo %}'
+                '{% set foo = ( foo | default(7) ) - 4 %} {{ foo }} {% set bar = foo %}'
             ]
         ];
     }
