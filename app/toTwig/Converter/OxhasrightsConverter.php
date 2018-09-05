@@ -56,7 +56,7 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceEndOxhasrights($content)
     {
-        $search = "#\[\{/oxhasrights\s*\}\]#";
+        $search = "#\[\{\s*/oxhasrights\s*\}\]#";
         $replace = "{% endoxhasrights %}";
 
         return preg_replace($search, $replace, $content);
@@ -69,7 +69,7 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceOxhasrights($content)
     {
-        $pattern = "#\[\{oxhasrights\b\s*([^{}]+)?\}\]#i";
+        $pattern = "#\[\{\s*oxhasrights\s*([^{}]+)?\}\]#i";
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

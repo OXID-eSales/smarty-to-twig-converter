@@ -42,14 +42,21 @@ class OxhasrightsConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Basic usage
             [
                 "[{oxhasrights ident=\"TOBASKET\"}]\nfoo\n[{/oxhasrights}]",
                 "{% oxhasrights \"TOBASKET\" %}\nfoo\n{% endoxhasrights %}"
             ],
+            // Nested blocks
             [
                 "[{oxhasrights ident=\"TOBASKET\"}]\nfoo\n[{oxhasrights ident=\"NESTED\"}]xxx\n[{/oxhasrights}][{/oxhasrights}]",
                 "{% oxhasrights \"TOBASKET\" %}\nfoo\n{% oxhasrights \"NESTED\" %}xxx\n{% endoxhasrights %}{% endoxhasrights %}"
-            ]
+            ],
+            // With spaces
+            [
+                "[{ oxhasrights ident=\"IDENT\" }] ... [{ /oxhasrights }]",
+                "{% oxhasrights \"IDENT\" %} ... {% endoxhasrights %}"
+            ],
         ];
     }
 
