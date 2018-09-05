@@ -45,6 +45,14 @@ class OxifcontentConverterTest extends TestCase
             [
                 "[{oxifcontent ident=\"TOBASKET\" object=\"aObject\"}]\nfoo\n[{/oxifcontent}]",
                 "{% oxifcontent { ident: \"TOBASKET\", object: \"aObject\" } %}\nfoo\n{% endoxifcontent %}"
+            ],
+            [
+                "[{oxifcontent ident=\$x object=\$y}]\nfoo\n[{/oxifcontent}]",
+                "{% oxifcontent { ident: x, object: y } %}\nfoo\n{% endoxifcontent %}"
+            ],
+            [
+                "[{oxifcontent ident=\$x object=\$y}]\nfoo\n[{oxifcontent ident=\$x2 object=\$y2}]bar[{/oxifcontent}][{/oxifcontent}]",
+                "{% oxifcontent { ident: x, object: y } %}\nfoo\n{% oxifcontent { ident: x2, object: y2 } %}bar{% endoxifcontent %}{% endoxifcontent %}"
             ]
         ];
     }
