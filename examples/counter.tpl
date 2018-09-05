@@ -4,6 +4,8 @@
 
 [{counter start=2}]
 
+[{counter start=0}]
+
 [{counter skip=2}]
 
 [{counter print=true}]
