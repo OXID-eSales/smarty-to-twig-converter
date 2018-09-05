@@ -20,11 +20,12 @@ class CounterConverterTest extends TestCase
     {
         $this->converter = new CounterConverter();
     }
+
     /**
      * @covers \toTwig\Converter\CounterConverter::convert
      * @dataProvider Provider
      */
-    public function testThatCounterIsConverted($smarty,$twig)
+    public function testThatCounterIsConverted($smarty, $twig)
     {
         // Test the above cases
         $this->assertSame($twig,
