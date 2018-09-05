@@ -45,6 +45,10 @@ class OxhasrightsConverterTest extends TestCase
             [
                 "[{oxhasrights ident=\"TOBASKET\"}]\nfoo\n[{/oxhasrights}]",
                 "{% oxhasrights \"TOBASKET\" %}\nfoo\n{% endoxhasrights %}"
+            ],
+            [
+                "[{oxhasrights ident=\"TOBASKET\"}]\nfoo\n[{oxhasrights ident=\"NESTED\"}]xxx\n[{/oxhasrights}][{/oxhasrights}]",
+                "{% oxhasrights \"TOBASKET\" %}\nfoo\n{% oxhasrights \"NESTED\" %}xxx\n{% endoxhasrights %}{% endoxhasrights %}"
             ]
         ];
     }
