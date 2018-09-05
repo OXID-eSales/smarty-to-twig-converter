@@ -1,25 +1,25 @@
-{assign var="name" value="Bob"}
+{% set name = "Bob" %}
 
-{assign "name" "Bob"} {* short-hand *}
+{% set name = "Bob" %} {* short-hand *}
 
-{assign var="name" value="Bob" nocache}
+{% set name = "Bob" %}
 
-{assign "name" "Bob" nocache} {* short-hand *}
+{% set name = "Bob" %} {* short-hand *}
 
-{assign var=running_total value=$running_total+$some_array[$row].some_value}
+{% set running_total = running_total + some_array[row].some_value %}
 
-{assign var="foo" value="bar" scope="root"}
+{% set foo = "bar" %}
 
-{assign var="foo" value=$bar}
+{% set foo = bar %}
 
-{assign var="foo" $bar}
+{% set foo = bar %}
 
-{assign var="foo" "bar" scope="global"}
+{% set foo = "bar" %}
 
-{assign var=foo value={counter}}  // plugin result
+{* [{assign var=foo value={{ counter }}}]  // plugin result *} // Counter is not implemented yet
 
-{assign var=foo value=substr($bar,2,5)}  // PHP function result
+{% set foo = substr(bar, 2, 5) %}  // PHP function result
 
-{assign var=foo value=$bar|strlen}  // using modifier
+{% set foo = bar|strlen %}  // using modifier
 
-{assign var=foo value=$buh+$bar|strlen}  // more complex expression
+{% set foo = buh + bar|strlen %}  // more complex expression
