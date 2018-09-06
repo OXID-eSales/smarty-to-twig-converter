@@ -19,35 +19,16 @@ class OxidIncludeWidgetConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $pattern = '/\[\{oxid_include_widget\b\s*([^{}]+)?\}\]/';
+        // [{oxid_include_widget other stuff}]
+        $pattern = '/\[\{\s*oxid_include_widget\s*([^{}]+)?\}\]/';
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
             $attributes = $this->attributes($match);
-            $extraParameters = $this->extractAdditionalParametersArray($attributes);
-
-            $argumentsString = "";
-            if (!empty($extraParameters)) {
-                $argumentsString = "{ " . implode(", ", $extraParameters) . " }";
-            }
+            $argumentsString = $this->convertArrayToAssocTwigArray($attributes, []);
 
             return "{{ oxid_include_widget($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @param $attributes
-     *
-     * @return array
-     */
-    private function extractAdditionalParametersArray($attributes)
-    {
-        $extraParameters = [];
-        foreach ($attributes as $name => $value) {
-            $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
-        }
-
-        return $extraParameters;
     }
 
     /**
