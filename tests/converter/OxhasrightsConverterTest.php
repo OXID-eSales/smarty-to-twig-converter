@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxhasrightsConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxhasrightsConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxhasrightsConverterTest extends TestCase
+class OxhasrightsConverterTest extends AbstractConverterTest
 {
     /** @var OxhasrightsConverter */
     protected $converter;
@@ -61,7 +60,7 @@ class OxhasrightsConverterTest extends TestCase
     }
 
     /**
-     * @covers \toTwig\Converter\ForConverter::getName
+     * @covers \toTwig\Converter\OxhasrightsConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -74,18 +73,5 @@ class OxhasrightsConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }
