@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxevalConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxevalConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxevalConverterTest extends TestCase
+class OxevalConverterTest extends AbstractConverterTest
 {
     /** @var OxevalConverter */
     protected $converter;
@@ -42,14 +41,21 @@ class OxevalConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Base usage
             [
                 "[{oxeval var=\$variable}]",
                 "{{ oxeval({ var: variable }) }}"
             ],
+            // With additional parameters
             [
                 "[{oxeval var=\$variable force=true}]",
                 "{{ oxeval({ var: variable, force: true }) }}"
-            ]
+            ],
+            // With spaces
+            [
+                "[{ oxeval var=\$variable }]",
+                "{{ oxeval({ var: variable }) }}"
+            ],
         ];
     }
 
@@ -67,17 +73,5 @@ class OxevalConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-        return $mock;
     }
 }
