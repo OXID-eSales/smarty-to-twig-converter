@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxmultilangConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxmultilangConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxmultilangConverterTest extends TestCase
+class OxmultilangConverterTest extends AbstractConverterTest
 {
     /** @var OxmultilangConverter */
     protected $converter;
@@ -42,13 +41,20 @@ class OxmultilangConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Basic usage
             [
                 "[{oxmultilang ident=\"ERROR_404\"}]",
                 "{{ oxmultilang({ ident: \"ERROR_404\" }) }}"
             ],
+            // Example from OXID
             [
                 "[{oxmultilang noerror=true ident=\$menuitem->getAttribute('name')|default:\$menuitem->getAttribute('id')}]",
                 "{{ oxmultilang({ noerror: true, ident: menuitem.getAttribute('name')|default(menuitem.getAttribute('id')) }) }}"
+            ],
+            // With spaces
+            [
+                "[{ oxmultilang ident=\"ERROR_404\" }]",
+                "{{ oxmultilang({ ident: \"ERROR_404\" }) }}"
             ],
         ];
     }
@@ -67,18 +73,5 @@ class OxmultilangConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }

@@ -19,33 +19,16 @@ class OxmultilangConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $pattern = '/\[\{oxmultilang\b\s*([^{}]+)?\}\]/';
+        // [{oxmultilang ident="A_IDENT"}]
+        $pattern = '/\[\{\s*oxmultilang\s*([^{}]+)?\}\]/';
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
             $attributes = $this->attributes($match);
-
-            $extraParameters = $this->extractAdditionalParametersArray($attributes);
-
-            $argumentsString = "{ " . implode(", ", $extraParameters) . " }";
+            $argumentsString = $this->convertArrayToAssocTwigArray($attributes, []);
 
             return "{{ oxmultilang($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @param $attributes
-     *
-     * @return array
-     */
-    private function extractAdditionalParametersArray($attributes)
-    {
-        $extraParameters = [];
-        foreach ($attributes as $name => $value) {
-            $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
-        }
-
-        return $extraParameters;
     }
 
     /**
