@@ -63,7 +63,12 @@ class AssignAdvConverterTest extends TestCase
             [
                 "[{assign_adv var=\"invite_array\" value=\"array('0' => '\$sender_name', '1' => '\$shop_name')\"}]",
                 "{% set invite_array = oxassign(\"array('0' => '\$sender_name', '1' => '\$shop_name')\") %}"
-            ]
+            ],
+            // With spaces
+            [
+                "[{ assign_adv var=\"name\" value=\"Bob\" }]",
+                "{% set name = oxassign(\"Bob\") %}"
+            ],
         ];
     }
 
