@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\AssignAdvConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\AssignAdvConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class AssignAdvConverterTest extends TestCase
+class AssignAdvConverterTest extends AbstractConverterTest
 {
     /** @var AssignAdvConverter */
     protected $converter;
@@ -86,18 +85,5 @@ class AssignAdvConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }
