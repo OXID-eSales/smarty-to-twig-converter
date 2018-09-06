@@ -78,12 +78,7 @@ class OxifcontentConverter extends ConverterAbstract
 
             $attributes = $this->attributes($match);
 
-            $arguments = [];
-            foreach ($attributes as $key => $value) {
-                $arguments[] = $this->variable($key) . ": " . $this->value($value);
-            }
-
-            return sprintf("{%% oxifcontent { %s } %%}", implode(", ", $arguments));
+            return sprintf("{%% oxifcontent %s %%}", $this->convertArrayToAssocTwigArray($attributes, []));
         }, $content);
     }
 }
