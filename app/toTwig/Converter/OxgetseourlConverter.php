@@ -19,31 +19,16 @@ class OxgetseourlConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $pattern = '/\[\{oxgetseourl\b\s*([^{}]+)?\}\]/';
+        // [{oxgetseourl other stuff}]
+        $pattern = '/\[\{\s*oxgetseourl\s*([^{}]+)?\}\]/';
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
             $attributes = $this->attributes($match);
-            $extraParameters = $this->extractAdditionalParametersArray($attributes);
-            $argumentsString = "{ " . implode(", ", $extraParameters) . " }";
+            $argumentsString = $this->convertArrayToAssocTwigArray($attributes, []);
 
             return "{{ oxgetseourl($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @param $attributes
-     *
-     * @return array
-     */
-    private function extractAdditionalParametersArray($attributes)
-    {
-        $extraParameters = [];
-        foreach ($attributes as $name => $value) {
-            $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
-        }
-
-        return $extraParameters;
     }
 
     /**

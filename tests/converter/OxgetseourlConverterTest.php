@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxgetseourlConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxgetseourlConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxgetseourlConverterTest extends TestCase
+class OxgetseourlConverterTest extends AbstractConverterTest
 {
     /** @var OxgetseourlConverter */
     protected $converter;
@@ -42,13 +41,20 @@ class OxgetseourlConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Example from OXID
             [
                 "[{oxgetseourl ident=\$oViewConf->getSelfLink()|cat:\"cl=basket\"}]",
                 "{{ oxgetseourl({ ident: oViewConf.getSelfLink()|cat(\"cl=basket\") }) }}"
             ],
+            // Example from OXID
             [
                 "[{oxgetseourl ident=\$oViewConf->getSelfLink()|cat:\"cl=account\" params=\"anid=`\$oDetailsProduct->oxarticles__oxnid->value`\"|cat:\"&amp;sourcecl=\"|cat:\$oViewConf->getTopActiveClassName()|cat:\$oViewConf->getNavUrlParams()}]",
                 "{{ oxgetseourl({ ident: oViewConf.getSelfLink()|cat(\"cl=account\"), params: \"anid=`\$oDetailsProduct.oxarticles__oxnid.value`\"|cat(\"&amp;sourcecl=\")|cat(oViewConf.getTopActiveClassName())|cat(oViewConf.getNavUrlParams()) }) }}"
+            ],
+            // With spaces
+            [
+                "[{ oxgetseourl ident=\"basket\"}]",
+                "{{ oxgetseourl({ ident: \"basket\" }) }}"
             ],
         ];
     }
@@ -67,18 +73,5 @@ class OxgetseourlConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }
