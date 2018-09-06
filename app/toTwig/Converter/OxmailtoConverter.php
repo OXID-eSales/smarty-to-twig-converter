@@ -28,18 +28,9 @@ class OxmailtoConverter extends ConverterAbstract
             $match = $matches[1];
             $attributes = $this->attributes($match);
 
-            $address = $this->value($attributes['address']);
-            unset($attributes['address']);
-
-            $parameters = [];
-            foreach ($attributes as $name => $value) {
-                $parameters[] = $this->variable($name) . ": " . $this->value($value);
-            }
-
-            if (empty($parameters)) {
-                $parameters = $address;
-            } else {
-                $parameters = $address . ", { " . implode(", ", $parameters) . " }";
+            $parameters = $this->value($attributes['address']);
+            if ($twigArray = $this->convertArrayToAssocTwigArray($attributes, ['address'])) {
+                $parameters .= ", " . $twigArray;
             }
 
             $replaced = str_replace(':parameters', $parameters, $string);

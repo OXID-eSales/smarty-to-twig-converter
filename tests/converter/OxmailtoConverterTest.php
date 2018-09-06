@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxmailtoConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxmailtoConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxmailtoConverterTest extends TestCase
+class OxmailtoConverterTest extends AbstractConverterTest
 {
     /** @var OxmailtoConverter */
     protected $converter;
@@ -84,18 +83,5 @@ class OxmailtoConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }
