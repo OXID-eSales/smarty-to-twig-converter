@@ -39,13 +39,29 @@ class SectionConverterTest extends TestCase
                 '{% for picRow in 1..10 %}'
             ],
             [
+                '[{ section name=picRow start=1 loop=10 }]',
+                '{% for picRow in 1..10 %}'
+            ],
+            [
                 '[{/section}]',
+                '{% endfor %}'
+            ],
+            [
+                '[{ /section }]',
                 '{% endfor %}'
             ],
             [
                 '[{section name=picRow start=1 loop=10}]
                     [{picRow}]
                 [{/section}]',
+                '{% for picRow in 1..10 %}
+                    [{picRow}]
+                {% endfor %}'
+            ],
+            [
+                '[{ section name=picRow start=1 loop=10 }]
+                    [{picRow}]
+                [{ /section }]',
                 '{% for picRow in 1..10 %}
                     [{picRow}]
                 {% endfor %}'
@@ -59,9 +75,25 @@ class SectionConverterTest extends TestCase
                 {% endfor %}'
             ],
             [
+                '[{ section name=picRow start=1 loop=$iPicCount+1 step=1 }]
+                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                [{ /section }]',
+                '{% for picRow in 1..$iPicCount+1 %}
+                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                {% endfor %}'
+            ],
+            [
                 '[{section name=picRow loop=$iPicCount+1 step=1}]
                     [{assign var="iIndex" value=$smarty.section.picRow.index}]
                 [{/section}]',
+                '{% for picRow in 0..$iPicCount+1 %}
+                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                {% endfor %}'
+            ],
+            [
+                '[{ section name=picRow loop=$iPicCount+1 step=1 }]
+                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                [{ /section }]',
                 '{% for picRow in 0..$iPicCount+1 %}
                     [{assign var="iIndex" value=$smarty.section.picRow.index}]
                 {% endfor %}'

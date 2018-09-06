@@ -33,7 +33,7 @@ class SectionConverter extends ConverterAbstract
      */
     public function getPriority()
     {
-        return 0;
+        return 1000;
     }
 
     /**
@@ -60,7 +60,8 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionOpeningTag($content)
     {
-        $pattern = '/\[\{section\b\s*([^{}]+)?\}\]/';
+        // [{section name=picRow start=1 loop=10}]
+        $pattern = '/\[\{\s*section\b\s*([^{}]+)?\s*\}\]/';
         $string = '{% for :name in :start..:loop %}';
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
@@ -91,7 +92,8 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionClosingTag($content)
     {
-        $search = '#\[\{/section\s*\}\]#';
+        // [{/section}]
+        $search = '#\[\{\s*/section\s*\}\]#';
         $replace = '{% endfor %}';
         return preg_replace($search, $replace, $content);
     }

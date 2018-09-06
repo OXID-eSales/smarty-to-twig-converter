@@ -46,15 +46,19 @@ class CaptureConverterTest extends TestCase
             {% endset %}
         ';
         $this->assertEquals($expected, $actual);
-    }
 
-    /**
-     * @expectedException \Exception
-     */
-    public function testConvertAppendException()
-    {
-        $dummySmartyTemplate = 'foo';
-        $this->converter->convertAppend($dummySmartyTemplate);
+        $dummySmartyTemplate = '
+            [{ capture append="var" }]
+            bar
+            [{ /capture }]
+        ';
+        $actual = $this->converter->convertAppend($dummySmartyTemplate);
+        $expected = '
+            {% set var %}{{ var }}
+            bar
+            {% endset %}
+        ';
+        $this->assertEquals($expected, $actual);
     }
 
     public function testConvertCapture()
@@ -63,6 +67,19 @@ class CaptureConverterTest extends TestCase
             [{capture name="foo"}]
             bar
             [{/capture}]
+        ';
+        $actual = $this->converter->convertCapture($dummySmartyTemplate);
+        $expected = '
+            {% set foo %}
+            bar
+            {% endset %}
+        ';
+        $this->assertEquals($expected, $actual);
+
+        $dummySmartyTemplate = '
+            [{ capture name="foo" }]
+            bar
+            [{ /capture }]
         ';
         $actual = $this->converter->convertCapture($dummySmartyTemplate);
         $expected = '
