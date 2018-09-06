@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxidIncludeDynamicConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxidIncludeDynamicConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxidIncludeDynamicConverterTest extends TestCase
+class OxidIncludeDynamicConverterTest extends AbstractConverterTest
 {
     /** @var OxidIncludeDynamicConverter */
     protected $converter;
@@ -42,13 +41,20 @@ class OxidIncludeDynamicConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Basic usage
             [
                 "[{oxid_include_dynamic file=\"form/formparams.tpl\"}]",
                 "{{ oxid_include_dynamic(\"form/formparams.tpl\") }}"
             ],
+            // Example from OXID
             [
                 "[{oxid_include_dynamic file=\"widget/product/compare_links.tpl\" testid=\"_`\$iIndex`\" type=\"compare\" aid=\$product->oxarticles__oxid->value anid=\$altproduct in_list=\$product->isOnComparisonList() page=\$oView->getActPage()}]",
                 "{{ oxid_include_dynamic(\"widget/product/compare_links.tpl\", { testid: \"_`\$iIndex`\", type: \"compare\", aid: product.oxarticles__oxid.value, anid: altproduct, in_list: product.isOnComparisonList(), page: oView.getActPage() }) }}"
+            ],
+            // With spaces
+            [
+                "[{ oxid_include_dynamic file=\"form/formparams.tpl\" }]",
+                "{{ oxid_include_dynamic(\"form/formparams.tpl\") }}"
             ],
         ];
     }
@@ -67,18 +73,5 @@ class OxidIncludeDynamicConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }

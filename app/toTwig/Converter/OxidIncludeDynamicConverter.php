@@ -19,39 +19,20 @@ class OxidIncludeDynamicConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $pattern = '/\[\{oxid_include_dynamic\b\s*([^{}]+)?\}\]/';
+        // [{oxid_include_dynamic other stuff}]
+        $pattern = '/\[\{\s*oxid_include_dynamic\s*([^{}]+)?\}\]/';
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
             $attributes = $this->attributes($match);
             $argumentsString = $this->value($attributes['file']);
 
-            $extraParameters = $this->extractAdditionalParametersArray($attributes);
-
-            if (!empty($extraParameters)) {
-                $argumentsString .= ", { " . implode(", ", $extraParameters) . " }";
+            if ($twigArray = $this->convertArrayToAssocTwigArray($attributes, ['file'])) {
+                $argumentsString .= ", " . $twigArray;
             }
 
             return "{{ oxid_include_dynamic($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @param $attributes
-     *
-     * @return array
-     */
-    private function extractAdditionalParametersArray($attributes)
-    {
-        $extraParameters = [];
-        foreach ($attributes as $name => $value) {
-            // Skip already handled attributes
-            if ($name === 'file') continue;
-
-            $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
-        }
-
-        return $extraParameters;
     }
 
     /**
