@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxcontentConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxcontentConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxcontentConverterTest extends TestCase
+class OxcontentConverterTest extends AbstractConverterTest
 {
     /** @var OxcontentConverter */
     protected $converter;
@@ -42,22 +41,31 @@ class OxcontentConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Base usage
             [
                 "[{oxcontent ident='me@example.com'}]",
                 "{{ oxcontent({ ident: 'me@example.com' }) }}"
             ],
+            // With additional parameters
             [
                 "[{oxcontent ident='me@example.com' text='send me some mail'}]",
                 "{{ oxcontent({ ident: 'me@example.com', text: 'send me some mail' }) }}"
             ],
+            // Value converting and assign
             [
                 "[{oxcontent ident='me@example.com' assign=\$var}]",
                 "{% set var = oxcontent({ ident: 'me@example.com' }) %}"
             ],
+            // As assignment
             [
                 "[{oxcontent ident='me@example.com' subject='Subject of email' assign=\$var}]",
                 "{% set var = oxcontent({ ident: 'me@example.com', subject: 'Subject of email' }) %}"
-            ]
+            ],
+            // With spaces
+            [
+                "[{ oxcontent ident='me@example.com' }]",
+                "{{ oxcontent({ ident: 'me@example.com' }) }}"
+            ],
         ];
     }
 
@@ -75,18 +83,5 @@ class OxcontentConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }
