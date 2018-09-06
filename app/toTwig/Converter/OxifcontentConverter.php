@@ -19,8 +19,8 @@ class OxifcontentConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $content = $this->replaceOxhasrights($content);
-        $content = $this->replaceEndOxhasrights($content);
+        $content = $this->replaceOxifcontent($content);
+        $content = $this->replaceEndOxifcontent($content);
 
         return $content;
     }
@@ -54,9 +54,10 @@ class OxifcontentConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceEndOxhasrights($content)
+    private function replaceEndOxifcontent($content)
     {
-        $search = "#\[\{/oxifcontent\s*\}\]#";
+        // [{oxifcontent}]
+        $search = "#\[\{\s*/oxifcontent\s*\}\]#";
         $replace = "{% endoxifcontent %}";
 
         return preg_replace($search, $replace, $content);
@@ -67,9 +68,10 @@ class OxifcontentConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceOxhasrights($content)
+    private function replaceOxifcontent($content)
     {
-        $pattern = "#\[\{oxifcontent\b\s*([^{}]+)?\}\]#i";
+        // [{oxifcontent other stuff}]
+        $pattern = "#\[\{\s*oxifcontent\s*([^{}]+)?\}\]#i";
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
