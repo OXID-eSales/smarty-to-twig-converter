@@ -34,6 +34,7 @@ class CounterConverter extends ConverterAbstract
 
     private function replace($content)
     {
+        // [{counter}]
         $pattern = '/\[\{\s*counter\b\s*([^{}]+)?\s*\}\]/';
         $string = '{% set :name = ( :name | default(:start) ) :direction :skip %}:print:assign';
 

@@ -13,13 +13,8 @@ use toTwig\ConverterAbstract;
 class CaptureConverter extends ConverterAbstract
 {
 
-    private $smartyAppend = '[{capture append="';
-    private $smartyCapture = '[{capture name="';
-    private $smartyEndCapture = '[{/capture}]';
-    private $smartyClosingTag = '"}]';
-    private $twigSet = '{% set ';
-    private $twigEndSet = '{% endset %}';
-    private $twigLogicClosingTag = ' %}';
+    // [{capture name="foo"}]
+    private $pattern = '/\[{\s*capture([^{]*)\s*}]/';
 
     /**
      * Returns the priority of the converter.
@@ -28,7 +23,7 @@ class CaptureConverter extends ConverterAbstract
      */
     public function getPriority()
     {
-        return 0;
+        return 1000;
     }
 
     /**
@@ -77,9 +72,23 @@ class CaptureConverter extends ConverterAbstract
      */
     public function convertCapture($content)
     {
-        $strippedOpeningTag = str_replace([$this->smartyCapture, $this->smartyClosingTag], [$this->twigSet, $this->twigLogicClosingTag], $content);
-        $return = str_replace($this->smartyEndCapture, $this->twigEndSet, $strippedOpeningTag);
-        return $return;
+        $string = '{% set :name %}';
+        $strippedOpeningTag = preg_replace_callback($this->pattern, function($matches) use ($string) {
+
+            $match = $matches[1];
+            $attr = $this->attributes($match);
+
+            $attr['name'] = $this->variable($attr['name']);
+
+            $string = $this->vsprintf($string, $attr);
+            // Replace more than one space to single space
+            $string = preg_replace('!\s+!', ' ', $string);
+
+            return str_replace($matches[0], $string, $matches[0]);
+
+        }, $content);
+
+        return $this->stripClosingTag($strippedOpeningTag);
     }
 
     /**
@@ -89,7 +98,7 @@ class CaptureConverter extends ConverterAbstract
     public function detectAppend($content)
     {
         $return = false;
-        if(strpos($content, $this->smartyAppend)) {
+        if(strpos($content, '[{capture append="')) {
             $return = true;
         }
         return $return;
@@ -98,22 +107,46 @@ class CaptureConverter extends ConverterAbstract
     /**
      * @param $content
      * @return string
-     * @throws \Exception
      */
     public function convertAppend($content)
     {
-        $escapedOpeningTag = str_replace('[', '\[', $this->smartyAppend);
-        $escapedClosingTag = str_replace('[', '\[', $this->smartyClosingTag);
-        $regex = '~' . $escapedOpeningTag . '([^{]*)' . $escapedClosingTag . '~i';
-        preg_match($regex, $content, $match);
-        if(isset($match[1])) {
-            $contentVariableName = $match[1];
-        } else {
-            throw new \Exception('It seems that template has errors');
-        }
-        $strippedOpeningTag = str_replace([$this->smartyAppend, $this->smartyClosingTag], [$this->twigSet, $this->twigLogicClosingTag . '{{ ' . $contentVariableName . ' }}'], $content);
-        $strippedClosingTag = str_replace($this->smartyEndCapture, $this->twigEndSet, $strippedOpeningTag);
-        return $strippedClosingTag;
+        $string = '{% set :append %}{{ :append }}';
+        $strippedOpeningTag = preg_replace_callback($this->pattern, function($matches) use ($string) {
+
+            $match = $matches[1];
+            $attr = $this->attributes($match);
+
+            $attr['append'] = $this->variable($attr['append']);
+
+            $string = $this->vsprintf($string, $attr);
+            // Replace more than one space to single space
+            $string = preg_replace('!\s+!', ' ', $string);
+
+            return str_replace($matches[0], $string, $matches[0]);
+
+        }, $content);
+
+        return $this->stripClosingTag($strippedOpeningTag);
+    }
+
+    private function stripClosingTag($strippedOpeningTag)
+    {
+        // [{/capture}]
+        $pattern = '/\[{\s*\/capture([^{]*)\s*}]/';
+        $string = '{% endset %}';
+
+        return preg_replace_callback($pattern, function($matches) use ($string) {
+
+            $match = $matches[1];
+            $attr = $this->attributes($match);
+
+            $string = $this->vsprintf($string, $attr);
+            // Replace more than one space to single space
+            $string = preg_replace('!\s+!', ' ', $string);
+
+            return str_replace($matches[0], $string, $matches[0]);
+
+        }, $strippedOpeningTag);
     }
 
 }
