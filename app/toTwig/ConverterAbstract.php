@@ -201,4 +201,29 @@ abstract class ConverterAbstract
             }
         }, $string);
     }
+
+    /**
+     * Converts associative php array to twig array
+     * ['a' => 1, 'b' => 2]  ==>>  "{ a: 1, b: 2 }"
+     *
+     * @param array $array
+     * @param array $skippedKeys
+     *
+     * @return string
+     */
+    protected function convertArrayToAssocTwigArray(array $array, array $skippedKeys)
+    {
+        $pairs = [];
+        foreach ($array as $key => $value) {
+            if (in_array($key, $skippedKeys)) continue;
+            $pairs[] = $this->variable($key) . ": " . $this->value($value);
+        }
+
+        // If array is empty, return nothing
+        if (empty($pairs)) {
+            return "";
+        }
+
+        return sprintf("{ %s }", implode(", ", $pairs));
+    }
 }
