@@ -19,7 +19,8 @@ class OxinputhelpConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $pattern = '/\[\{oxinputhelp\b\s*([^{}]+)?\}\]/';
+        // [{oxinputhelp ident="A_IDENT"}]
+        $pattern = '/\[\{\s*oxinputhelp\s*([^{}]+)?\}\]/';
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxinputhelpConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxinputhelpConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxinputhelpConverterTest extends TestCase
+class OxinputhelpConverterTest extends AbstractConverterTest
 {
     /** @var OxinputhelpConverter */
     protected $converter;
@@ -42,12 +41,19 @@ class OxinputhelpConverterTest extends TestCase
     public function Provider()
     {
         return [
+            // Basic usage
             [
                 "[{oxinputhelp ident=\"HELP_CATEGORY_MAIN_ACTIVE\"}]",
                 "{{ oxinputhelp(\"HELP_CATEGORY_MAIN_ACTIVE\") }}"
             ],
+            // Basic usage
             [
                 "[{oxinputhelp ident=\"HELP_GENERAL_DATE\"}]",
+                "{{ oxinputhelp(\"HELP_GENERAL_DATE\") }}"
+            ],
+            // With spaces
+            [
+                "[{ oxinputhelp ident=\"HELP_GENERAL_DATE\" }]",
                 "{{ oxinputhelp(\"HELP_GENERAL_DATE\") }}"
             ],
         ];
@@ -67,18 +73,5 @@ class OxinputhelpConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
     }
 }
