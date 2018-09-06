@@ -43,20 +43,20 @@ class MailtoConverterTest extends TestCase
     {
         return [
             [
-                "[{mailto address=\"me@example.com\"}]",
+                "[{mailto address='me@example.com'}]",
                 "{{ mailto('me@example.com') }}"
             ],
             [
-                "[{mailto address=\"me@example.com\" text=\"send me some mail\"}]",
+                "[{mailto address='me@example.com' text='send me some mail'}]",
                 "{{ mailto('me@example.com', { text: 'send me some mail' }) }}"
             ],
             [
-                "[{mailto address=\"me@example.com\" extra=\"class='email'\"}]",
-                "{{ mailto('me@example.com', { extra: 'class=\'email\'' }) }}"
+                "[{mailto address='me@example.com' extra='class='email''}]",
+                "{{ mailto('me@example.com', { extra: 'class='email'' }) }}"
             ],
             [
-                "[{mailto address=\"me@example.com\" subject=\"Subject of email\" extra=\"class='email'\"}]",
-                "{{ mailto('me@example.com', { subject: 'Subject of email', extra: 'class=\'email\'' }) }}"
+                "[{mailto address='me@example.com' subject='Subject of email' extra='class='email''}]",
+                "{{ mailto('me@example.com', { subject: 'Subject of email', extra: 'class='email'' }) }}"
             ]
         ];
     }

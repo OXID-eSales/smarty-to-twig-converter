@@ -76,44 +76,113 @@ abstract class ConverterAbstract
     protected function attributes($string)
     {
         //Initialize variables
-        $attr = [];
-        $retarray = [];
+        $attr = $pairs = [];
         $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?[^\s}]*))/';
+
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
         if (is_array($attr)) {
             $numPairs = count($attr[1]);
-            for ($i = 0; $i < $numPairs; $i++) {
 
+            for ($i = 0; $i < $numPairs; $i++) {
                 $value = trim($attr[2][$i]);
                 $key = ($attr[1][$i]) ? trim($attr[1][$i]) : trim(trim($value, '"'), "'");
 
-                $retarray[$key] = $value;
+                $pairs[$key] = $value;
             }
         }
-        return $retarray;
-    }
 
-    /**
-     * Sanitize value, remove $,' or " from string
-     * @param string $string
-     */
-    protected function variable($string)
-    {
-        return str_replace(['$', '"', "'"], '', trim($string));
+        return $pairs;
     }
 
     /**
      * Sanitize variable, remove $,' or " from string
+     *
      * @param string $string
+     *
+     * @return mixed
+     */
+    protected function variable($string)
+    {
+        return trim(trim($string), '$"\'');
+    }
+
+    /**
+     * Sanitize value, remove $,' or " from string
+     *
+     * @param string $string
+     *
+     * @return string
      */
     protected function value($string)
     {
-        $string = trim(trim($string), "'");
-        $string = ($string{0} == '$') ? ltrim($string, '$') : "'" . str_replace("'", "\'", $string) . "'";
-        $string = str_replace(['"', "''"], "'", $string);
+        $string = rtrim(ltrim($string));
+
+        if (empty($string)) {
+            return $string;
+        }
+
+        // Handle "($var"
+        if ($string[0] == "(") {
+            return "(" . $this->value(ltrim($string, "("));
+        }
+
+        // Handle "!$var"
+        if (preg_match("/(?<=[(\\s]|^)!(?=[$]?\\w*)/", $string)) {
+            return "not " . $this->value(ltrim($string, "!"));
+        }
+
+        $string = ltrim($string, '$');
+        $string = str_replace("->", ".", $string);
+
+        // Handle function arguments
+        $string = preg_replace_callback("/\([^)]*\)/", function($matches) {
+            $expression = $matches[0];
+            $expression = rtrim(ltrim($expression, "("), ")");
+
+            $parts = explode(",", $expression);
+            foreach ($parts as &$part) {
+                $part = $this->value($part);
+            }
+
+            return sprintf("(%s)", implode(", ", $parts));
+        }, $string);
+
+        // Handle filters [{$var|filter:$var->from:'to'}]
+        $string = preg_replace_callback("/\|\w+\:[^\s}|]*/", function ($matches) {
+            $expression = $matches[0];
+            $expression = ltrim($expression, "|");
+
+            $parts = explode(":", $expression);
+
+            $value = array_shift($parts);
+            $value = $this->value($value);
+
+            foreach ($parts as &$part) {
+                $part = $this->value($part);
+            }
+
+            return sprintf("|$value(%s)", implode(", ", $parts));
+        }, $string);
 
         return $string;
+    }
+
+    /**
+     * Explodes expression to parts and converts them separately
+     *
+     * @param $expression
+     *
+     * @return string
+     */
+    protected function convertExpression($expression)
+    {
+        $parts = explode(" ", $expression);
+        foreach ($parts as &$part) {
+            $part = $this->value($part);
+        }
+
+        return implode(" ", $parts);
     }
 
     /**

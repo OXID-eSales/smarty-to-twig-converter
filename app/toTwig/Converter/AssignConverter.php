@@ -69,6 +69,7 @@ class AssignConverter extends ConverterAbstract
             }
 
             $key = $this->variable($key);
+            $value = $this->value($value);
 
             $string = $this->vsprintf($string, ['key' => $key, 'value' => $value]);
             // Replace more than one space to single space

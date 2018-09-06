@@ -45,8 +45,14 @@ class IncludeConverterTest extends TestCase
     public function Provider()
     {
         return [
-            ["[{include file='page_header.tpl'}]", "{% include 'page_header.tpl' %}"],
-            ['[{include file=\'footer.tpl\' foo=\'bar\' links=$links}]', '{% include \'footer.tpl\' with {foo : \'bar\', links : $links} %}']
+            [
+                "[{include file='page_header.tpl'}]",
+                "{% include 'page_header.tpl' %}"
+            ],
+            [
+                "[{include file=\"footer.tpl\" foo=\"bar\" links=\$links}]",
+                "{% include \"footer.tpl\" with {foo: \"bar\", links: links} %}"
+            ]
         ];
     }
 
