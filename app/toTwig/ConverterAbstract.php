@@ -49,7 +49,7 @@ abstract class ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-
+        return $content;
     }
 
     /**
