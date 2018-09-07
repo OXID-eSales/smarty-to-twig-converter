@@ -13,8 +13,9 @@ use toTwig\ConverterAbstract;
 class CaptureConverter extends ConverterAbstract
 {
 
-    // [{capture name="foo"}]
-    private $pattern = '/\[{\s*capture([^{]*)\s*}]/';
+    private $name = '';
+    private $append = '';
+    private $isAppend = false;
 
     /**
      * Returns the priority of the converter.
@@ -54,69 +55,33 @@ class CaptureConverter extends ConverterAbstract
      * @param \SplFileInfo $file
      * @param string $content
      * @return mixed|string
-     * @throws \Exception
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        if($this->detectAppend($content)) {
-            $return = $this->convertAppend($content);
-        } else {
-            $return = $this->convertCapture($content);
-        }
+        $return = $this->replace($content);
         return $return;
     }
 
     /**
      * @param $content
-     * @return mixed
+     * @return null|string|string[]
      */
-    public function convertCapture($content)
+    private function replace($content)
     {
-        $string = '{% set :name %}';
-        $strippedOpeningTag = preg_replace_callback($this->pattern, function($matches) use ($string) {
+        // [{capture name="foo"}]
+        $pattern = '/\[{\s*capture([^{]*)\s*}]/';
+        $strippedOpeningTag = preg_replace_callback($pattern, function($matches) {
 
             $match = $matches[1];
             $attr = $this->attributes($match);
 
             $attr['name'] = $this->variable($attr['name']);
 
-            $string = $this->vsprintf($string, $attr);
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
-
-            return str_replace($matches[0], $string, $matches[0]);
-
-        }, $content);
-
-        return $this->stripClosingTag($strippedOpeningTag);
-    }
-
-    /**
-     * @param $content
-     * @return bool
-     */
-    public function detectAppend($content)
-    {
-        $return = false;
-        if(strpos($content, '[{capture append="')) {
-            $return = true;
-        }
-        return $return;
-    }
-
-    /**
-     * @param $content
-     * @return string
-     */
-    public function convertAppend($content)
-    {
-        $string = '{% set :append %}{{ :append }}';
-        $strippedOpeningTag = preg_replace_callback($this->pattern, function($matches) use ($string) {
-
-            $match = $matches[1];
-            $attr = $this->attributes($match);
-
-            $attr['append'] = $this->variable($attr['append']);
+            $string = '{% set :name %}';
+            if(isset($attr['append'])) {
+                $attr['append'] = $this->variable($attr['append']);
+                $string .= '{{ :append }}';
+            }
 
             $string = $this->vsprintf($string, $attr);
             // Replace more than one space to single space

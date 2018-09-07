@@ -2,20 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: jskoczek
- * Date: 24/08/18
- * Time: 16:11
+ * Date: 28/08/18
+ * Time: 13:47
  */
 
 namespace sankar\ST\Tests\Converter;
 
-use toTwig\Converter\CaptureConverter;
 use PHPUnit\Framework\TestCase;
+use toTwig\Converter\CaptureConverter;
 
 class CaptureConverterTest extends TestCase
 {
-    /**
-     * @var CaptureConverter
-     */
+    /** @var CaptureConverter */
     protected $converter;
 
     public function setUp()
@@ -23,71 +21,62 @@ class CaptureConverterTest extends TestCase
         $this->converter = new CaptureConverter();
     }
 
-    public function testDetectAppend()
+    /**
+     * @covers \toTwig\Converter\CaptureConverter::convert
+     * @dataProvider Provider
+     *
+     * @param $smarty
+     * @param $twig
+     */
+    public function testThatIncludeIsConverted($smarty, $twig)
     {
-        $converted_appends = $this->converter->detectAppend('foo [{capture append="bar"');
-        $this->assertTrue($converted_appends);
-
-        $converted_appends = $this->converter->detectAppend('foo bar');
-        $this->assertFalse($converted_appends);
+        // Test the above cases
+        /** @var \SplFileInfo  $fileMock */
+        $fileMock = $this->getFileMock();
+        $this->assertSame($twig, $this->converter->convert($fileMock, $smarty));
     }
 
-    public function testConvertAppend()
+    public function Provider()
     {
-        $dummySmartyTemplate = '
-            [{capture append="var"}]
-            bar
-            [{/capture}]
-        ';
-        $actual = $this->converter->convertAppend($dummySmartyTemplate);
-        $expected = '
-            {% set var %}{{ var }}
-            bar
-            {% endset %}
-        ';
-        $this->assertEquals($expected, $actual);
-
-        $dummySmartyTemplate = '
-            [{ capture append="var" }]
-            bar
-            [{ /capture }]
-        ';
-        $actual = $this->converter->convertAppend($dummySmartyTemplate);
-        $expected = '
-            {% set var %}{{ var }}
-            bar
-            {% endset %}
-        ';
-        $this->assertEquals($expected, $actual);
+        return [
+            [
+                '[{capture name="foo" append="var"}] bar [{/capture}]',
+                '{% set foo %}{{ var }} bar {% endset %}'
+            ],
+            [
+                '[{ capture name="foo" append="var" }] bar [{ /capture }]',
+                '{% set foo %}{{ var }} bar {% endset %}'
+            ],
+            [
+                '[{capture name="foo"}] bar [{/capture}]',
+                '{% set foo %} bar {% endset %}'
+            ],
+            [
+                '[{ capture name="foo" }] bar [{ /capture }]',
+                '{% set foo %} bar {% endset %}'
+            ]
+        ];
     }
 
-    public function testConvertCapture()
+    /**
+     * @covers \toTwig\Converter\CaptureConverter::getName
+     */
+    public function testThatHaveExpectedName()
     {
-        $dummySmartyTemplate = '
-            [{capture name="foo"}]
-            bar
-            [{/capture}]
-        ';
-        $actual = $this->converter->convertCapture($dummySmartyTemplate);
-        $expected = '
-            {% set foo %}
-            bar
-            {% endset %}
-        ';
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals('CaptureConverter', $this->converter->getName());
+    }
 
-        $dummySmartyTemplate = '
-            [{ capture name="foo" }]
-            bar
-            [{ /capture }]
-        ';
-        $actual = $this->converter->convertCapture($dummySmartyTemplate);
-        $expected = '
-            {% set foo %}
-            bar
-            {% endset %}
-        ';
-        $this->assertEquals($expected, $actual);
+    /**
+     * @covers \toTwig\Converter\CaptureConverter::getDescription
+     */
+    public function testThatHaveDescription()
+    {
+        $this->assertNotEmpty($this->converter->getDescription());
+    }
+
+    private function getFileMock()
+    {
+        return $this->getMockBuilder('\SplFileInfo')->disableOriginalConstructor()->getMock();
     }
 
 }
