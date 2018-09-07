@@ -24,7 +24,7 @@ class OxgetseourlConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxgetseourl other stuff}]
-        $pattern = '/\[\{\s*oxgetseourl\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxgetseourl');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

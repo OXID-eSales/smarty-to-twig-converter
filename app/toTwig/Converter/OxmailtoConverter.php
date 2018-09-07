@@ -24,7 +24,7 @@ class OxmailtoConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxmailto other stuff}]
-        $pattern = '/\[\{\s*oxmailto\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxmailto');
         $string = '{{ oxmailto(:parameters) }}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

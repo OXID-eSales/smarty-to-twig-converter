@@ -29,16 +29,17 @@ class IfConverter extends ConverterAbstract
         // Replace {elseif }
         $content = $this->replaceElseIf($content);
         // Replace {else}
-        $content = preg_replace('#\[\{/if\s*\}\]#', "{% endif %}", $content);
+        $content = preg_replace($this->getClosingTagPattern('if'), "{% endif %}", $content);
         // Replace {/if}
-        $content = preg_replace('#\[\{else\s*\}\]#', "{% else %}", $content);
+        $content = preg_replace($this->getOpeningTagPattern('else'), "{% else %}", $content);
 
         return $content;
     }
 
     private function replaceIf($content)
     {
-        $pattern = "#\[\{if\b\s*([^{}]+)?\}\]#i";
+        // [{if other stuff}]
+        $pattern = $this->getOpeningTagPattern('if');
         $string = '{%% if %s %%}';
 
         return $this->replace($pattern, $content, $string);
@@ -46,7 +47,8 @@ class IfConverter extends ConverterAbstract
 
     private function replaceElseIf($content)
     {
-        $pattern = "#\[\{elseif\b\s*([^{}]+)?\}\]#i";
+        // [{elseif other stuff}]
+        $pattern = $this->getOpeningTagPattern('elseif');
         $string = '{%% elseif %s %%}';
 
         return $this->replace($pattern, $content, $string);

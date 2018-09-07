@@ -36,8 +36,8 @@ class OxifcontentConverter extends ConverterAbstract
      */
     private function replaceEndOxifcontent($content)
     {
-        // [{oxifcontent}]
-        $search = "#\[\{\s*/oxifcontent\s*\}\]#";
+        // [{/oxifcontent}]
+        $search = $this->getClosingTagPattern('oxifcontent');
         $replace = "{% endoxifcontent %}";
 
         return preg_replace($search, $replace, $content);
@@ -51,7 +51,7 @@ class OxifcontentConverter extends ConverterAbstract
     private function replaceOxifcontent($content)
     {
         // [{oxifcontent other stuff}]
-        $pattern = "#\[\{\s*oxifcontent\s*([^{}]+)?\}\]#i";
+        $pattern = $this->getOpeningTagPattern('oxifcontent');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

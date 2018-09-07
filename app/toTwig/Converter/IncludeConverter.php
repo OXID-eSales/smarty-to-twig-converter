@@ -22,9 +22,15 @@ class IncludeConverter extends ConverterAbstract
     protected $description = 'Convert smarty include to twig include';
     protected $priority = 100;
 
-    protected $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
+    protected $pattern;
     protected $string = '{% include :template :with :vars %}';
     protected $attrName = 'file';
+
+    public function __construct()
+    {
+        // [{include other stuff}]
+        $this->pattern = $this->getOpeningTagPattern('include');
+    }
 
     public function convert(\SplFileInfo $file, $content)
     {

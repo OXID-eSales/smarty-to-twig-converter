@@ -44,23 +44,24 @@ class ForConverter extends ConverterAbstract
 
     private function replaceEndForEach($content)
     {
-        $search = "#\[\{/foreach\s*\}\]#";
+        // [{/foreach}]
+        $search = $this->getClosingTagPattern('foreach');
         $replace = "{% endfor %}";
         return preg_replace($search, $replace, $content);
     }
 
     private function replaceForEachElse($content)
     {
-        $search = "#\[\{foreachelse\s*\}\]#";
+        // [{foreachelse other stuff}]
+        $search = $this->getOpeningTagPattern('foreachelse');
         $replace = "{% else %}";
         return preg_replace($search, $replace, $content);
     }
 
     private function replaceFor($content)
     {
-
-        // $pattern = "#\{foreach\b\s*(?:(?!}).)+?\}#";
-        $pattern = "#\[\{foreach\b\s*([^{}]+)?\}\]#i";
+        // [{foreach other stuff}]
+        $pattern = $this->getOpeningTagPattern('foreach');
         $string = '{% for :key :item in :from %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

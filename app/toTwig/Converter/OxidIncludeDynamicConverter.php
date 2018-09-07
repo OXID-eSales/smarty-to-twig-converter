@@ -24,7 +24,7 @@ class OxidIncludeDynamicConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxid_include_dynamic other stuff}]
-        $pattern = '/\[\{\s*oxid_include_dynamic\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxid_include_dynamic');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

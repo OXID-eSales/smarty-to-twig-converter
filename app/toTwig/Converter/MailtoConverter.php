@@ -23,7 +23,8 @@ class MailtoConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        $pattern = '/\[\{mailto\b\s*([^{}]+)?\}\]/';
+        // [{mailto other stuff}]
+        $pattern = $this->getOpeningTagPattern('mailto');
         $string = '{{ mailto(:parameters) }}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

@@ -24,7 +24,7 @@ class OxevalConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxeval other stuff}]
-        $pattern = '/\[\{\s*oxeval\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxeval');
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
             $attributes = $this->attributes($match);

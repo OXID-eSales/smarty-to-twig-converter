@@ -24,7 +24,7 @@ class OxmultilangConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxmultilang ident="A_IDENT"}]
-        $pattern = '/\[\{\s*oxmultilang\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxmultilang');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

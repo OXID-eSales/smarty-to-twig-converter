@@ -31,7 +31,8 @@ class AssignConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\[\{assign\b\s*([^{}]+)?\}\]/';
+        // [{assign other stuff}]
+        $pattern = $this->getOpeningTagPattern('assign');
         $string = '{% set :key = :value %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

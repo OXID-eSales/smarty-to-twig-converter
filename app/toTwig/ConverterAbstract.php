@@ -88,6 +88,30 @@ abstract class ConverterAbstract
     }
 
     /**
+     * Get opening tag pattern: [{tagName other stuff}]
+     *
+     * @param string $tagName
+     *
+     * @return string
+     */
+    protected function getOpeningTagPattern($tagName)
+    {
+        return "#\[\{\s*$tagName\b\s*([^{}]+)?\}\]#i";
+    }
+
+    /**
+     * Get closing tag pattern: [{\tagName}]
+     *
+     * @param string $tagName
+     *
+     * @return string
+     */
+    protected function getClosingTagPattern($tagName)
+    {
+        return "#\[\{\s*/$tagName\s*\}\]#i";
+    }
+
+    /**
      * Method to extract key/value pairs out of a string with xml style attributes
      *
      * @param   string $string String containing xml style attributes

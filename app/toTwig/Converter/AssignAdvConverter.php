@@ -36,7 +36,7 @@ class AssignAdvConverter extends ConverterAbstract
     private function replace($content)
     {
         // [{assign_adv other stuff}]
-        $pattern = '/\[\{\s*assign_adv\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('assign_adv');
         $string = '{% set :key = oxassign(:value) %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

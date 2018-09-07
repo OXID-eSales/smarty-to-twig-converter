@@ -24,8 +24,8 @@ class CycleConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // Smarty cycle tag will be converted to custom Twig function oxcycle
-
-        $pattern = '/\[\{cycle\b\s*([^{}]+)?\}\]/';
+        // [{cycle other stuff}]
+        $pattern = $this->getOpeningTagPattern('cycle');
 
         return preg_replace_callback($pattern, function ($matches) {
             // If short form [{cycle}] - attributes are empty

@@ -24,7 +24,7 @@ class OxcontentConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxcontent other stuff}]
-        $pattern = '/\[\{\s*oxcontent\b\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxcontent');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

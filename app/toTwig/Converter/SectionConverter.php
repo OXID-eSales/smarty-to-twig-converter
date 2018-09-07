@@ -38,7 +38,7 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionOpeningTag($content)
     {
-        $pattern = '/\[\{section\b\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('section');
         $string = '{% for :name in :start..:loop %}';
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
@@ -69,7 +69,7 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionClosingTag($content)
     {
-        $search = '#\[\{/section\s*\}\]#';
+        $search = $this->getClosingTagPattern('section');
         $replace = '{% endfor %}';
         return preg_replace($search, $replace, $content);
     }

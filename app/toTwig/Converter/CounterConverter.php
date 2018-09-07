@@ -23,7 +23,8 @@ class CounterConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\[\{\s*counter\b\s*([^{}]+)?\s*\}\]/';
+        // [{counter other stuff}]
+        $pattern = $this->getOpeningTagPattern('counter');
         $string = '{% set :name = ( :name | default(:start) ) :direction :skip %}:print:assign';
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
