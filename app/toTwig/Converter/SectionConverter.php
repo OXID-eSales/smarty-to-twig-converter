@@ -12,6 +12,8 @@ use toTwig\ConverterAbstract;
 
 class SectionConverter extends ConverterAbstract
 {
+    protected $name = 'section';
+    protected $description = 'Convert smarty {section} to twig {for}';
 
     /**
      * Function converts smarty {section} tags to twig {for}
@@ -26,30 +28,6 @@ class SectionConverter extends ConverterAbstract
         $content = $this->replaceSectionClosingTag($contentReplacedOpeningTag);
 
         return $content;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 0;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'section';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert smarty {section} to twig {for}';
     }
 
     /**

@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxmailtoConverter extends ConverterAbstract
 {
+    protected $name = 'oxmailto';
+    protected $description = "Convert smarty {oxmailto} to twig function {{ oxmailto() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -37,29 +41,5 @@ class OxmailtoConverter extends ConverterAbstract
             return $replaced;
 
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxmailto';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxmailto} to twig function {{ oxmailto() }}";
     }
 }

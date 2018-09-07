@@ -18,6 +18,9 @@ use toTwig\ConverterAbstract;
  */
 class MiscConverter extends ConverterAbstract
 {
+    protected $name = 'misc';
+    protected $description = 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
+    protected $priority = 52;
 
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
@@ -38,20 +41,5 @@ class MiscConverter extends ConverterAbstract
         }
 
         return $content;
-    }
-
-    public function getPriority()
-    {
-        return 52;
-    }
-
-    public function getName()
-    {
-        return 'misc';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
     }
 }

@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxmultilangConverter extends ConverterAbstract
 {
+    protected $name = 'oxmultilang';
+    protected $description = "Convert smarty {oxmultilang} to twig function {{ oxmultilang() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -29,29 +33,5 @@ class OxmultilangConverter extends ConverterAbstract
 
             return "{{ oxmultilang($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxmultilang';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxmultilang} to twig function {{ oxmultilang() }}";
     }
 }

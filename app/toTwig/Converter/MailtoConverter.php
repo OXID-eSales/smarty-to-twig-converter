@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class MailtoConverter extends ConverterAbstract
 {
+    protected $name = 'mailto';
+    protected $description = "Convert smarty {mailto} to twig function {{ mailto() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -45,29 +49,5 @@ class MailtoConverter extends ConverterAbstract
             return $replaced;
 
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'mailto';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {mailto} to twig function {{ mailto() }}";
     }
 }

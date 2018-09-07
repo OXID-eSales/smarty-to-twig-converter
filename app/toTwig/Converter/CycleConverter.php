@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class CycleConverter extends ConverterAbstract
 {
+    protected $name = 'cycle';
+    protected $description = "Convert smarty {cycle} to twig function {{ oxcycle() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -117,29 +121,5 @@ class CycleConverter extends ConverterAbstract
         }
 
         return $argumentsString;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'cycle';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {cycle} to twig function {{ oxcycle() }}";
     }
 }

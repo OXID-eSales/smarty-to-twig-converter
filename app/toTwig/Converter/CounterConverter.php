@@ -12,24 +12,13 @@ use toTwig\ConverterAbstract;
 
 class CounterConverter extends ConverterAbstract
 {
+    protected $name = 'counter';
+    protected $description = 'Convert smarty Counter to twig';
+    protected $priority = 1000;
+
     public function convert(\SplFileInfo $file, $content)
     {
         return $this->replace($content);
-    }
-
-    public function getPriority()
-    {
-        return 1000;
-    }
-
-    public function getName()
-    {
-        return 'counter';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty Counter to twig';
     }
 
     private function replace($content)

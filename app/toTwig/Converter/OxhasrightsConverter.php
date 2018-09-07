@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxhasrightsConverter extends ConverterAbstract
 {
+    protected $name = 'oxhasrights';
+    protected $description = 'Convert oxhasrights to twig';
+    protected $priority = 50;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -23,30 +27,6 @@ class OxhasrightsConverter extends ConverterAbstract
         $content = $this->replaceEndOxhasrights($content);
 
         return $content;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxhasrights';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert oxhasrights to twig';
     }
 
     /**

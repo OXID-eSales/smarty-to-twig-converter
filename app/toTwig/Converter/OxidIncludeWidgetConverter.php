@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxidIncludeWidgetConverter extends ConverterAbstract
 {
+    protected $name = 'oxid_include_widget';
+    protected $description = "Convert smarty {oxid_include_widget} to twig function {{ oxid_include_widget() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -29,29 +33,5 @@ class OxidIncludeWidgetConverter extends ConverterAbstract
 
             return "{{ oxid_include_widget($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxid_include_widget';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxid_include_widget} to twig function {{ oxid_include_widget() }}";
     }
 }

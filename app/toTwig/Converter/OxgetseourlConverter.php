@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxgetseourlConverter extends ConverterAbstract
 {
+    protected $name = 'oxgetseourl';
+    protected $description = "Convert smarty {oxgetseourl} to twig function {{ oxgetseourl() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -29,29 +33,5 @@ class OxgetseourlConverter extends ConverterAbstract
 
             return "{{ oxgetseourl($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxgetseourl';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxgetseourl} to twig function {{ oxgetseourl() }}";
     }
 }

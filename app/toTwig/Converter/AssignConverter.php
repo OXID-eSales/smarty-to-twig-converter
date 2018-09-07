@@ -18,27 +18,15 @@ use toTwig\ConverterAbstract;
  */
 class AssignConverter extends ConverterAbstract
 {
+    protected $name = 'assign';
+    protected $description = "Convert smarty {assign} to twig {% set foo = 'foo' %}";
+    protected $priority = 100;
 
     public function convert(\SplFileInfo $file, $content)
     {
         $content = $this->replace($content);
 
         return $content;
-    }
-
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    public function getName()
-    {
-        return 'assign';
-    }
-
-    public function getDescription()
-    {
-        return "Convert smarty {assign} to twig {% set foo = 'foo' %}";
     }
 
     private function replace($content)

@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxinputhelpConverter extends ConverterAbstract
 {
+    protected $name = 'oxinputhelp';
+    protected $description = "Convert smarty {oxinputhelp} to twig function {{ oxinputhelp() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -29,29 +33,5 @@ class OxinputhelpConverter extends ConverterAbstract
 
             return "{{ oxinputhelp($ident) }}";
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxinputhelp';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxinputhelp} to twig function {{ oxinputhelp() }}";
     }
 }

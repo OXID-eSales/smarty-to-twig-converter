@@ -18,6 +18,10 @@ use toTwig\ConverterAbstract;
  */
 class IncludeConverter extends ConverterAbstract
 {
+    protected $name = 'include';
+    protected $description = 'Convert smarty include to twig include';
+    protected $priority = 100;
+
     protected $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
     protected $string = '{% include :template :with :vars %}';
     protected $attrName = 'file';
@@ -25,21 +29,6 @@ class IncludeConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         return $this->replace($content);
-    }
-
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    public function getName()
-    {
-        return 'include';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty include to twig include';
     }
 
     private function replace($content)

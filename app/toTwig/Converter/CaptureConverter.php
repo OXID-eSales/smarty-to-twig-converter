@@ -12,6 +12,8 @@ use toTwig\ConverterAbstract;
 
 class CaptureConverter extends ConverterAbstract
 {
+    protected $name = 'CaptureConverter';
+    protected $description = 'Converts Smarty Capture into Twig set';
 
     private $smartyAppend = '[{capture append="';
     private $smartyCapture = '[{capture name="';
@@ -20,40 +22,6 @@ class CaptureConverter extends ConverterAbstract
     private $twigSet = '{% set ';
     private $twigEndSet = '{% endset %}';
     private $twigLogicClosingTag = ' %}';
-
-    /**
-     * Returns the priority of the converter.
-     *
-     * The default priority is 0 and higher priorities are executed first.
-     */
-    public function getPriority()
-    {
-        return 0;
-    }
-
-    /**
-     * Returns the name of the converter.
-     *
-     * The name must be all lowercase and without any spaces.
-     *
-     * @return string The name of the converter
-     */
-    public function getName()
-    {
-        return 'CaptureConverter';
-    }
-
-    /**
-     * Returns the description of the converter.
-     *
-     * A short one-line description of what the converter does.
-     *
-     * @return string The description of the converter
-     */
-    public function getDescription()
-    {
-        return 'Converts Smarty Capture into Twig set';
-    }
 
     /**
      * @param \SplFileInfo $file

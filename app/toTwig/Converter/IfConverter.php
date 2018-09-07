@@ -18,6 +18,10 @@ use toTwig\ConverterAbstract;
  */
 class IfConverter extends ConverterAbstract
 {
+    protected $name = 'if';
+    protected $description = 'Convert smarty if/else/elseif to twig';
+    protected $priority = 50;
+
     public function convert(\SplFileInfo $file, $content)
     {
         // Replace {if }
@@ -30,21 +34,6 @@ class IfConverter extends ConverterAbstract
         $content = preg_replace('#\[\{else\s*\}\]#', "{% else %}", $content);
 
         return $content;
-    }
-
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    public function getName()
-    {
-        return 'if';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty if/else/elseif to twig';
     }
 
     private function replaceIf($content)

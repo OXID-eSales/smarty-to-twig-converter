@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxevalConverter extends ConverterAbstract
 {
+    protected $name = 'oxeval';
+    protected $description = "Convert smarty {oxeval} to twig function {{ oxeval() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -29,29 +33,5 @@ class OxevalConverter extends ConverterAbstract
 
             return "{{ oxeval($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxeval';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxeval} to twig function {{ oxeval() }}";
     }
 }

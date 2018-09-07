@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxifcontentConverter extends ConverterAbstract
 {
+    protected $name = 'oxifcontent';
+    protected $description = 'Convert oxifcontent to twig';
+    protected $priority = 50;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -23,30 +27,6 @@ class OxifcontentConverter extends ConverterAbstract
         $content = $this->replaceEndOxifcontent($content);
 
         return $content;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxifcontent';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert oxifcontent to twig';
     }
 
     /**

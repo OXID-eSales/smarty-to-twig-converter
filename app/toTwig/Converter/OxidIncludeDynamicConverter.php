@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxidIncludeDynamicConverter extends ConverterAbstract
 {
+    protected $name = 'oxid_include_dynamic';
+    protected $description = "Convert smarty {oxid_include_dynamic} to twig function {{ oxid_include_dynamic() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -33,29 +37,5 @@ class OxidIncludeDynamicConverter extends ConverterAbstract
 
             return "{{ oxid_include_dynamic($argumentsString) }}";
         }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxid_include_dynamic';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxid_include_dynamic} to twig function {{ oxid_include_dynamic() }}";
     }
 }
