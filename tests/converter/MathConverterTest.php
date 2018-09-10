@@ -85,6 +85,10 @@ class MathConverterTest extends TestCase
                 "{{ pow(2,3) }}"
             ],
             [
+                "[{ math equation=\"pow(x,y)\" x=\$a y=\$b }]",
+                "{{ pow(a,b) }}"
+            ],
+            [
                 "[{math equation=\"sqrt(x)\" x=3.4}]",
                 "{{ sqrt(3.4) }}"
             ],

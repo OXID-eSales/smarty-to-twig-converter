@@ -28,7 +28,7 @@ class MathConverter extends ConverterAbstract
      */
     public function getPriority()
     {
-        return 0;
+        return 1000;
     }
 
     /**
@@ -49,7 +49,8 @@ class MathConverter extends ConverterAbstract
 
     private function replace($content)
     {
-        $pattern = '/\[\{math\b\s*([^{}]+)?\}\]/';
+        // [{math equation="x + y" x=1 y=2}]
+        $pattern = '/\[\{\s*math\b\s*([^{}]+)?\s*\}\]/';
         return preg_replace_callback($pattern, function($matches) {
 
             $match = $this->getMatch($matches);
@@ -93,7 +94,8 @@ class MathConverter extends ConverterAbstract
      * @param $replace
      * @return string
      */
-    private function getStringForPregReplace($replace) {
+    private function getStringForPregReplace($replace)
+    {
         if($replace['assign']) {
             $string = '{% set :assign = :equation %}';
         } else {
@@ -130,9 +132,10 @@ class MathConverter extends ConverterAbstract
     protected function mathEquationSprintf($string, $args)
     {
         $pattern = '/([a-zA-Z0-9]+)/';
-        return preg_replace_callback($pattern, function ($matches) use ($args) {
-            if (isset($args[$matches[1]])) {
-                return str_replace($matches[0], $args[$matches[1]], $matches[0]);
+        return preg_replace_callback($pattern, function($matches) use ($args) {
+            if(isset($args[$matches[1]])) {
+                $replace = $this->value($args[$matches[1]]);
+                return str_replace($matches[0], $replace, $matches[0]);
             } else {
                 return $matches[0];
             }
@@ -163,6 +166,7 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathAbsSprintf($string, $args)
     {
+        // [{math equation="abs(x)" x=-1}]
         $pattern = '/abs\(\b\s*([^{}]+)?\)/';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
@@ -180,6 +184,7 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathCeilSprintf($string, $args)
     {
+        // [{math equation="ceil(x)" x=3.4}]
         $pattern = '/ceil\(\b\s*([^{}]+)?\)/';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
@@ -197,6 +202,7 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathFloorSprintf($string, $args)
     {
+        // [{math equation="floor(x)" x=3.4}]
         $pattern = '/floor\(\b\s*([^{}]+)?\)/';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
@@ -214,6 +220,7 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathPowSprintf($string, $args)
     {
+        // [{math equation="pow(x,y)" x=2 y=3}]
         $pattern = '/pow\(\b\s*([^{)}]+)?\)/';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
@@ -231,6 +238,7 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathRandSprintf($string, $args)
     {
+        //[{math equation="rand(x, y)" x=2 y=3}]
         $pattern = '/rand\(\b\s*([^{)}]+)?\)/';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
@@ -248,6 +256,7 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathRoundSprintf($string, $args)
     {
+        //[{math equation="round(x)" x=3.4}]
         $pattern = '/round\(\b\s*([^{}]+)?\)/';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
@@ -265,8 +274,9 @@ class MathConverter extends ConverterAbstract
      */
     protected function mathFormatSprintf($string, $args)
     {
-        $string .= ' | format(format_string)';
+        // [{math equation="x + y" x=1 y=2 format="%.2f"}]
         $pattern = '/format\(\b\s*([^{}]+)?\)/';
+        $string .= ' | format(format_string)';
         return preg_replace_callback($pattern, function($matches) use ($args) {
             if(isset($matches[1])) {
                 return str_replace($matches[1], $args[$matches[1]], $matches[0]);
