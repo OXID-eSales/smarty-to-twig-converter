@@ -5,24 +5,26 @@ toTwig is an utility to convert smarty template engine to twig template engine. 
 Installation
 ------------
 
-Download the
-[`toTwig`](https://github.com/OXID-eSales/oxideshop-to-twig-converter) and
-store it somewhere on your computer.
+Clone the [`toTwig`](https://github.com/OXID-eSales/oxideshop-to-twig-converter)
+repository.
 
-You can run these commands to easily acces `toTwig` from anywhere on your system:
+You can install `toTwig` anywhere on your system:
 
-	$ sudo git clone https://github.com/OXID-eSales/oxideshop-to-twig-converter.git
-
-then:
-
-	$ sudo chmod a+x /path-to-toTwig/toTwig
+    $ cd <preferrableToTwigInstallationDirectory>
+	$ git clone https://github.com/OXID-eSales/oxideshop-to-twig-converter.git .
+	$ sudo chmod a+x ./toTwig
 
 Then, just run `toTwig`
+
+	$ ./toTwig
 
 Update
 -----
 
-It is enough to use git pull in toTwig installation directory.
+It is enough to use git pull in toTwig installation directory:
+
+    $ cd <toTwigDirectory>
+    $ git pull
 
 Usage
 -----
