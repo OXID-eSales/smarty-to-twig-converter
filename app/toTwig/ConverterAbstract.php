@@ -96,7 +96,7 @@ abstract class ConverterAbstract
      */
     protected function getOpeningTagPattern($tagName)
     {
-        return "#\[\{\s*$tagName\b\s*([^{}]+)?\}\]#i";
+        return "#\[\{\s*$tagName\b\s*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\}\]#i";
     }
 
     /**

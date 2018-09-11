@@ -24,7 +24,7 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
         // [{tag other stuff}]
         $pattern = $this->getOpeningTagPattern($this->name);
         return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
+            $match = isset($matches[1]) ? $matches[1] : '';
             $attributes = $this->attributes($match);
 
             $arguments = [];
