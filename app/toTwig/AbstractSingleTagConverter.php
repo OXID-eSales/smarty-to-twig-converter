@@ -1,8 +1,6 @@
 <?php
 
-namespace toTwig\Converter;
-
-use toTwig\ConverterAbstract;
+namespace toTwig;
 
 /**
  * Class AbstractSingleTagConverter
