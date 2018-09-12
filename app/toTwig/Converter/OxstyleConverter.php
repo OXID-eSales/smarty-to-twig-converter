@@ -2,6 +2,8 @@
 
 namespace toTwig\Converter;
 
+use toTwig\AbstractSingleTagConverter;
+
 /**
  * Class OxstyleConverter
  *
