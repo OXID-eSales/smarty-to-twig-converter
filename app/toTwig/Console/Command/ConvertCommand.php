@@ -196,7 +196,7 @@ EOF
 			case 'txt':
 				foreach ($changed as $file => $fixResult) {
 					$output->write(sprintf('%4d) %s', $i++, $file));
-					if ($input->getOption('verbose')) {
+					if ($input->hasOption('verbose')) {
 						$output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $fixResult['appliedConverters'])));
 						if ($input->getOption('diff')) {
 							$output->writeln('');
