@@ -148,10 +148,11 @@ and directories that need to be analyzed:
 		->finder($finder)
 	;
 
-### Converter
+### Creating you own Converters
 
 A *converter * is a class that tries to convert one tag (a `Converter` class must
-extends `ConverterAbstract`).
+extends `ConverterAbstract`). To create new converter simply create new YourConverter.php
+in app/toTwig/Converter/ directory. Converters are loaded automatically.
 
 ### Configs
 
