@@ -96,7 +96,7 @@ abstract class ConverterAbstract
      */
     protected function getOpeningTagPattern($tagName)
     {
-        return "#\[\{\s*$tagName\b\s*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\}\]#i";
+        return sprintf("#\[\{\s*%s\b\s*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\}\]#i", preg_quote($tagName, '#'));
     }
 
     /**
@@ -108,7 +108,7 @@ abstract class ConverterAbstract
      */
     protected function getClosingTagPattern($tagName)
     {
-        return "#\[\{\s*/$tagName\s*\}\]#i";
+        return sprintf("#\[\{\s*/%s\s*\}\]#i", preg_quote($tagName, '#'));
     }
 
     /**
