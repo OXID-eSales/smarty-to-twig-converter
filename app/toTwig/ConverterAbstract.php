@@ -166,6 +166,10 @@ abstract class ConverterAbstract
             return $string;
         }
 
+        // Handle && and ||
+        if ($string == '&&') return 'and';
+        if ($string == '||') return 'or';
+
         // Handle "($var"
         if ($string[0] == "(") {
             return "(" . $this->value(ltrim($string, "("));
@@ -179,8 +183,22 @@ abstract class ConverterAbstract
         $string = ltrim($string, '$');
         $string = str_replace("->", ".", $string);
 
-        // Handle function arguments
-        $string = preg_replace_callback("/\([^)]*\)/", function($matches) {
+        $string = $this->convertFunctionArguments($string);
+        $string = $this->convertFilters($string);
+
+        return $string;
+    }
+
+    /**
+     * Handle function arguments (arg1, arg2, arg3)
+     *
+     * @param $string
+     *
+     * @return string
+     */
+    private function convertFunctionArguments($string)
+    {
+        return preg_replace_callback("/\([^)]*\)/", function($matches) {
             $expression = $matches[0];
             $expression = rtrim(ltrim($expression, "("), ")");
 
@@ -191,9 +209,18 @@ abstract class ConverterAbstract
 
             return sprintf("(%s)", implode(", ", $parts));
         }, $string);
+    }
 
-        // Handle filters [{$var|filter:$var->from:'to'}]
-        $string = preg_replace_callback("/\|\w+\:[^\s}|]*/", function ($matches) {
+    /**
+     * Handle filters [{$var|filter:$var->from:'to'}]
+     *
+     * @param $string
+     *
+     * @return string
+     */
+    private function convertFilters($string)
+    {
+        return preg_replace_callback("/\|\w+\:[^\s}|]*/", function ($matches) {
             $expression = $matches[0];
             $expression = ltrim($expression, "|");
 
@@ -208,8 +235,6 @@ abstract class ConverterAbstract
 
             return sprintf("|$value(%s)", implode(", ", $parts));
         }, $string);
-
-        return $string;
     }
 
     /**

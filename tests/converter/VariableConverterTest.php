@@ -68,6 +68,10 @@ class VariableConverterTest extends TestCase
             [
                 "[{\$_cur->link|oxaddparams:\$oView->getDynUrlParams()}]",
                 "{{ _cur.link|oxaddparams(oView.getDynUrlParams()) }}"
+            ],
+            [
+                "[{(\$a && \$b) || \$c}]",
+                "{{ (a and b) or c }}"
             ]
         ];
     }

@@ -37,7 +37,7 @@ class VariableConverter extends ConverterAbstract
             $match = $matches[1];
             $search = $matches[0];
 
-            $match = $this->value($match);
+            $match = $this->convertExpression($match);
 
             $search = str_replace($search, '{{ ' . $match . ' }}', $search);
 
