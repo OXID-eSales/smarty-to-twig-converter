@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxhasrightsConverter extends ConverterAbstract
 {
+    protected $name = 'oxhasrights';
+    protected $description = 'Convert oxhasrights to twig';
+    protected $priority = 50;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -26,37 +30,14 @@ class OxhasrightsConverter extends ConverterAbstract
     }
 
     /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxhasrights';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert oxhasrights to twig';
-    }
-
-    /**
      * @param string $content
      *
      * @return string
      */
     private function replaceEndOxhasrights($content)
     {
-        $search = "#\[\{\s*/oxhasrights\s*\}\]#";
+        // [{/oxhasrights}]
+        $search = $this->getClosingTagPattern('oxhasrights');
         $replace = "{% endoxhasrights %}";
 
         return preg_replace($search, $replace, $content);
@@ -69,7 +50,8 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceOxhasrights($content)
     {
-        $pattern = "#\[\{\s*oxhasrights\s*([^{}]+)?\}\]#i";
+        // [{oxhasrights other stuff}]
+        $pattern = $this->getOpeningTagPattern('oxhasrights');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

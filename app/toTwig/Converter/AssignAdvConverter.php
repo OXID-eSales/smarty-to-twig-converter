@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class AssignAdvConverter extends ConverterAbstract
 {
+    protected $name = 'assign_adv';
+    protected $description = "Convert OXID {assign_adv} to twig {% set foo = oxassign('foo') %}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -25,30 +29,6 @@ class AssignAdvConverter extends ConverterAbstract
     }
 
     /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'assign_adv';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert OXID {assign_adv} to twig {% set foo = oxassign('foo') %}";
-    }
-
-    /**
      * @param $content
      *
      * @return string
@@ -56,7 +36,7 @@ class AssignAdvConverter extends ConverterAbstract
     private function replace($content)
     {
         // [{assign_adv other stuff}]
-        $pattern = '/\[\{\s*assign_adv\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('assign_adv');
         $string = '{% set :key = oxassign(:value) %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

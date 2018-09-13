@@ -12,6 +12,8 @@ use toTwig\ConverterAbstract;
 
 class SectionConverter extends ConverterAbstract
 {
+    protected $name = 'section';
+    protected $description = 'Convert smarty {section} to twig {for}';
 
     /**
      * Function converts smarty {section} tags to twig {for}
@@ -29,30 +31,6 @@ class SectionConverter extends ConverterAbstract
     }
 
     /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 1000;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'section';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert smarty {section} to twig {for}';
-    }
-
-    /**
      * Function converts opening tag of smarty {section} to twig {for}
      *
      * @param $content
@@ -60,7 +38,7 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionOpeningTag($content)
     {
-        // [{section name=picRow start=1 loop=10}]
+        $pattern = $this->getOpeningTagPattern('section');
         $pattern = '/\[\{\s*section\b\s*([^{}]+)?\s*\}\]/';
         $string = '{% for :name in :start..:loop %}';
 
@@ -92,7 +70,7 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionClosingTag($content)
     {
-        // [{/section}]
+        $search = $this->getClosingTagPattern('section');
         $search = '#\[\{\s*/section\s*\}\]#';
         $replace = '{% endfor %}';
         return preg_replace($search, $replace, $content);

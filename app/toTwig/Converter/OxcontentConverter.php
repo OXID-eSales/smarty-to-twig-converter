@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxcontentConverter extends ConverterAbstract
 {
+    protected $name = 'oxcontent';
+    protected $description = "Convert smarty {oxcontent} to twig function {{ oxcontent() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -20,7 +24,7 @@ class OxcontentConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // [{oxcontent other stuff}]
-        $pattern = '/\[\{\s*oxcontent\b\s*([^{}]+)?\}\]/';
+        $pattern = $this->getOpeningTagPattern('oxcontent');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];
@@ -53,29 +57,5 @@ class OxcontentConverter extends ConverterAbstract
         }
 
         return $assignVar;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxcontent';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxcontent} to twig function {{ oxcontent() }}";
     }
 }

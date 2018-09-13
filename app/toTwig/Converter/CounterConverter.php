@@ -12,30 +12,19 @@ use toTwig\ConverterAbstract;
 
 class CounterConverter extends ConverterAbstract
 {
+    protected $name = 'counter';
+    protected $description = 'Convert smarty Counter to twig';
+    protected $priority = 1000;
+
     public function convert(\SplFileInfo $file, $content)
     {
         return $this->replace($content);
     }
 
-    public function getPriority()
-    {
-        return 1000;
-    }
-
-    public function getName()
-    {
-        return 'counter';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty Counter to twig';
-    }
-
     private function replace($content)
     {
-        // [{counter}]
-        $pattern = '/\[\{\s*counter\b\s*([^{}]+)?\s*\}\]/';
+        // [{counter other stuff}]
+        $pattern = $this->getOpeningTagPattern('counter');
         $string = '{% set :name = ( :name | default(:start) ) :direction :skip %}:print:assign';
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
