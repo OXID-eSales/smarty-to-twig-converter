@@ -19,6 +19,27 @@ abstract class ConverterAbstract
     const ALL_LEVEL = 15;
 
     /**
+     * @var string Name of the converter.
+     *
+     * The name must be all lowercase and without any spaces.
+     */
+    protected $name;
+
+    /**
+     * @var string Description of the converter.
+     *
+     * A short one-line description of what the converter does.
+     */
+    protected $description;
+
+    /**
+     * @var int Priority of the converter.
+     *
+     * The default priority is 0 and higher priorities are executed first.
+     */
+    protected $priority = 0;
+
+    /**
      * Fixes a file.
      *
      * @param \SplFileInfo $file A \SplFileInfo instance
@@ -28,33 +49,32 @@ abstract class ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
-
+        return $content;
     }
 
     /**
-     * Returns the priority of the converter.
-     *
-     * The default priority is 0 and higher priorities are executed first.
+     * @return int
      */
-    public abstract function getPriority();
+    public function getPriority()
+    {
+        return $this->priority;
+    }
 
     /**
-     * Returns the name of the converter.
-     *
-     * The name must be all lowercase and without any spaces.
-     *
-     * @return string The name of the converter
+     * @return string
      */
-    public abstract function getName();
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
-     * Returns the description of the converter.
-     *
-     * A short one-line description of what the converter does.
-     *
-     * @return string The description of the converter
+     * @return string
      */
-    public abstract function getDescription();
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
 
     /**
@@ -65,6 +85,30 @@ abstract class ConverterAbstract
     public function supports(\SplFileInfo $file)
     {
         return true;
+    }
+
+    /**
+     * Get opening tag pattern: [{tagName other stuff}]
+     *
+     * @param string $tagName
+     *
+     * @return string
+     */
+    protected function getOpeningTagPattern($tagName)
+    {
+        return "#\[\{\s*$tagName\b\s*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\}\]#i";
+    }
+
+    /**
+     * Get closing tag pattern: [{\tagName}]
+     *
+     * @param string $tagName
+     *
+     * @return string
+     */
+    protected function getClosingTagPattern($tagName)
+    {
+        return "#\[\{\s*/$tagName\s*\}\]#i";
     }
 
     /**

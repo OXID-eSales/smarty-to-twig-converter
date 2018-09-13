@@ -18,6 +18,9 @@ use toTwig\ConverterAbstract;
  */
 class AssignConverter extends ConverterAbstract
 {
+    protected $name = 'assign';
+    protected $description = "Convert smarty {assign} to twig {% set foo = 'foo' %}";
+    protected $priority = 100;
 
     public function convert(\SplFileInfo $file, $content)
     {
@@ -26,24 +29,10 @@ class AssignConverter extends ConverterAbstract
         return $content;
     }
 
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    public function getName()
-    {
-        return 'assign';
-    }
-
-    public function getDescription()
-    {
-        return "Convert smarty {assign} to twig {% set foo = 'foo' %}";
-    }
-
     private function replace($content)
     {
-        $pattern = '/\[\{assign\b\s*([^{}]+)?\}\]/';
+        // [{assign other stuff}]
+        $pattern = $this->getOpeningTagPattern('assign');
         $string = '{% set :key = :value %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

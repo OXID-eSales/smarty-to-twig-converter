@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class OxifcontentConverter extends ConverterAbstract
 {
+    protected $name = 'oxifcontent';
+    protected $description = 'Convert oxifcontent to twig';
+    protected $priority = 50;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -26,38 +30,14 @@ class OxifcontentConverter extends ConverterAbstract
     }
 
     /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxifcontent';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert oxifcontent to twig';
-    }
-
-    /**
      * @param string $content
      *
      * @return string
      */
     private function replaceEndOxifcontent($content)
     {
-        // [{oxifcontent}]
-        $search = "#\[\{\s*/oxifcontent\s*\}\]#";
+        // [{/oxifcontent}]
+        $search = $this->getClosingTagPattern('oxifcontent');
         $replace = "{% endoxifcontent %}";
 
         return preg_replace($search, $replace, $content);
@@ -71,7 +51,7 @@ class OxifcontentConverter extends ConverterAbstract
     private function replaceOxifcontent($content)
     {
         // [{oxifcontent other stuff}]
-        $pattern = "#\[\{\s*oxifcontent\s*([^{}]+)?\}\]#i";
+        $pattern = $this->getOpeningTagPattern('oxifcontent');
 
         return preg_replace_callback($pattern, function ($matches) {
             $match = $matches[1];

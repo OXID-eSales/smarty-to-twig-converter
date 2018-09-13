@@ -10,23 +10,17 @@ namespace toTwig\Converter;
 
 class InsertConverter extends IncludeConverter
 {
-    protected $pattern = '/\[\{insert\b\s*([^{}]+)?\}\]/';
+    protected $name = 'insert';
+    protected $description = 'Convert smarty insert to twig include';
+
     protected $string = '{% include :template :with :vars %}';
     protected $attrName = 'name';
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function __construct()
     {
-        return 'insert';
-    }
+        parent::__construct();
 
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Convert smarty insert to twig include';
+        // [{insert other stuff}]
+        $this->pattern = $this->getOpeningTagPattern('insert');
     }
 }

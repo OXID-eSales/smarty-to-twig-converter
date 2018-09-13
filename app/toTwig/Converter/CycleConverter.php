@@ -11,6 +11,10 @@ use toTwig\ConverterAbstract;
  */
 class CycleConverter extends ConverterAbstract
 {
+    protected $name = 'cycle';
+    protected $description = "Convert smarty {cycle} to twig function {{ oxcycle() }}";
+    protected $priority = 100;
+
     /**
      * @param \SplFileInfo $file
      * @param string $content
@@ -20,8 +24,8 @@ class CycleConverter extends ConverterAbstract
     public function convert(\SplFileInfo $file, $content)
     {
         // Smarty cycle tag will be converted to custom Twig function oxcycle
-
-        $pattern = '/\[\{cycle\b\s*([^{}]+)?\}\]/';
+        // [{cycle other stuff}]
+        $pattern = $this->getOpeningTagPattern('cycle');
 
         return preg_replace_callback($pattern, function ($matches) {
             // If short form [{cycle}] - attributes are empty
@@ -117,29 +121,5 @@ class CycleConverter extends ConverterAbstract
         }
 
         return $argumentsString;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'cycle';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {cycle} to twig function {{ oxcycle() }}";
     }
 }
