@@ -11,13 +11,12 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\ForConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class ForConverterTest extends TestCase
+class ForConverterTest extends AbstractConverterTest
 {
     /** @var ForConverter */
     protected $converter;
@@ -79,12 +78,5 @@ class ForConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    private function getFileMock()
-    {
-        return $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }
