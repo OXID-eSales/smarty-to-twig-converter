@@ -12,108 +12,71 @@ use toTwig\ConverterAbstract;
 
 class CaptureConverter extends ConverterAbstract
 {
-
-    private $smartyAppend = '[{capture append="';
-    private $smartyCapture = '[{capture name="';
-    private $smartyEndCapture = '[{/capture}]';
-    private $smartyClosingTag = '"}]';
-    private $twigSet = '{% set ';
-    private $twigEndSet = '{% endset %}';
-    private $twigLogicClosingTag = ' %}';
+    protected $name = 'CaptureConverter';
+    protected $description = 'Converts Smarty Capture into Twig set';
 
     /**
-     * Returns the priority of the converter.
-     *
-     * The default priority is 0 and higher priorities are executed first.
-     */
-    public function getPriority()
-    {
-        return 0;
-    }
-
-    /**
-     * Returns the name of the converter.
-     *
-     * The name must be all lowercase and without any spaces.
-     *
-     * @return string The name of the converter
-     */
-    public function getName()
-    {
-        return 'CaptureConverter';
-    }
-
-    /**
-     * Returns the description of the converter.
-     *
-     * A short one-line description of what the converter does.
-     *
-     * @return string The description of the converter
-     */
-    public function getDescription()
-    {
-        return 'Converts Smarty Capture into Twig set';
-    }
-
-    /**
+        return 1000;
      * @param \SplFileInfo $file
      * @param string $content
      * @return mixed|string
-     * @throws \Exception
      */
     public function convert(\SplFileInfo $file, $content)
     {
-        if($this->detectAppend($content)) {
-            $return = $this->convertAppend($content);
-        } else {
-            $return = $this->convertCapture($content);
-        }
+        $return = $this->replace($content);
         return $return;
     }
 
     /**
      * @param $content
-     * @return mixed
+     * @return null|string|string[]
      */
-    public function convertCapture($content)
+    private function replace($content)
     {
-        $strippedOpeningTag = str_replace([$this->smartyCapture, $this->smartyClosingTag], [$this->twigSet, $this->twigLogicClosingTag], $content);
-        $return = str_replace($this->smartyEndCapture, $this->twigEndSet, $strippedOpeningTag);
-        return $return;
+        // [{capture name="foo"}]
+        $pattern = '/\[{\s*capture([^{]*)\s*}]/';
+        $strippedOpeningTag = preg_replace_callback($pattern, function($matches) {
+
+            $match = $matches[1];
+            $attr = $this->attributes($match);
+
+            $attr['name'] = $this->variable($attr['name']);
+
+            $string = '{% set :name %}';
+            if(isset($attr['append'])) {
+                $attr['append'] = $this->variable($attr['append']);
+                $string .= '{{ :append }}';
+            }
+
+            $string = $this->vsprintf($string, $attr);
+            // Replace more than one space to single space
+            $string = preg_replace('!\s+!', ' ', $string);
+
+            return str_replace($matches[0], $string, $matches[0]);
+
+        }, $content);
+
+        return $this->stripClosingTag($strippedOpeningTag);
     }
 
-    /**
-     * @param $content
-     * @return bool
-     */
-    public function detectAppend($content)
+    private function stripClosingTag($strippedOpeningTag)
     {
-        $return = false;
-        if(strpos($content, $this->smartyAppend)) {
-            $return = true;
-        }
-        return $return;
-    }
+        // [{/capture}]
+        $pattern = '/\[{\s*\/capture([^{]*)\s*}]/';
+        $string = '{% endset %}';
 
-    /**
-     * @param $content
-     * @return string
-     * @throws \Exception
-     */
-    public function convertAppend($content)
-    {
-        $escapedOpeningTag = str_replace('[', '\[', $this->smartyAppend);
-        $escapedClosingTag = str_replace('[', '\[', $this->smartyClosingTag);
-        $regex = '~' . $escapedOpeningTag . '([^{]*)' . $escapedClosingTag . '~i';
-        preg_match($regex, $content, $match);
-        if(isset($match[1])) {
-            $contentVariableName = $match[1];
-        } else {
-            throw new \Exception('It seems that template has errors');
-        }
-        $strippedOpeningTag = str_replace([$this->smartyAppend, $this->smartyClosingTag], [$this->twigSet, $this->twigLogicClosingTag . '{{ ' . $contentVariableName . ' }}'], $content);
-        $strippedClosingTag = str_replace($this->smartyEndCapture, $this->twigEndSet, $strippedOpeningTag);
-        return $strippedClosingTag;
+        return preg_replace_callback($pattern, function($matches) use ($string) {
+
+            $match = $matches[1];
+            $attr = $this->attributes($match);
+
+            $string = $this->vsprintf($string, $attr);
+            // Replace more than one space to single space
+            $string = preg_replace('!\s+!', ' ', $string);
+
+            return str_replace($matches[0], $string, $matches[0]);
+
+        }, $strippedOpeningTag);
     }
 
 }

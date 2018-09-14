@@ -18,6 +18,10 @@ use toTwig\ConverterAbstract;
  */
 class IfConverter extends ConverterAbstract
 {
+    protected $name = 'if';
+    protected $description = 'Convert smarty if/else/elseif to twig';
+    protected $priority = 50;
+
     public function convert(\SplFileInfo $file, $content)
     {
         // Replace {if }
@@ -25,31 +29,17 @@ class IfConverter extends ConverterAbstract
         // Replace {elseif }
         $content = $this->replaceElseIf($content);
         // Replace {else}
-        $content = preg_replace('#\[\{/if\s*\}\]#', "{% endif %}", $content);
+        $content = preg_replace($this->getClosingTagPattern('if'), "{% endif %}", $content);
         // Replace {/if}
-        $content = preg_replace('#\[\{else\s*\}\]#', "{% else %}", $content);
+        $content = preg_replace($this->getOpeningTagPattern('else'), "{% else %}", $content);
 
         return $content;
     }
 
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    public function getName()
-    {
-        return 'if';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty if/else/elseif to twig';
-    }
-
     private function replaceIf($content)
     {
-        $pattern = "#\[\{if\b\s*([^{}]+)?\}\]#i";
+        // [{if other stuff}]
+        $pattern = $this->getOpeningTagPattern('if');
         $string = '{%% if %s %%}';
 
         return $this->replace($pattern, $content, $string);
@@ -57,7 +47,8 @@ class IfConverter extends ConverterAbstract
 
     private function replaceElseIf($content)
     {
-        $pattern = "#\[\{elseif\b\s*([^{}]+)?\}\]#i";
+        // [{elseif other stuff}]
+        $pattern = $this->getOpeningTagPattern('elseif');
         $string = '{%% elseif %s %%}';
 
         return $this->replace($pattern, $content, $string);

@@ -130,7 +130,7 @@ class Converter
 
                 $ext = strrchr($filename, '.');
                 if($outputExt) {
-                    $filename = rtrim($filename, $ext) . '.' . trim($outputExt, '.');
+                    $filename = substr($filename, 0, -strlen($ext)) . '.' . trim($outputExt, '.');
                 }
 
                 file_put_contents($filename, $new);

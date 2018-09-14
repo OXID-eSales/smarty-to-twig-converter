@@ -18,35 +18,30 @@ use toTwig\ConverterAbstract;
  */
 class IncludeConverter extends ConverterAbstract
 {
-    protected $pattern = '/\[\{include\b\s*([^{}]+)?\}\]/';
+    protected $name = 'include';
+    protected $description = 'Convert smarty include to twig include';
+    protected $priority = 100;
+
+    protected $pattern;
     protected $string = '{% include :template :with :vars %}';
     protected $attrName = 'file';
+
+    public function __construct()
+    {
+        // [{include other stuff}]
+        $this->pattern = $this->getOpeningTagPattern('include');
+    }
 
     public function convert(\SplFileInfo $file, $content)
     {
         return $this->replace($content);
     }
 
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    public function getName()
-    {
-        return 'include';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty include to twig include';
-    }
-
     private function replace($content)
     {
         $pattern = $this->pattern;
         $string = $this->string;
-        return preg_replace_callback($pattern, function ($matches) use ($string) {
+        return preg_replace_callback($pattern, function($matches) use ($string) {
 
             $match = $matches[1];
             $attr = $this->attributes($match);
@@ -54,13 +49,17 @@ class IncludeConverter extends ConverterAbstract
             $replace = array();
             $replace['template'] = $attr[$this->attrName];
 
+            if(isset($attr['insert'])) {
+                unset($attr['insert']);
+            }
+
             // If we have any other variables
-            if (count($attr) > 1) {
+            if(count($attr) > 1) {
                 $replace['with'] = 'with';
                 unset($attr[$this->attrName]); // We won't need in vars
 
                 $vars = array();
-                foreach ($attr as $key => $value) {
+                foreach($attr as $key => $value) {
                     $vars[] = $this->variable($key) . ": " . $this->value($value);
                 }
 

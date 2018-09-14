@@ -40,11 +40,19 @@ class InsertConverterTest extends TestCase
     {
         return [
             [
-                '[{insert name="oxid_tracker" title="PRODUCT_DETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath() }]',
+                '[{insert name="oxid_tracker" title="PRODUCT_DETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath()}]',
+                '{% include "oxid_tracker" with {title: "PRODUCT_DETAILS"|oxmultilangassign, product: oDetailsProduct, cpath: oView.getCatTreePath()} %}'
+            ],
+            [
+                '[{ insert name="oxid_tracker" title="PRODUCT_DETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath() }]',
                 '{% include "oxid_tracker" with {title: "PRODUCT_DETAILS"|oxmultilangassign, product: oDetailsProduct, cpath: oView.getCatTreePath()} %}'
             ],
             [
                 '[{insert name="oxid_newbasketitem" tpl="widget/minibasket/newbasketitemmsg.tpl" type="message"}]',
+                '{% include "oxid_newbasketitem" with {tpl: "widget/minibasket/newbasketitemmsg.tpl", type: "message"} %}'
+            ],
+            [
+                '[{ insert name="oxid_newbasketitem" tpl="widget/minibasket/newbasketitemmsg.tpl" type="message" }]',
                 '{% include "oxid_newbasketitem" with {tpl: "widget/minibasket/newbasketitemmsg.tpl", type: "message"} %}'
             ]
         ];

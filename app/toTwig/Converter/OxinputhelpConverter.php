@@ -2,56 +2,18 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
+use toTwig\AbstractSingleTagConverter;
 
 /**
  * Class OxinputhelpConverter
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxinputhelpConverter extends ConverterAbstract
+class OxinputhelpConverter extends AbstractSingleTagConverter
 {
-    /**
-     * @param \SplFileInfo $file
-     * @param string $content
-     *
-     * @return null|string|string[]
-     */
-    public function convert(\SplFileInfo $file, $content)
-    {
-        // [{oxinputhelp ident="A_IDENT"}]
-        $pattern = '/\[\{\s*oxinputhelp\s*([^{}]+)?\}\]/';
+    protected $name = 'oxinputhelp';
+    protected $description = "Convert smarty {oxinputhelp} to twig function {{ oxinputhelp() }}";
+    protected $priority = 100;
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
-            $attributes = $this->attributes($match);
-            $ident = $this->value($attributes['ident']);
-
-            return "{{ oxinputhelp($ident) }}";
-        }, $content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'oxinputhelp';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return "Convert smarty {oxinputhelp} to twig function {{ oxinputhelp() }}";
-    }
+    protected $mandatoryFields = ['ident'];
 }

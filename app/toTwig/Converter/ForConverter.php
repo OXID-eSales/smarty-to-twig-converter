@@ -18,6 +18,10 @@ use toTwig\ConverterAbstract;
  */
 class ForConverter extends ConverterAbstract
 {
+    protected $name = 'for';
+    protected $description = 'Convert foreach/foreachelse to twig';
+    protected $priority = 50;
+
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
     private $replacements = array(
@@ -38,40 +42,26 @@ class ForConverter extends ConverterAbstract
         return $content;
     }
 
-    public function getPriority()
-    {
-        return 50;
-    }
-
-    public function getName()
-    {
-        return 'for';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert foreach/foreachelse to twig';
-    }
-
     private function replaceEndForEach($content)
     {
-        $search = "#\[\{/foreach\s*\}\]#";
+        // [{/foreach}]
+        $search = $this->getClosingTagPattern('foreach');
         $replace = "{% endfor %}";
         return preg_replace($search, $replace, $content);
     }
 
     private function replaceForEachElse($content)
     {
-        $search = "#\[\{foreachelse\s*\}\]#";
+        // [{foreachelse other stuff}]
+        $search = $this->getOpeningTagPattern('foreachelse');
         $replace = "{% else %}";
         return preg_replace($search, $replace, $content);
     }
 
     private function replaceFor($content)
     {
-
-        // $pattern = "#\{foreach\b\s*(?:(?!}).)+?\}#";
-        $pattern = "#\[\{foreach\b\s*([^{}]+)?\}\]#i";
+        // [{foreach other stuff}]
+        $pattern = $this->getOpeningTagPattern('foreach');
         $string = '{% for :key :item in :from %}';
 
         return preg_replace_callback($pattern, function ($matches) use ($string) {

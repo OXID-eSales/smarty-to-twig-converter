@@ -18,26 +18,15 @@ use toTwig\ConverterAbstract;
  */
 class VariableConverter extends ConverterAbstract
 {
+    protected $name = 'variable';
+    protected $description = 'Convert smarty variable {$var.name} to twig {{ $var.name }}';
+    protected $priority = 100;
+
     public function convert(\SplFileInfo $file, $content)
     {
         $content = $this->replace($content);
 
         return $content;
-    }
-
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    public function getName()
-    {
-        return 'variable';
-    }
-
-    public function getDescription()
-    {
-        return 'Convert smarty variable {$var.name} to twig {{ $var.name }}';
     }
 
     private function replace($content)
