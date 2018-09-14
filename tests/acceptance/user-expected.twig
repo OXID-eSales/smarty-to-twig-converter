@@ -1,0 +1,28 @@
+{% set oxidBlock_content %}{{ oxidBlock_content }}
+    {# ordering steps #}
+    {% include "page/checkout/inc/steps.tpl" with {active: 2} %}
+    {% block checkout_user_main %}
+        {% if not oxcmp_user and not oView.getLoginOption() %}
+            {% include "page/checkout/inc/options.tpl" %}
+        {% endif %}
+
+        {% block checkout_user_noregistration %}
+            {% if not oxcmp_user and oView.getLoginOption() == 1 %}
+                {% include "form/user_checkout_noregistration.tpl" %}
+            {% endif %}
+        {% endblock %}
+
+        {% block checkout_user_registration %}
+            {% if not oxcmp_user and oView.getLoginOption() == 3 %}
+                {% include "form/user_checkout_registration.tpl" %}
+            {% endif %}
+        {% endblock %}
+
+        {% block checkout_user_change %}
+            {% if oxcmp_user %}
+                {% include "form/user_checkout_change.tpl" %}
+            {% endif %}
+        {% endblock %}
+    {% endblock %}
+{% endset %}
+{% include "layout/page.tpl" %}
