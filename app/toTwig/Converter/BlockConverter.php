@@ -65,7 +65,7 @@ class BlockConverter extends ConverterAbstract
                 $name = $this->value(array_shift($attr));
             }
 
-            $block = sprintf("{%% block %s %%}", $name);
+            $block = sprintf("{%% block %s %%}", trim($name, '"'));
 
             if (isset($attr['prepend'])) {
                 $block .= "{{ parent() }}";
