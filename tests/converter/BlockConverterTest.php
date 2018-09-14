@@ -44,17 +44,17 @@ class BlockConverterTest extends AbstractConverterTest
             // Basic usage
             [
                 "[{block name=\"title\"}]Default Title[{/block}]",
-                "{% block \"title\" %}Default Title{% endblock %}"
+                "{% block title %}Default Title{% endblock %}"
             ],
             // Short-hand
             [
                 "[{block \"title\"}]Default Title[{/block}]",
-                "{% block \"title\" %}Default Title{% endblock %}"
+                "{% block title %}Default Title{% endblock %}"
             ],
             // Prepend
             [
                 "[{block name=\"title\" prepend}]\nPage Title\n[{/block}]",
-                "{% block \"title\" %}{{ parent() }}\nPage Title\n{% endblock %}"
+                "{% block title %}{{ parent() }}\nPage Title\n{% endblock %}"
             ],
             // Extends
             [
@@ -69,7 +69,7 @@ class BlockConverterTest extends AbstractConverterTest
             // Extends with parent call
             [
                 "[{extends file=\"parent.tpl\"}]\n[{block name=\"title\"}]\nYou will see now - [{\$smarty.block.parent}] - here\n[{/block}]",
-                "{% extends \"parent.html.twig\" %}\n{% block \"title\" %}\nYou will see now - {{ parent() }} - here\n{% endblock %}"
+                "{% extends \"parent.html.twig\" %}\n{% block title %}\nYou will see now - {{ parent() }} - here\n{% endblock %}"
             ],
         ];
     }
