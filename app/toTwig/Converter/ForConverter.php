@@ -71,7 +71,7 @@ class ForConverter extends ConverterAbstract
             $replace = [];
 
             // {foreach $users as $user}
-            if (preg_match("/(.*)(?:as)(.*)/i", $match, $mcs)) {
+            if (preg_match("/(.*)(?:\bas\b)(.*)/i", $match, $mcs)) {
 
                 // {foreach $users as $k => $val}
                 if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {
