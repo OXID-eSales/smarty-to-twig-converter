@@ -3,6 +3,7 @@
 namespace sankar\ST\Tests\Converter;
 
 use toTwig\Converter\OxevalConverter;
+include_once 'AbstractConverterTest.php';
 
 /**
  * Class OxevalConverterTest
@@ -44,17 +45,12 @@ class OxevalConverterTest extends AbstractConverterTest
             // Base usage
             [
                 "[{oxeval var=\$variable}]",
-                "{{ oxeval({ var: variable }) }}"
-            ],
-            // With additional parameters
-            [
-                "[{oxeval var=\$variable force=true}]",
-                "{{ oxeval({ var: variable, force: true }) }}"
+                "{{ include(template_from_string(variable)) }}"
             ],
             // With spaces
             [
                 "[{ oxeval var=\$variable }]",
-                "{{ oxeval({ var: variable }) }}"
+                "{{ include(template_from_string(variable)) }}"
             ],
         ];
     }
@@ -64,7 +60,7 @@ class OxevalConverterTest extends AbstractConverterTest
      */
     public function testThatHaveExpectedName()
     {
-        $this->assertEquals('oxeval', $this->converter->getName());
+        $this->assertEquals('OxevalConverter', $this->converter->getName());
     }
 
     /**
