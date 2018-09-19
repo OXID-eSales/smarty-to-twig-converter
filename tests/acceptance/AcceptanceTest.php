@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jskoczek
- * Date: 11/09/18
- * Time: 11:29
- */
 
 namespace sankar\ST\Tests;
 

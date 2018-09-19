@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jskoczek
- * Date: 30/08/18
- * Time: 12:37
- */
 
 namespace sankar\ST\Tests\Converter;
 
