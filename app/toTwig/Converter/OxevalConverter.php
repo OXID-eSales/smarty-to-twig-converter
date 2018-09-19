@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jskoczek
- * Date: 17/09/18
- * Time: 16:09
- */
 
 namespace toTwig\Converter;
 
@@ -39,12 +33,10 @@ class OxevalConverter extends ConverterAbstract
 
             $match = $matches[1];
             $attr = $this->attributes($match);
-
-            var_dump($attr);
-
             $attr['var'] = $this->variable($attr['var']);
             $string = '{{ include(template_from_string(:var)) }}';
             $string = $this->vsprintf($string, $attr);
+
             // Replace more than one space to single space
             $string = preg_replace('!\s+!', ' ', $string);
 
