@@ -14,9 +14,9 @@ class CaptureConverter extends ConverterAbstract
 {
     protected $name = 'CaptureConverter';
     protected $description = 'Converts Smarty Capture into Twig set';
+    protected $priority = 100;
 
     /**
-        return 1000;
      * @param \SplFileInfo $file
      * @param string $content
      * @return mixed|string
@@ -33,18 +33,21 @@ class CaptureConverter extends ConverterAbstract
      */
     private function replace($content)
     {
-        // [{capture name="foo"}]
-        $pattern = '/\[{\s*capture([^{]*)\s*}]/';
+        $pattern = $this->getOpeningTagPattern('capture');
         $strippedOpeningTag = preg_replace_callback($pattern, function($matches) {
 
             $match = $matches[1];
             $attr = $this->attributes($match);
-
-            $attr['name'] = $this->variable($attr['name']);
+            if(isset($attr['name'])) {
+                $attr['name'] = $this->variable($attr['name']);
+            }
 
             $string = '{% set :name %}';
             if(isset($attr['append'])) {
                 $attr['append'] = $this->variable($attr['append']);
+                if(!isset($attr['name'])) {
+                    $attr['name'] = $attr['append'];
+                }
                 $string .= '{{ :append }}';
             }
 

@@ -54,6 +54,10 @@ class CaptureConverterTest extends TestCase
             [
                 '[{ capture name="foo" }] bar [{ /capture }]',
                 '{% set foo %} bar {% endset %}'
+            ],
+            [
+                '[{ capture append="foo" }] bar [{ /capture }]',
+                '{% set foo %}{{ foo }} bar {% endset %}'
             ]
         ];
     }
