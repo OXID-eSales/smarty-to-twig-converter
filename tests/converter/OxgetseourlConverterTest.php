@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
+ */
 
 namespace sankar\ST\Tests\Converter;
 
@@ -44,17 +48,17 @@ class OxgetseourlConverterTest extends AbstractConverterTest
             // Example from OXID
             [
                 "[{oxgetseourl ident=\$oViewConf->getSelfLink()|cat:\"cl=basket\"}]",
-                "{{ oxgetseourl({ ident: oViewConf.getSelfLink()|cat(\"cl=basket\") }) }}"
+                "{{ seo_url({ ident: oViewConf.getSelfLink()|cat(\"cl=basket\") }) }}"
             ],
             // Example from OXID
             [
                 "[{oxgetseourl ident=\$oViewConf->getSelfLink()|cat:\"cl=account\" params=\"anid=`\$oDetailsProduct->oxarticles__oxnid->value`\"|cat:\"&amp;sourcecl=\"|cat:\$oViewConf->getTopActiveClassName()|cat:\$oViewConf->getNavUrlParams()}]",
-                "{{ oxgetseourl({ ident: oViewConf.getSelfLink()|cat(\"cl=account\"), params: \"anid=`\$oDetailsProduct.oxarticles__oxnid.value`\"|cat(\"&amp;sourcecl=\")|cat(oViewConf.getTopActiveClassName())|cat(oViewConf.getNavUrlParams()) }) }}"
+                "{{ seo_url({ ident: oViewConf.getSelfLink()|cat(\"cl=account\"), params: \"anid=`\$oDetailsProduct.oxarticles__oxnid.value`\"|cat(\"&amp;sourcecl=\")|cat(oViewConf.getTopActiveClassName())|cat(oViewConf.getNavUrlParams()) }) }}"
             ],
             // With spaces
             [
                 "[{ oxgetseourl ident=\"basket\"}]",
-                "{{ oxgetseourl({ ident: \"basket\" }) }}"
+                "{{ seo_url({ ident: \"basket\" }) }}"
             ],
         ];
     }

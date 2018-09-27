@@ -50,7 +50,7 @@
                                         {% include "page/checkout/inc/agb.tpl" %}
 
                                         <div class="lineBox clear">
-                                            <a href="{{ oxgetseourl({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
+                                            <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
                                             <button type="submit" class="submitButton nextStep largeButton">{{ oxmultilang({ ident: "SUBMIT_ORDER" }) }}</button>
                                         </div>
                                     </form>
@@ -205,7 +205,7 @@
                                     {% include "page/checkout/inc/agb.tpl" with {hideButtons: true} %}
                                 {% endif %}
 
-                                <a href="{{ oxgetseourl({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
+                                <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
                                 <button type="submit" class="submitButton nextStep largeButton">{{ oxmultilang({ ident: "SUBMIT_ORDER" }) }}</button>
                             </form>
                         {% endblock %}

@@ -24,10 +24,10 @@
 
             {% block checkout_thankyou_proceed %}
                 {{ oxmultilang({ ident: "YOU_CAN_GO" }) }}
-                <a id="backToShop" rel="nofollow" href="{{ oxgetseourl({ ident: oViewConf.getHomeLink() }) }}" class="link">{{ oxmultilang({ ident: "BACK_TO_START_PAGE" }) }}</a>
+                <a id="backToShop" rel="nofollow" href="{{ seo_url({ ident: oViewConf.getHomeLink() }) }}" class="link">{{ oxmultilang({ ident: "BACK_TO_START_PAGE" }) }}</a>
                 {% if oxcmp_user.oxuser__oxpassword.value %}
                     {{ oxmultilang({ ident: "OR" }) }}
-                    <a id="orderHistory" rel="nofollow" href="{{ oxgetseourl({ ident: oViewConf.getSelfLink()|cat("cl=account_order") }) }}" class="link">{{ oxmultilang({ ident: "CHECK_YOUR_ORDER_HISTORY" }) }}</a>.
+                    <a id="orderHistory" rel="nofollow" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_order") }) }}" class="link">{{ oxmultilang({ ident: "CHECK_YOUR_ORDER_HISTORY" }) }}</a>.
                 {% endif %}
             {% endblock %}
 

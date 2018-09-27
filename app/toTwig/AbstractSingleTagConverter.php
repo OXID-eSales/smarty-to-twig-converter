@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
+ */
 
 namespace toTwig;
 
@@ -10,6 +14,17 @@ namespace toTwig;
 abstract class AbstractSingleTagConverter extends ConverterAbstract
 {
     protected $mandatoryFields = [];
+    protected $convertedName = null;
+
+    /**
+     * AbstractSingleTagConverter constructor.
+     */
+    public function __construct()
+    {
+        if (!$this->convertedName) {
+            $this->convertedName = $this->name;
+        }
+    }
 
     /**
      * @param \SplFileInfo $file
@@ -34,7 +49,7 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
                 $arguments[] = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields);
             }
 
-            return sprintf("{{ %s(%s) }}", $this->name, implode(", ", $arguments));
+            return sprintf("{{ %s(%s) }}", $this->convertedName, implode(", ", $arguments));
         }, $content);
     }
 }
