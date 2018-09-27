@@ -2,6 +2,7 @@
 
 namespace sankar\ST\Tests\Converter;
 
+use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxinputhelpConverter;
 
 /**
@@ -9,7 +10,7 @@ use toTwig\Converter\OxinputhelpConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxinputhelpConverterTest extends AbstractConverterTest
+class OxinputhelpConverterTest extends TestCase
 {
     /** @var OxinputhelpConverter */
     protected $converter;
@@ -20,47 +21,31 @@ class OxinputhelpConverterTest extends AbstractConverterTest
     }
 
     /**
-     * @covers \toTwig\Converter\OxinputhelpConverter::convert
-     *
+     * @covers \toTwig\Converter\CaptureConverter::convert
      * @dataProvider Provider
      *
      * @param $smarty
      * @param $twig
      */
-    public function testThatAssignIsConverted($smarty, $twig)
+    public function testThatIncludeIsConverted($smarty, $twig)
     {
-        // Test the above cases
-        $this->assertSame($twig,
-            $this->converter->convert($this->getFileMock(), $smarty)
-        );
+        /** @var \SplFileInfo  $fileMock */
+        $fileMock = $this->getFileMock();
+        $this->assertSame($twig, $this->converter->convert($fileMock, $smarty));
     }
 
-    /**
-     * @return array
-     */
     public function Provider()
     {
         return [
-            // Basic usage
             [
-                "[{oxinputhelp ident=\"HELP_CATEGORY_MAIN_ACTIVE\"}]",
-                "{{ oxinputhelp(\"HELP_CATEGORY_MAIN_ACTIVE\") }}"
-            ],
-            // Basic usage
-            [
-                "[{oxinputhelp ident=\"HELP_GENERAL_DATE\"}]",
-                "{{ oxinputhelp(\"HELP_GENERAL_DATE\") }}"
-            ],
-            // With spaces
-            [
-                "[{ oxinputhelp ident=\"HELP_GENERAL_DATE\" }]",
-                "{{ oxinputhelp(\"HELP_GENERAL_DATE\") }}"
-            ],
+                '[{oxinputhelp ident="foo"}]',
+                '{% include "inputhelp.tpl" with {\'sHelpId\': getSHelpId(foo), \'sHelpText\': getSHelpText(foo)} %}'
+            ]
         ];
     }
 
     /**
-     * @covers \toTwig\Converter\OxinputhelpConverter::getName
+     * @covers \toTwig\Converter\CaptureConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -68,10 +53,15 @@ class OxinputhelpConverterTest extends AbstractConverterTest
     }
 
     /**
-     * @covers \toTwig\Converter\OxinputhelpConverter::getDescription
+     * @covers \toTwig\Converter\CaptureConverter::getDescription
      */
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
+    }
+
+    private function getFileMock()
+    {
+        return $this->getMockBuilder('\SplFileInfo')->disableOriginalConstructor()->getMock();
     }
 }
