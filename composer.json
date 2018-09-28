@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "symfony/console": "~2.1",
         "symfony/filesystem": "~2.1",
         "symfony/finder": "~2.1",
