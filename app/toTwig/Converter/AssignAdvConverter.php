@@ -11,13 +11,14 @@ use toTwig\ConverterAbstract;
  */
 class AssignAdvConverter extends ConverterAbstract
 {
+
     protected $name = 'assign_adv';
     protected $description = "Convert OXID {assign_adv} to twig {% set foo = oxassign('foo') %}";
     protected $priority = 100;
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return string
      */
@@ -29,7 +30,7 @@ class AssignAdvConverter extends ConverterAbstract
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      */
@@ -39,20 +40,22 @@ class AssignAdvConverter extends ConverterAbstract
         $pattern = $this->getOpeningTagPattern('assign_adv');
         $string = '{% set :key = oxassign(:value) %}';
 
-        return preg_replace_callback($pattern, function ($matches) use ($string) {
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($string) {
+                $match = $matches[1];
+                $attr = $this->attributes($match);
 
-            $match = $matches[1];
-            $attr = $this->attributes($match);
+                $key = $this->variable($attr['var']);
+                $value = $this->value($attr['value']);
 
-            $key = $this->variable($attr['var']);
-            $value = $this->value($attr['value']);
+                $string = $this->vsprintf($string, ['key' => $key, 'value' => $value]);
+                // Replace more than one space to single space
+                $string = preg_replace('!\s+!', ' ', $string);
 
-            $string = $this->vsprintf($string, ['key' => $key, 'value' => $value]);
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
-
-            return str_replace($matches[0], $string, $matches[0]);
-
-        }, $content);
+                return str_replace($matches[0], $string, $matches[0]);
+            },
+            $content
+        );
     }
 }

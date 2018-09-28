@@ -21,82 +21,126 @@ use toTwig\Finder\DefaultFinder;
  */
 class Config implements ConfigInterface
 {
-	protected $name;
-	protected $description;
-	protected $finder;
-	protected $converter;
-	protected $dir;
-	protected $customConverter;
 
-	public function __construct($name = 'default', $description = 'A default configuration')
-	{
-		$this->name = $name;
-		$this->description = $description;
-		$this->converter = ConverterAbstract::ALL_LEVEL;
-		$this->finder = new DefaultFinder();
-		$this->customConverter = array();
-	}
+    protected $name;
+    protected $description;
+    protected $finder;
+    protected $converter;
+    protected $dir;
+    protected $customConverter;
 
-	public static function create()
-	{
-		return new static();
-	}
+    /**
+     * Config constructor.
+     *
+     * @param string $name
+     * @param string $description
+     */
+    public function __construct($name = 'default', $description = 'A default configuration')
+    {
+        $this->name = $name;
+        $this->description = $description;
+        $this->converter = ConverterAbstract::ALL_LEVEL;
+        $this->finder = new DefaultFinder();
+        $this->customConverter = array();
+    }
 
-	public function setDir($dir)
-	{
-		$this->dir = $dir;
-	}
+    /**
+     * @return Config
+     */
+    public static function create()
+    {
+        return new static();
+    }
 
-	public function getDir()
-	{
-		return $this->dir;
-	}
+    /**
+     * @param string $dir
+     */
+    public function setDir($dir)
+    {
+        $this->dir = $dir;
+    }
 
-	public function finder(\Traversable $finder)
-	{
-		$this->finder = $finder;
+    /**
+     * @return string
+     */
+    public function getDir()
+    {
+        return $this->dir;
+    }
 
-		return $this;
-	}
+    /**
+     * @param \Traversable $finder
+     *
+     * @return $this
+     */
+    public function finder(\Traversable $finder)
+    {
+        $this->finder = $finder;
 
-	public function getFinder()
-	{
-		if ($this->finder instanceof FinderInterface && $this->dir !== null) {
-			$this->finder->setDir($this->dir);
-		}
+        return $this;
+    }
 
-		return $this->finder;
-	}
+    /**
+     * @return DefaultFinder|FinderInterface|\Traversable
+     */
+    public function getFinder()
+    {
+        if ($this->finder instanceof FinderInterface && $this->dir !== null) {
+            $this->finder->setDir($this->dir);
+        }
 
-	public function converters($converter)
-	{
-		$this->converter = $converter;
+        return $this->finder;
+    }
 
-		return $this;
-	}
+    /**
+     * @param ConverterAbstract[] $converter
+     *
+     * @return $this
+     */
+    public function converters($converter)
+    {
+        $this->converter = $converter;
 
-	public function getConverters()
-	{
-		return $this->converter;
-	}
+        return $this;
+    }
 
-	public function getName()
-	{
-		return $this->name;
-	}
+    /**
+     * @return ConverterAbstract[]|int
+     */
+    public function getConverters()
+    {
+        return $this->converter;
+    }
 
-	public function getDescription()
-	{
-		return $this->description;
-	}
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	public function addCustomConverter(ConverterAbstract $converter)
-	{
-		$this->customConverter[] = $converter;
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
-	public function getCustomConverters()
-	{
-		return $this->customConverter;
-	}
+    /**
+     * @param ConverterAbstract $converter
+     */
+    public function addCustomConverter(ConverterAbstract $converter)
+    {
+        $this->customConverter[] = $converter;
+    }
+
+    /**
+     * @return ConverterAbstract[]
+     */
+    public function getCustomConverters()
+    {
+        return $this->customConverter;
+    }
 }

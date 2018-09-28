@@ -18,10 +18,17 @@ use toTwig\ConverterAbstract;
  */
 class VariableConverter extends ConverterAbstract
 {
+
     protected $name = 'variable';
     protected $description = 'Convert smarty variable {$var.name} to twig {{ $var.name }}';
     protected $priority = 10;
 
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
     public function convert(\SplFileInfo $file, $content)
     {
         $content = $this->replace($content);
@@ -29,20 +36,28 @@ class VariableConverter extends ConverterAbstract
         return $content;
     }
 
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
     private function replace($content)
     {
         $pattern = '/\[\{([^{}]+)?\}\]/';
-        return preg_replace_callback($pattern, function ($matches) {
 
-            $match = $matches[1];
-            $search = $matches[0];
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
+                $search = $matches[0];
 
-            $match = $this->convertExpression($match);
+                $match = $this->convertExpression($match);
 
-            $search = str_replace($search, '{{ ' . $match . ' }}', $search);
+                $search = str_replace($search, '{{ ' . $match . ' }}', $search);
 
-            return $search;
-
-        }, $content);
+                return $search;
+            },
+            $content
+        );
     }
 }

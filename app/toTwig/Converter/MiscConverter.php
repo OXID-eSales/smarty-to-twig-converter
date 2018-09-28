@@ -18,6 +18,7 @@ use toTwig\ConverterAbstract;
  */
 class MiscConverter extends ConverterAbstract
 {
+
     protected $name = 'misc';
     protected $description = 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
     protected $priority = 52;
@@ -26,18 +27,27 @@ class MiscConverter extends ConverterAbstract
     // replacements not addressed in the grammar.
     private $replacements;
 
+    /**
+     * MiscConverter constructor.
+     */
     public function __construct()
     {
         $this->replacements = [
-            $this->getOpeningTagPattern('ldelim') => '',
-            $this->getOpeningTagPattern('rdelim') => '',
+            $this->getOpeningTagPattern('ldelim')  => '',
+            $this->getOpeningTagPattern('rdelim')  => '',
             $this->getOpeningTagPattern('literal') => '{# literal #}',
             $this->getClosingTagPattern('literal') => '{# /literal #}',
-            $this->getOpeningTagPattern('strip') => '{% spaceless %}',
-            $this->getClosingTagPattern('strip') => '{% endspaceless %}',
+            $this->getOpeningTagPattern('strip')   => '{% spaceless %}',
+            $this->getClosingTagPattern('strip')   => '{% endspaceless %}',
         ];
     }
 
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
     public function convert(\SplFileInfo $file, $content)
     {
         foreach ($this->replacements as $k => $v) {

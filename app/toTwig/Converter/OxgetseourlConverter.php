@@ -15,6 +15,7 @@ use toTwig\AbstractSingleTagConverter;
  */
 class OxgetseourlConverter extends AbstractSingleTagConverter
 {
+
     protected $name = 'oxgetseourl';
     protected $convertedName = 'seo_url';
     protected $description = "Convert smarty {oxgetseourl} to twig function {{ seo_url() }}";

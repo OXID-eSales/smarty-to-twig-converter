@@ -10,8 +10,12 @@ namespace toTwig\Converter;
 
 use toTwig\ConverterAbstract;
 
+/**
+ * Class SectionConverter
+ */
 class SectionConverter extends ConverterAbstract
 {
+
     protected $name = 'section';
     protected $description = 'Convert smarty {section} to twig {for}';
 
@@ -19,7 +23,8 @@ class SectionConverter extends ConverterAbstract
      * Function converts smarty {section} tags to twig {for}
      *
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
+     *
      * @return null|string|string[]
      */
     public function convert(\SplFileInfo $file, $content)
@@ -33,7 +38,8 @@ class SectionConverter extends ConverterAbstract
     /**
      * Function converts opening tag of smarty {section} to twig {for}
      *
-     * @param $content
+     * @param string $content
+     *
      * @return null|string|string[]
      */
     private function replaceSectionOpeningTag($content)
@@ -42,30 +48,33 @@ class SectionConverter extends ConverterAbstract
         $pattern = '/\[\{\s*section\b\s*([^{}]+)?\s*\}\]/';
         $string = '{% for :name in :start..:loop %}';
 
-        return preg_replace_callback($pattern, function($matches) use ($string) {
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($string) {
+                $match = $matches[1];
+                $search = $matches[0];
 
-            $match = $matches[1];
-            $search = $matches[0];
+                $attr = $this->attributes($match);
+                if (!isset($attr['start'])) {
+                    $attr['start'] = 0;
+                }
+                $replace = $attr;
+                $string = $this->vsprintf($string, $replace);
 
-            $attr = $this->attributes($match);
-            if(!isset($attr['start'])) {
-                $attr['start'] = 0;
-            }
-            $replace = $attr;
-            $string = $this->vsprintf($string, $replace);
+                // Replace more than one space to single space
+                $string = preg_replace('!\s+!', ' ', $string);
 
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
-
-            return str_replace($search, $string, $search);
-
-        }, $content);
+                return str_replace($search, $string, $search);
+            },
+            $content
+        );
     }
 
     /**
      * Function converts closing tag of smarty {section} to twig {for}
      *
-     * @param $content
+     * @param string $content
+     *
      * @return null|string|string[]
      */
     private function replaceSectionClosingTag($content)
@@ -73,6 +82,7 @@ class SectionConverter extends ConverterAbstract
         $search = $this->getClosingTagPattern('section');
         $search = '#\[\{\s*/section\s*\}\]#';
         $replace = '{% endfor %}';
+
         return preg_replace($search, $replace, $content);
     }
 }

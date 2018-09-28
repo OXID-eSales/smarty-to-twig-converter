@@ -17,6 +17,9 @@
         "sebastian/diff": "2.*",
         "phpunit/phpunit": "^6"
     },
+    "require-dev": {
+        "oxid-esales/coding-standards": "^v3.0.5"
+    },
     "autoload": {
         "psr-0": { "toTwig\\": "app/" }
     },

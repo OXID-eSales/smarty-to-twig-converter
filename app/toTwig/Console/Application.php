@@ -23,23 +23,27 @@ use toTwig\Converter;
  */
 class Application extends BaseApplication
 {
-	/**
-	 * Constructor.
-	 */
-	public function __construct()
-	{
-		error_reporting(E_ALL^E_NOTICE);
 
-		parent::__construct('PHP Smarty to Twig Converter', Converter::VERSION);
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        error_reporting(E_ALL ^ E_NOTICE);
 
-		$this->add(new ConvertCommand());
-		$this->add(new CompileCommand());
-		$this->add(new ReadmeCommand());
-		$this->add(new SelfUpdateCommand());
-	}
+        parent::__construct('PHP Smarty to Twig Converter', Converter::VERSION);
 
-	public function getLongVersion()
-	{
-		return parent::getLongVersion().' by <comment>sankar</comment>';
-	}
+        $this->add(new ConvertCommand());
+        $this->add(new CompileCommand());
+        $this->add(new ReadmeCommand());
+        $this->add(new SelfUpdateCommand());
+    }
+
+    /**
+     * @return string
+     */
+    public function getLongVersion()
+    {
+        return parent::getLongVersion() . ' by <comment>sankar</comment>';
+    }
 }

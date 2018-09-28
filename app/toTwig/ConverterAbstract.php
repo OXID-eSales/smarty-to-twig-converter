@@ -16,6 +16,7 @@ namespace toTwig;
  */
 abstract class ConverterAbstract
 {
+
     const ALL_LEVEL = 15;
 
     /**
@@ -42,8 +43,8 @@ abstract class ConverterAbstract
     /**
      * Fixes a file.
      *
-     * @param \SplFileInfo $file A \SplFileInfo instance
-     * @param string $content The file content
+     * @param \SplFileInfo $file    A \SplFileInfo instance
+     * @param string       $content The file content
      *
      * @return string The fixed file content
      */
@@ -80,6 +81,8 @@ abstract class ConverterAbstract
     /**
      * Returns true if the file is supported by this converter.
      *
+     * @param \SplFileInfo $file
+     *
      * @return Boolean true if the file is supported by this converter, false otherwise
      */
     public function supports(\SplFileInfo $file)
@@ -115,6 +118,7 @@ abstract class ConverterAbstract
      * Method to extract key/value pairs out of a string with xml style attributes
      *
      * @param   string $string String containing xml style attributes
+     *
      * @return  array   Key/Value pairs for the attributes
      */
     protected function attributes($string)
@@ -167,8 +171,12 @@ abstract class ConverterAbstract
         }
 
         // Handle && and ||
-        if ($string == '&&') return 'and';
-        if ($string == '||') return 'or';
+        if ($string == '&&') {
+            return 'and';
+        }
+        if ($string == '||') {
+            return 'or';
+        }
 
         // Handle "($var"
         if ($string[0] == "(") {
@@ -192,55 +200,63 @@ abstract class ConverterAbstract
     /**
      * Handle function arguments (arg1, arg2, arg3)
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
     private function convertFunctionArguments($string)
     {
-        return preg_replace_callback("/\([^)]*\)/", function($matches) {
-            $expression = $matches[0];
-            $expression = rtrim(ltrim($expression, "("), ")");
+        return preg_replace_callback(
+            "/\([^)]*\)/",
+            function ($matches) {
+                $expression = $matches[0];
+                $expression = rtrim(ltrim($expression, "("), ")");
 
-            $parts = explode(",", $expression);
-            foreach ($parts as &$part) {
-                $part = $this->value($part);
-            }
+                $parts = explode(",", $expression);
+                foreach ($parts as &$part) {
+                    $part = $this->value($part);
+                }
 
-            return sprintf("(%s)", implode(", ", $parts));
-        }, $string);
+                return sprintf("(%s)", implode(", ", $parts));
+            },
+            $string
+        );
     }
 
     /**
      * Handle filters [{$var|filter:$var->from:'to'}]
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
     private function convertFilters($string)
     {
-        return preg_replace_callback("/\|\w+\:[^\s}|]*/", function ($matches) {
-            $expression = $matches[0];
-            $expression = ltrim($expression, "|");
+        return preg_replace_callback(
+            "/\|\w+\:[^\s}|]*/",
+            function ($matches) {
+                $expression = $matches[0];
+                $expression = ltrim($expression, "|");
 
-            $parts = explode(":", $expression);
+                $parts = explode(":", $expression);
 
-            $value = array_shift($parts);
-            $value = $this->value($value);
+                $value = array_shift($parts);
+                $value = $this->value($value);
 
-            foreach ($parts as &$part) {
-                $part = $this->value($part);
-            }
+                foreach ($parts as &$part) {
+                    $part = $this->value($part);
+                }
 
-            return sprintf("|$value(%s)", implode(", ", $parts));
-        }, $string);
+                return sprintf("|$value(%s)", implode(", ", $parts));
+            },
+            $string
+        );
     }
 
     /**
      * Explodes expression to parts and converts them separately
      *
-     * @param $expression
+     * @param string $expression
      *
      * @return string
      */
@@ -258,17 +274,23 @@ abstract class ConverterAbstract
      * Replace named args in string
      *
      * @param  string $string
-     * @param  array $args
+     * @param  array  $args
+     *
      * @return string         Formated string
      */
     protected function vsprintf($string, $args)
     {
         $pattern = '/:([a-zA-Z0-9_-]+)/';
-        return preg_replace_callback($pattern, function ($matches) use ($args) {
-            if (isset($args[$matches[1]])) {
-                return str_replace($matches[0], $args[$matches[1]], $matches[0]);
-            }
-        }, $string);
+
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($args) {
+                if (isset($args[$matches[1]])) {
+                    return str_replace($matches[0], $args[$matches[1]], $matches[0]);
+                }
+            },
+            $string
+        );
     }
 
     /**
@@ -284,7 +306,9 @@ abstract class ConverterAbstract
     {
         $pairs = [];
         foreach ($array as $key => $value) {
-            if (in_array($key, $skippedKeys)) continue;
+            if (in_array($key, $skippedKeys)) {
+                continue;
+            }
             $pairs[] = $this->variable($key) . ": " . $this->value($value);
         }
 

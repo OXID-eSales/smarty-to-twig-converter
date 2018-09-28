@@ -11,13 +11,14 @@ use toTwig\ConverterAbstract;
  */
 class OxifcontentConverter extends ConverterAbstract
 {
+
     protected $name = 'oxifcontent';
     protected $description = 'Convert oxifcontent to twig';
     protected $priority = 50;
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return string
      */
@@ -53,12 +54,16 @@ class OxifcontentConverter extends ConverterAbstract
         // [{oxifcontent other stuff}]
         $pattern = $this->getOpeningTagPattern('oxifcontent');
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
 
-            $attributes = $this->attributes($match);
+                $attributes = $this->attributes($match);
 
-            return sprintf("{%% oxifcontent %s %%}", $this->convertArrayToAssocTwigArray($attributes, []));
-        }, $content);
+                return sprintf("{%% oxifcontent %s %%}", $this->convertArrayToAssocTwigArray($attributes, []));
+            },
+            $content
+        );
     }
 }

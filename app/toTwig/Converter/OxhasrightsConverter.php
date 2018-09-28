@@ -11,13 +11,14 @@ use toTwig\ConverterAbstract;
  */
 class OxhasrightsConverter extends ConverterAbstract
 {
+
     protected $name = 'oxhasrights';
     protected $description = 'Convert oxhasrights to twig';
     protected $priority = 50;
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return string
      */
@@ -53,13 +54,17 @@ class OxhasrightsConverter extends ConverterAbstract
         // [{oxhasrights other stuff}]
         $pattern = $this->getOpeningTagPattern('oxhasrights');
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
 
-            $attr = $this->attributes($match);
-            $ident = $this->value($attr['ident']);
+                $attr = $this->attributes($match);
+                $ident = $this->value($attr['ident']);
 
-            return sprintf("{%% oxhasrights %s %%}", $ident);
-        }, $content);
+                return sprintf("{%% oxhasrights %s %%}", $ident);
+            },
+            $content
+        );
     }
 }
