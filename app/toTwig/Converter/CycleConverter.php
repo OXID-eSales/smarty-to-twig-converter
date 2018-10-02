@@ -13,7 +13,7 @@ class CycleConverter extends ConverterAbstract
 {
 
     protected $name = 'cycle';
-    protected $description = "Convert smarty {cycle} to twig function {{ oxcycle() }}";
+    protected $description = "Convert smarty {cycle} to twig function {{ smarty_cycle() }}";
     protected $priority = 100;
 
     /**
@@ -35,17 +35,22 @@ class CycleConverter extends ConverterAbstract
                 $match = isset($matches[1]) ? $matches[1] : "";
                 $attributes = $this->attributes($match);
 
+                // Different approaches for syntax with and without assignment
+                $assignVar = $this->extractAssignVariableName($attributes);
+
+                if ($assignVar) {
+                    unset($attributes['print']);
+                }
+
                 $valuesArray = $this->extractValuesArray($attributes);
                 $extraParameters = $this->extractAdditionalParametersArray($attributes);
-
                 $argumentsString = $this->composeArgumentsString($valuesArray, $extraParameters);
 
                 // Different approaches for syntax with and without assignment
-                $assignVar = $this->extractAssignVariableName($attributes);
                 if ($assignVar) {
-                    $twigTag = "{% set $assignVar = oxcycle($argumentsString) %}";
+                    $twigTag = "{% set $assignVar = smarty_cycle($argumentsString) %}";
                 } else {
-                    $twigTag = "{{ oxcycle($argumentsString) }}";
+                    $twigTag = "{{ smarty_cycle($argumentsString) }}";
                 }
 
                 return $twigTag;
