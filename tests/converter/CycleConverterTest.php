@@ -12,6 +12,7 @@ use toTwig\Converter\CycleConverter;
  */
 class CycleConverterTest extends TestCase
 {
+
     /** @var CycleConverter */
     protected $converter;
 
@@ -31,7 +32,8 @@ class CycleConverterTest extends TestCase
     public function testThatAssignIsConverted($smarty, $twig)
     {
         // Test the above cases
-        $this->assertSame($twig,
+        $this->assertSame(
+            $twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
     }
@@ -45,37 +47,37 @@ class CycleConverterTest extends TestCase
             [
                 // Basic usage
                 "[{cycle values=\"val1,val2,val3\"}]",
-                "{{ oxcycle([\"val1\", \"val2\", \"val3\"]) }}"
+                "{{ smarty_cycle([\"val1\", \"val2\", \"val3\"]) }}"
             ],
             [
                 // Using non-default delimiter
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\"}]",
-                "{{ oxcycle([\"val1\", \"val2\", \"val3\"]) }}"
+                "{{ smarty_cycle([\"val1\", \"val2\", \"val3\"]) }}"
             ],
             [
                 // Assigning to variable
                 "[{cycle values=\"val1,val2,val3\" assign=\"var\"}]",
-                "{% set var = oxcycle([\"val1\", \"val2\", \"val3\"]) %}"
+                "{% set var = smarty_cycle([\"val1\", \"val2\", \"val3\"]) %}"
             ],
             [
                 // Assigning to variable using non-default delimiter
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\" assign=\"var\"}]",
-                "{% set var = oxcycle([\"val1\", \"val2\", \"val3\"]) %}"
+                "{% set var = smarty_cycle([\"val1\", \"val2\", \"val3\"]) %}"
             ],
             [
                 // Short-hand use
                 "[{cycle}]",
-                "{{ oxcycle() }}"
+                "{{ smarty_cycle() }}"
             ],
             [
                 // Extra parameters
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true}]",
-                "{{ oxcycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) }}"
+                "{{ smarty_cycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) }}"
             ],
             [
                 // Extra parameters with assign
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true assign=\"var\"}]",
-                "{% set var = oxcycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) %}"
+                "{% set var = smarty_cycle([\"val1\", \"val2\", \"val3\"], { advance: false, reset: true }) %}"
             ]
         ];
     }
