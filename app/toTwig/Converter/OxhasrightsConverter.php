@@ -57,14 +57,45 @@ class OxhasrightsConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                $string = "{% hasrights {:type :field :right :object :readonly :ident} %}";
+                $replace = [];
+
                 $match = $matches[1];
-
                 $attr = $this->attributes($match);
-                $ident = $this->value($attr['ident']);
 
-                return sprintf("{%% oxhasrights %s %%}", $ident);
+                $replace['type'] = $this->getArrayElementToReplace($attr, 'type');
+                $replace['field'] = $this->getArrayElementToReplace($attr, 'field');
+                $replace['right'] = $this->getArrayElementToReplace($attr, 'right');
+                $replace['object'] = $this->getArrayElementToReplace($attr, 'object');
+                $replace['readonly'] = $this->getArrayElementToReplace($attr, 'readonly');
+                $replace['ident'] = $this->getArrayElementToReplace($attr, 'ident');
+
+                $string = $this->vsprintf($string, $replace);
+
+                // Replace more than one space to single space
+                $string = preg_replace('!\s+!', ' ', $string);
+
+                return str_replace($matches[0], $string, $matches[0]);
             },
             $content
         );
+    }
+
+    /**
+     * Returns element of array to replace template string
+     *
+     * @param $attr
+     * @param $attributeName
+     * @return string
+     */
+    private function getArrayElementToReplace($attr, $attributeName) {
+        if(isset($attr[$attributeName])) {
+            $format = "\"%s\": \"%s\",";
+            $variable = $this->variable($attr[$attributeName]);
+            $return = sprintf($format, $attributeName, $variable);
+        } else {
+            $return = '';
+        }
+        return $return;
     }
 }
