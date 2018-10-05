@@ -21,7 +21,7 @@ class OxinputhelpConverterTest extends TestCase
     }
 
     /**
-     * @covers \toTwig\Converter\CaptureConverter::convert
+     * @covers       \toTwig\Converter\CaptureConverter::convert
      * @dataProvider Provider
      *
      * @param $smarty
@@ -29,7 +29,7 @@ class OxinputhelpConverterTest extends TestCase
      */
     public function testThatIncludeIsConverted($smarty, $twig)
     {
-        /** @var \SplFileInfo  $fileMock */
+        /** @var \SplFileInfo $fileMock */
         $fileMock = $this->getFileMock();
         $this->assertSame($twig, $this->converter->convert($fileMock, $smarty));
     }
