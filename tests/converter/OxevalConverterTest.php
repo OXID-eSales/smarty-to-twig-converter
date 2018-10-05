@@ -3,7 +3,6 @@
 namespace sankar\ST\Tests\Converter;
 
 use toTwig\Converter\OxevalConverter;
-include_once 'AbstractConverterTest.php';
 
 /**
  * Class OxevalConverterTest
@@ -21,7 +20,7 @@ class OxevalConverterTest extends AbstractConverterTest
     }
 
     /**
-     * @covers \toTwig\Converter\OxevalConverter::convert
+     * @covers       \toTwig\Converter\OxevalConverter::convert
      *
      * @dataProvider Provider
      *
@@ -31,9 +30,7 @@ class OxevalConverterTest extends AbstractConverterTest
     public function testThatAssignIsConverted($smarty, $twig)
     {
         // Test the above cases
-        $this->assertSame($twig,
-            $this->converter->convert($this->getFileMock(), $smarty)
-        );
+        $this->assertSame($twig, $this->converter->convert($this->getFileMock(), $smarty));
     }
 
     /**
