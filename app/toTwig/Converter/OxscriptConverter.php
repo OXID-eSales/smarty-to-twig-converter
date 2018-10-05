@@ -11,6 +11,7 @@ use toTwig\AbstractSingleTagConverter;
  */
 class OxscriptConverter extends AbstractSingleTagConverter
 {
+
     protected $name = 'oxscript';
     protected $description = "Convert smarty {oxscript} to twig function {{ oxscript() }}";
     protected $priority = 100;

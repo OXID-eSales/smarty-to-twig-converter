@@ -11,6 +11,7 @@ use toTwig\ConverterAbstract;
  */
 class OxinputhelpConverter extends ConverterAbstract
 {
+
     protected $name = 'oxinputhelp';
     protected $description = "Convert smarty {oxinputhelp} to twig include with specified file path and parameters";
     protected $priority = 100;

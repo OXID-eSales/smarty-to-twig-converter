@@ -19,6 +19,10 @@ use toTwig\FinderInterface;
  */
 class DefaultFinder extends Finder implements FinderInterface
 {
+
+    /**
+     * DefaultFinder constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -31,12 +35,16 @@ class DefaultFinder extends Finder implements FinderInterface
             ->ignoreDotFiles(true)
             ->ignoreVCS(true)
             ->exclude('vendor')
-            ->filter(function (\SplFileInfo $file) use ($files) {
-                return !in_array($file->getRelativePathname(), $files);
-            })
-        ;
+            ->filter(
+                function (\SplFileInfo $file) use ($files) {
+                    return !in_array($file->getRelativePathname(), $files);
+                }
+            );
     }
 
+    /**
+     * @param string $dir
+     */
     public function setDir($dir)
     {
         $this->in($this->getDirs($dir));
@@ -44,6 +52,8 @@ class DefaultFinder extends Finder implements FinderInterface
 
     /**
      * Gets the directories that needs to be scanned for files to validate.
+     *
+     * @param string $dir
      *
      * @return array
      */

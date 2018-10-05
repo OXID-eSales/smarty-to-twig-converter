@@ -27,41 +27,45 @@ use toTwig\ConfigInterface;
  */
 class ConvertCommand extends Command
 {
-	protected $converter;
-	protected $defaultConfig;
 
-	/**
-	 * @param Converter           $converter
-	 * @param ConfigInterface $config
-	 */
-	public function __construct(Converter $converter = null, ConfigInterface $config = null)
-	{
-		$this->converter = $converter ?: new Converter();
-		$this->converter->registerBuiltInConverters();
-		$this->converter->registerBuiltInConfigs();
-		$this->defaultConfig = $config ?: new Config();
+    protected $converter;
+    protected $defaultConfig;
 
-		parent::__construct();
-	}
+    /**
+     * @param Converter       $converter
+     * @param ConfigInterface $config
+     */
+    public function __construct(Converter $converter = null, ConfigInterface $config = null)
+    {
+        $this->converter = $converter ?: new Converter();
+        $this->converter->registerBuiltInConverters();
+        $this->converter->registerBuiltInConfigs();
+        $this->defaultConfig = $config ?: new Config();
 
-	/**
-	 * @see Command
-	 */
-	protected function configure()
-	{
-		$this
-			->setName('convert')
-			->setDefinition(array(
-				new InputArgument('path', InputArgument::REQUIRED, 'The path'),
-				new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration name', null),
-				new InputOption('converters', '', InputOption::VALUE_REQUIRED, 'A list of converters to run'),
-				new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension'),
-				new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
-				new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified'),
-				new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt')
-			))
-			->setDescription('Convert a directory or a file')
-			->setHelp(<<<EOF
+        parent::__construct();
+    }
+
+    /**
+     * @see Command
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('convert')
+            ->setDefinition(
+                array(
+                    new InputArgument('path', InputArgument::REQUIRED, 'The path'),
+                    new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration name', null),
+                    new InputOption('converters', '', InputOption::VALUE_REQUIRED, 'A list of converters to run'),
+                    new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension'),
+                    new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
+                    new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified'),
+                    new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt')
+                )
+            )
+            ->setDescription('Convert a directory or a file')
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command tries to fix as much coding standards
 problems as possible on a given file or directory:
 
@@ -119,177 +123,234 @@ and directories that need to be analyzed:
 		->finder(\$finder)
 	;
 EOF
-			);
-	}
+            );
+    }
 
-	/**
-	 * @see Command
-	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
-		$path = $input->getArgument('path');
-		$filesystem = new Filesystem();
-		if (!$filesystem->isAbsolutePath($path)) {
-			$path = getcwd().DIRECTORY_SEPARATOR.$path;
-		}
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     *
+     * @see Command
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $path = $input->getArgument('path');
+        $filesystem = new Filesystem();
+        if (!$filesystem->isAbsolutePath($path)) {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+        }
 
-		$addSuppliedPathFromCli = true;
+        $config = $this->getConfig($input, $path);
 
-		if ($input->getOption('config')) {
-			$config = null;
-			foreach ($this->converter->getConfigs() as $c) {
-				if ($c->getName() == $input->getOption('config')) {
-					$config = $c;
-					break;
-				}
-			}
+        // register custom converters from config
+        $this->converter->registerCustomConverters($config->getCustomConverters());
 
-			if (null === $config) {
-				throw new \InvalidArgumentException(sprintf('The configuration "%s" is not defined', $input->getOption('config')));
-			}
-		} elseif (file_exists($file = $path.'/.php_st')) {
-			$config = include $file;
-			$addSuppliedPathFromCli = false;
-		} else {
-			$config = $this->defaultConfig;
-		}
+        $converters = $this->getConverters($input);
 
-		if ($addSuppliedPathFromCli) {
-			if (is_file($path)) {
-				$config->finder(new \ArrayIterator(array(new \SplFileInfo($path))));
-			} else {
-				$config->setDir($path);
-			}
-		}
+        $config->converters($converters);
 
-		// register custom converters from config
-		$this->converter->registerCustomConverters($config->getCustomConverters());
+        $changed = $this->converter->convert($config, $input->getOption('dry-run'), $input->getOption('diff'), $input->getOption('ext'));
 
-		$allConverters = $this->converter->getConverters();
+        switch ($input->getOption('format')) {
+            case 'txt':
+                $this->outputTxt($input, $output, $changed);
+                break;
+            case 'xml':
+                $this->outputXml($input, $output, $changed);
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf('The format "%s" is not defined.', $input->getOption('format')));
+        }
 
-		$converters = array();
-		// remove/add converters based on the converters option
-		if (preg_match('{(^|,)-}', $input->getOption('converters'))) {
-			foreach ($converters as $key => $converter) {
-				if (preg_match('{(^|,)-'.preg_quote($converter->getName()).'}', $input->getOption('converters'))) {
-					unset($converters[$key]);
-				}
-			}
-		} elseif ($input->getOption('converters')) {
-			$names = array_map('trim', explode(',', $input->getOption('converters')));
+        return empty($changed) ? 0 : 1;
+    }
 
-			foreach ($allConverters as $converter) {
-				if (in_array($converter->getName(), $names) && !in_array($converter, $converters)) {
-					$converters[] = $converter;
-				}
-			}
-		} else {
-			$converters = $allConverters;
-		}
+    /**
+     * @param InputInterface $input
+     * @param string         $path
+     *
+     * @return Config|null
+     */
+    private function getConfig(InputInterface $input, $path)
+    {
+        $addSuppliedPathFromCli = true;
 
-		$config->converters($converters);
+        if ($input->getOption('config')) {
+            $config = null;
+            foreach ($this->converter->getConfigs() as $c) {
+                if ($c->getName() == $input->getOption('config')) {
+                    $config = $c;
+                    break;
+                }
+            }
 
-		$changed = $this->converter->convert($config, $input->getOption('dry-run'), $input->getOption('diff'), $input->getOption('ext'));
+            if (null === $config) {
+                throw new \InvalidArgumentException(sprintf('The configuration "%s" is not defined', $input->getOption('config')));
+            }
+        } elseif (file_exists($file = $path . '/.php_st')) {
+            $config = include $file;
+            $addSuppliedPathFromCli = false;
+        } else {
+            $config = $this->defaultConfig;
+        }
 
-		$i = 1;
-		switch ($input->getOption('format')) {
-			case 'txt':
-				foreach ($changed as $file => $fixResult) {
-					$output->write(sprintf('%4d) %s', $i++, $file));
-					if ($input->hasOption('verbose')) {
-						$output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $fixResult['appliedConverters'])));
-						if ($input->getOption('diff')) {
-							$output->writeln('');
-							$output->writeln('<comment>      ---------- begin diff ----------</comment>');
-							$output->writeln($fixResult['diff']);
-							$output->writeln('<comment>      ---------- end diff ----------</comment>');
-						}
-					}
-					$output->writeln('');
-				}
-				break;
-			case 'xml':
-				$dom = new \DOMDocument('1.0', 'UTF-8');
-				$dom->appendChild($filesXML = $dom->createElement('files'));
-				foreach ($changed as $file => $fixResult) {
-					$filesXML->appendChild($fileXML = $dom->createElement('file'));
+        if ($addSuppliedPathFromCli) {
+            if (is_file($path)) {
+                $config->finder(new \ArrayIterator(array(new \SplFileInfo($path))));
+            } else {
+                $config->setDir($path);
+            }
+        }
 
-					$fileXML->setAttribute('id', $i++);
-					$fileXML->setAttribute('name', $file);
-					if ($input->getOption('verbose')) {
-						$fileXML->appendChild($appliedConvertersXML = $dom->createElement('applied_converters'));
-						foreach ($fixResult['appliedConverters'] as $appliedConverter) {
-							$appliedConvertersXML->appendChild($appliedConverterXML = $dom->createElement('applied_converter'));
-							$appliedConverterXML->setAttribute('name', $appliedConverter);
-						}
+        return $config;
+    }
 
-						if ($input->getOption('diff')) {
-							$fileXML->appendChild($diffXML = $dom->createElement('diff'));
+    /**
+     * @param InputInterface $input
+     *
+     * @return array
+     */
+    private function getConverters(InputInterface $input): array
+    {
+        $allConverters = $this->converter->getConverters();
 
-							$diffXML->appendChild($dom->createCDATASection($fixResult['diff']));
-						}
-					}
-				}
+        $converters = array();
+        // remove/add converters based on the converters option
+        if (preg_match('{(^|,)-}', $input->getOption('converters'))) {
+            foreach ($converters as $key => $converter) {
+                if (preg_match('{(^|,)-' . preg_quote($converter->getName()) . '}', $input->getOption('converters'))) {
+                    unset($converters[$key]);
+                }
+            }
+        } elseif ($input->getOption('converters')) {
+            $names = array_map('trim', explode(',', $input->getOption('converters')));
 
-				$dom->formatOutput = true;
-				$output->write($dom->saveXML());
-				break;
-			default:
-				throw new \InvalidArgumentException(sprintf('The format "%s" is not defined.', $input->getOption('format')));
-		}
+            foreach ($allConverters as $converter) {
+                if (in_array($converter->getName(), $names) && !in_array($converter, $converters)) {
+                    $converters[] = $converter;
+                }
+            }
+        } else {
+            $converters = $allConverters;
+        }
 
-		return empty($changed) ? 0 : 1;
-	}
+        return $converters;
+    }
 
-	protected function getConvertersHelp()
-	{
-		$converters = '';
-		$maxName = 0;
-		foreach ($this->converter->getConverters() as $converter) {
-			if (strlen($converter->getName()) > $maxName) {
-				$maxName = strlen($converter->getName());
-			}
-		}
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param array           $changed
+     */
+    private function outputTxt(InputInterface $input, OutputInterface $output, $changed): void
+    {
+        $i = 1;
+        foreach ($changed as $file => $fixResult) {
+            $output->write(sprintf('%4d) %s', $i++, $file));
+            if ($input->hasOption('verbose')) {
+                $output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $fixResult['appliedConverters'])));
+                if ($input->getOption('diff')) {
+                    $output->writeln('');
+                    $output->writeln('<comment>      ---------- begin diff ----------</comment>');
+                    $output->writeln($fixResult['diff']);
+                    $output->writeln('<comment>      ---------- end diff ----------</comment>');
+                }
+            }
+            $output->writeln('');
+        }
+    }
 
-		$count = count($this->converter->getConverters()) - 1;
-		foreach ($this->converter->getConverters() as $i => $converter) {
-			$chunks = explode("\n", wordwrap(sprintf('%s', $converter->getDescription()), 72 - $maxName, "\n"));
-			$converters .= sprintf(" * <comment>%s</comment>%s %s\n", $converter->getName(), str_repeat(' ', $maxName - strlen($converter->getName())), array_shift($chunks));
-			while ($c = array_shift($chunks)) {
-				$converters .= str_repeat(' ', $maxName + 4).$c."\n";
-			}
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param array           $changed
+     */
+    private function outputXml(InputInterface $input, OutputInterface $output, $changed): void
+    {
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->appendChild($filesXML = $dom->createElement('files'));
+        $i = 1;
+        foreach ($changed as $file => $fixResult) {
+            $filesXML->appendChild($fileXML = $dom->createElement('file'));
 
-			if ($count != $i) {
-				$converters .= "\n";
-			}
-		}
+            $fileXML->setAttribute('id', $i++);
+            $fileXML->setAttribute('name', $file);
+            if ($input->getOption('verbose')) {
+                $fileXML->appendChild($appliedConvertersXML = $dom->createElement('applied_converters'));
+                foreach ($fixResult['appliedConverters'] as $appliedConverter) {
+                    $appliedConvertersXML->appendChild($appliedConverterXML = $dom->createElement('applied_converter'));
+                    $appliedConverterXML->setAttribute('name', $appliedConverter);
+                }
 
-		return $converters;
-	}
+                if ($input->getOption('diff')) {
+                    $fileXML->appendChild($diffXML = $dom->createElement('diff'));
 
-	protected function getConfigsHelp()
-	{
-		$configs = '';
-		$maxName = 0;
-		foreach ($this->converter->getConfigs() as $config) {
-			if (strlen($config->getName()) > $maxName) {
-				$maxName = strlen($config->getName());
-			}
-		}
+                    $diffXML->appendChild($dom->createCDATASection($fixResult['diff']));
+                }
+            }
+        }
 
-		$count = count($this->converter->getConfigs()) - 1;
-		foreach ($this->converter->getConfigs() as $i => $config) {
-			$chunks = explode("\n", wordwrap($config->getDescription(), 72 - $maxName, "\n"));
-			$configs .= sprintf(" * <comment>%s</comment>%s %s\n", $config->getName(), str_repeat(' ', $maxName - strlen($config->getName())), array_shift($chunks));
-			while ($c = array_shift($chunks)) {
-				$configs .= str_repeat(' ', $maxName + 4).$c."\n";
-			}
+        $dom->formatOutput = true;
+        $output->write($dom->saveXML());
+    }
 
-			if ($count != $i) {
-				$configs .= "\n";
-			}
-		}
+    /**
+     * @return string
+     */
+    protected function getConvertersHelp()
+    {
+        $converters = '';
+        $maxName = 0;
+        foreach ($this->converter->getConverters() as $converter) {
+            if (strlen($converter->getName()) > $maxName) {
+                $maxName = strlen($converter->getName());
+            }
+        }
 
-		return $configs;
-	}
+        $count = count($this->converter->getConverters()) - 1;
+        foreach ($this->converter->getConverters() as $i => $converter) {
+            $chunks = explode("\n", wordwrap(sprintf('%s', $converter->getDescription()), 72 - $maxName, "\n"));
+            $converters .= sprintf(" * <comment>%s</comment>%s %s\n", $converter->getName(), str_repeat(' ', $maxName - strlen($converter->getName())), array_shift($chunks));
+            while ($c = array_shift($chunks)) {
+                $converters .= str_repeat(' ', $maxName + 4) . $c . "\n";
+            }
+
+            if ($count != $i) {
+                $converters .= "\n";
+            }
+        }
+
+        return $converters;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigsHelp()
+    {
+        $configs = '';
+        $maxName = 0;
+        foreach ($this->converter->getConfigs() as $config) {
+            if (strlen($config->getName()) > $maxName) {
+                $maxName = strlen($config->getName());
+            }
+        }
+
+        $count = count($this->converter->getConfigs()) - 1;
+        foreach ($this->converter->getConfigs() as $i => $config) {
+            $chunks = explode("\n", wordwrap($config->getDescription(), 72 - $maxName, "\n"));
+            $configs .= sprintf(" * <comment>%s</comment>%s %s\n", $config->getName(), str_repeat(' ', $maxName - strlen($config->getName())), array_shift($chunks));
+            while ($c = array_shift($chunks)) {
+                $configs .= str_repeat(' ', $maxName + 4) . $c . "\n";
+            }
+
+            if ($count != $i) {
+                $configs .= "\n";
+            }
+        }
+
+        return $configs;
+    }
 }

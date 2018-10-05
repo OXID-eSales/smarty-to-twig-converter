@@ -11,13 +11,14 @@ use toTwig\ConverterAbstract;
  */
 class OxcontentConverter extends ConverterAbstract
 {
+
     protected $name = 'oxcontent';
     protected $description = "Convert smarty {oxcontent} to twig function {{ oxcontent() }}";
     protected $priority = 100;
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return null|string|string[]
      */
@@ -26,26 +27,30 @@ class OxcontentConverter extends ConverterAbstract
         // [{oxcontent other stuff}]
         $pattern = $this->getOpeningTagPattern('oxcontent');
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
-            $attributes = $this->attributes($match);
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
+                $attributes = $this->attributes($match);
 
-            $argumentsString = $this->convertArrayToAssocTwigArray($attributes, ['assign']);
+                $argumentsString = $this->convertArrayToAssocTwigArray($attributes, ['assign']);
 
-            // Different approaches for syntax with and without assignment
-            $assignVar = $this->extractAssignVariableName($attributes);
-            if ($assignVar) {
-                $twigTag = "{% set $assignVar = oxcontent($argumentsString) %}";
-            } else {
-                $twigTag = "{{ oxcontent($argumentsString) }}";
-            }
+                // Different approaches for syntax with and without assignment
+                $assignVar = $this->extractAssignVariableName($attributes);
+                if ($assignVar) {
+                    $twigTag = "{% set $assignVar = oxcontent($argumentsString) %}";
+                } else {
+                    $twigTag = "{{ oxcontent($argumentsString) }}";
+                }
 
-            return $twigTag;
-        }, $content);
+                return $twigTag;
+            },
+            $content
+        );
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      *
      * @return string
      */

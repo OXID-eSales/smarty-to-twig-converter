@@ -16,5 +16,11 @@ namespace toTwig;
  */
 interface FinderInterface
 {
-	public function setDir($dir);
+
+    /**
+     * @param string $dir
+     *
+     * @return mixed
+     */
+    public function setDir($dir);
 }

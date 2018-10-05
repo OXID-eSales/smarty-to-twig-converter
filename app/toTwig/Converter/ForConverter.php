@@ -18,6 +18,7 @@ use toTwig\ConverterAbstract;
  */
 class ForConverter extends ConverterAbstract
 {
+
     protected $name = 'for';
     protected $description = 'Convert foreach/foreachelse to twig';
     protected $priority = 50;
@@ -25,10 +26,16 @@ class ForConverter extends ConverterAbstract
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
     private $replacements = array(
-        'smarty\.foreach.*\.index' => 'loop.index0',
+        'smarty\.foreach.*\.index'     => 'loop.index0',
         'smarty\.foreach.*\.iteration' => 'loop.index'
     );
 
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
     public function convert(\SplFileInfo $file, $content)
     {
         $content = $this->replaceFor($content);
@@ -42,68 +49,84 @@ class ForConverter extends ConverterAbstract
         return $content;
     }
 
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
     private function replaceEndForEach($content)
     {
         // [{/foreach}]
         $search = $this->getClosingTagPattern('foreach');
         $replace = "{% endfor %}";
+
         return preg_replace($search, $replace, $content);
     }
 
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
     private function replaceForEachElse($content)
     {
         // [{foreachelse other stuff}]
         $search = $this->getOpeningTagPattern('foreachelse');
         $replace = "{% else %}";
+
         return preg_replace($search, $replace, $content);
     }
 
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
     private function replaceFor($content)
     {
         // [{foreach other stuff}]
         $pattern = $this->getOpeningTagPattern('foreach');
         $string = '{% for :key :item in :from %}';
 
-        return preg_replace_callback($pattern, function ($matches) use ($string) {
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($string) {
+                $match = $matches[1];
+                $search = $matches[0];
+                $replace = [];
 
-            $match = $matches[1];
-            $search = $matches[0];
-            $replace = [];
-
-            // {foreach $users as $user}
-            if (preg_match("/(.*)(?:\bas\b)(.*)/i", $match, $mcs)) {
-
-                // {foreach $users as $k => $val}
-                if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {
-                    if (!isset($replace['key'])) {
-                        $replace['key'] = '';
+                // {foreach $users as $user}
+                if (preg_match("/(.*)(?:\bas\b)(.*)/i", $match, $mcs)) {
+                    // {foreach $users as $k => $val}
+                    if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {
+                        if (!isset($replace['key'])) {
+                            $replace['key'] = '';
+                        }
+                        $replace['key'] .= $this->variable($match[1]) . ',';
+                        $mcs[2] = $match[2];
                     }
-                    $replace['key'] .= $this->variable($match[1]) . ',';
-                    $mcs[2] = $match[2];
+                    $replace['item'] = $this->variable($mcs[2]);
+                    $replace['from'] = $mcs[1];
+                } else {
+                    $attr = $this->attributes($match);
+
+                    if (isset($attr['key'])) {
+                        $replace['key'] = $attr['key'] . ',';
+                    }
+
+                    $replace['item'] = $this->variable($attr['item']);
+                    $replace['from'] = $attr['from'];
                 }
-                $replace['item'] = $this->variable($mcs[2]);
-                $replace['from'] = $mcs[1];
 
-            } else {
+                $replace['from'] = $this->value($replace['from']);
 
-                $attr = $this->attributes($match);
+                $string = $this->vsprintf($string, $replace);
+                // Replace more than one space to single space
+                $string = preg_replace('!\s+!', ' ', $string);
 
-                if (isset($attr['key'])) {
-                    $replace['key'] = $attr['key'] . ',';
-                }
-
-                $replace['item'] = $this->variable($attr['item']);
-                $replace['from'] = $attr['from'];
-            }
-
-            $replace['from'] = $this->value($replace['from']);
-
-            $string = $this->vsprintf($string, $replace);
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
-
-            return str_replace($search, $string, $search);
-
-        }, $content);
+                return str_replace($search, $string, $search);
+            },
+            $content
+        );
     }
 }

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
+ */
 
 namespace toTwig;
 
@@ -9,11 +13,23 @@ namespace toTwig;
  */
 abstract class AbstractSingleTagConverter extends ConverterAbstract
 {
+
     protected $mandatoryFields = [];
+    protected $convertedName = null;
+
+    /**
+     * AbstractSingleTagConverter constructor.
+     */
+    public function __construct()
+    {
+        if (!$this->convertedName) {
+            $this->convertedName = $this->name;
+        }
+    }
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return null|string|string[]
      */
@@ -21,20 +37,25 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
     {
         // [{tag other stuff}]
         $pattern = $this->getOpeningTagPattern($this->name);
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = isset($matches[1]) ? $matches[1] : '';
-            $attributes = $this->attributes($match);
 
-            $arguments = [];
-            foreach ($this->mandatoryFields as $mandatoryField) {
-                $arguments[] = $this->value($attributes[$mandatoryField]);
-            }
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = isset($matches[1]) ? $matches[1] : '';
+                $attributes = $this->attributes($match);
 
-            if ($extraParams = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields)) {
-                $arguments[] = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields);
-            }
+                $arguments = [];
+                foreach ($this->mandatoryFields as $mandatoryField) {
+                    $arguments[] = $this->value($attributes[$mandatoryField]);
+                }
 
-            return sprintf("{{ %s(%s) }}", $this->name, implode(", ", $arguments));
-        }, $content);
+                if ($extraParams = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields)) {
+                    $arguments[] = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields);
+                }
+
+                return sprintf("{{ %s(%s) }}", $this->convertedName, implode(", ", $arguments));
+            },
+            $content
+        );
     }
 }

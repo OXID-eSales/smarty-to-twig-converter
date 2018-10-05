@@ -10,12 +10,15 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "symfony/console": "~2.1",
         "symfony/filesystem": "~2.1",
         "symfony/finder": "~2.1",
         "sebastian/diff": "2.*",
         "phpunit/phpunit": "^6"
+    },
+    "require-dev": {
+        "oxid-esales/coding-standards": "^v3.0.5"
     },
     "autoload": {
         "psr-0": { "toTwig\\": "app/" }

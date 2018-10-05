@@ -115,7 +115,7 @@
                             </div>
                         {% else %}
                             <div class="lineBox clear">
-                                <a href="{{ oxgetseourl({ ident: oViewConf.getOrderLink() }) }}" class="prevStep submitButton largeButton" id="paymentBackStepBottom">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
+                                <a href="{{ seo_url({ ident: oViewConf.getOrderLink() }) }}" class="prevStep submitButton largeButton" id="paymentBackStepBottom">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
                                 <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">{{ oxmultilang({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
                             </div>
                         {% endif %}
@@ -130,7 +130,7 @@
                         {% endoxifcontent %}
                         <input type="hidden" name="paymentid" value="oxempty">
                         <div class="lineBox clear">
-                            <a href="{{ oxgetseourl({ ident: oViewConf.getSelfLink()|cat("cl=user") }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=user") }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
                             <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">{{ oxmultilang({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
                         </div>
                     {% endblock %}

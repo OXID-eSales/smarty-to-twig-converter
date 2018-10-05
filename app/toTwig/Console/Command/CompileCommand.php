@@ -21,23 +21,26 @@ use toTwig\Util\Compiler;
  */
 class CompileCommand extends Command
 {
-	/**
-	 * @see Command
-	 */
-	protected function configure()
-	{
-		$this
-			->setName('compile')
-			->setDescription('Compiles the converter as a phar file')
-		;
-	}
 
-	/**
-	 * @see Command
-	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
-		$compiler = new Compiler();
-		$compiler->compile();
-	}
+    /**
+     * @see Command
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('compile')
+            ->setDescription('Compiles the converter as a phar file');
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @see Command
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $compiler = new Compiler();
+        $compiler->compile();
+    }
 }

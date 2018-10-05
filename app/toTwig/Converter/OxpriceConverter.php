@@ -11,6 +11,7 @@ use toTwig\AbstractSingleTagConverter;
  */
 class OxpriceConverter extends AbstractSingleTagConverter
 {
+
     protected $name = 'oxprice';
     protected $description = "Convert smarty {oxprice} to twig function {{ oxprice() }}";
     protected $priority = 100;
