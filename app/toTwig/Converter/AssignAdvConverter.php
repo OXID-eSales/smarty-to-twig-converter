@@ -42,6 +42,12 @@ class AssignAdvConverter extends ConverterAbstract
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
 
+            if (!isset($matches[1]) && $matches[0]) {
+                $match = $matches[0];
+            } else {
+                $match = $matches[1];
+            }
+            $attr = $this->attributes($match);
             $key = $this->variable($attr['var']);
             $value = $this->value($attr['value']);
 
