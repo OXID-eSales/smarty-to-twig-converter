@@ -39,7 +39,7 @@ class AssignAdvConverter extends ConverterAbstract
         $pattern = $this->getOpeningTagPattern('assign_adv');
         $string = '{% set :key = oxassign(:value) %}';
 
-        return preg_replace_callback($pattern, function ($matches) use ($string) {
+        return preg_replace_callback($pattern, function($matches) use ($string) {
 
             $match = $matches[1];
             $attr = $this->attributes($match);
