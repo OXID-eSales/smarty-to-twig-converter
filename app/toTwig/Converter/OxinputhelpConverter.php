@@ -11,6 +11,7 @@ use toTwig\AbstractSingleTagConverter;
  */
 class OxinputhelpConverter extends AbstractSingleTagConverter
 {
+
     protected $name = 'oxinputhelp';
     protected $description = "Convert smarty {oxinputhelp} to twig function {{ oxinputhelp() }}";
     protected $priority = 100;

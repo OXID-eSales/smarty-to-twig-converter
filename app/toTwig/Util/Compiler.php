@@ -20,6 +20,10 @@ use Symfony\Component\Finder\Finder;
  */
 class Compiler
 {
+
+    /**
+     * @param string $pharFile
+     */
     public function compile($pharFile = 'toTwig.phar')
     {
         if (file_exists($pharFile)) {
@@ -33,7 +37,7 @@ class Compiler
 
         // CLI Component files
         foreach ($this->getFiles() as $file) {
-            $path = str_replace(__DIR__.'/', '', $file);
+            $path = str_replace(__DIR__ . '/', '', $file);
             $phar->addFromString($path, file_get_contents($file));
         }
         $this->addStConverter($phar);
@@ -63,11 +67,17 @@ class Compiler
         $phar->addFromString('toTwig', $content);
     }
 
+    /**
+     * @return string
+     */
     protected function getStub()
     {
         return "#!/usr/bin/env php\n<?php Phar::mapPhar('toTwig.phar'); require 'phar://toTwig.phar/toTwig'; __HALT_COMPILER();";
     }
 
+    /**
+     * @return string
+     */
     protected function getLicense()
     {
         return '
@@ -81,6 +91,9 @@ class Compiler
      */';
     }
 
+    /**
+     * @return array
+     */
     protected function getFiles()
     {
         $iterator = Finder::create()->files()->exclude('tests')->name('*.php')->in(array('vendor', 'lib'));

@@ -11,13 +11,14 @@ use toTwig\ConverterAbstract;
  */
 class CycleConverter extends ConverterAbstract
 {
+
     protected $name = 'cycle';
-    protected $description = "Convert smarty {cycle} to twig function {{ oxcycle() }}";
+    protected $description = "Convert smarty {cycle} to twig function {{ smarty_cycle() }}";
     protected $priority = 100;
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return null|string|string[]
      */
@@ -27,30 +28,39 @@ class CycleConverter extends ConverterAbstract
         // [{cycle other stuff}]
         $pattern = $this->getOpeningTagPattern('cycle');
 
-        return preg_replace_callback($pattern, function ($matches) {
-            // If short form [{cycle}] - attributes are empty
-            $match = isset($matches[1]) ? $matches[1] : "";
-            $attributes = $this->attributes($match);
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                // If short form [{cycle}] - attributes are empty
+                $match = isset($matches[1]) ? $matches[1] : "";
+                $attributes = $this->attributes($match);
 
-            $valuesArray = $this->extractValuesArray($attributes);
-            $extraParameters = $this->extractAdditionalParametersArray($attributes);
+                // Different approaches for syntax with and without assignment
+                $assignVar = $this->extractAssignVariableName($attributes);
 
-            $argumentsString = $this->composeArgumentsString($valuesArray, $extraParameters);
+                if ($assignVar) {
+                    unset($attributes['print']);
+                }
 
-            // Different approaches for syntax with and without assignment
-            $assignVar = $this->extractAssignVariableName($attributes);
-            if ($assignVar) {
-                $twigTag = "{% set $assignVar = oxcycle($argumentsString) %}";
-            } else {
-                $twigTag = "{{ oxcycle($argumentsString) }}";
-            }
+                $valuesArray = $this->extractValuesArray($attributes);
+                $extraParameters = $this->extractAdditionalParametersArray($attributes);
+                $argumentsString = $this->composeArgumentsString($valuesArray, $extraParameters);
 
-            return $twigTag;
-        }, $content);
+                // Different approaches for syntax with and without assignment
+                if ($assignVar) {
+                    $twigTag = "{% set $assignVar = smarty_cycle($argumentsString) %}";
+                } else {
+                    $twigTag = "{{ smarty_cycle($argumentsString) }}";
+                }
+
+                return $twigTag;
+            },
+            $content
+        );
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      *
      * @return array
      */
@@ -65,11 +75,12 @@ class CycleConverter extends ConverterAbstract
                 $valuesArray[] = "\"$value\"";
             }
         }
+
         return $valuesArray;
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      *
      * @return string
      */
@@ -84,7 +95,7 @@ class CycleConverter extends ConverterAbstract
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      *
      * @return array
      */
@@ -93,7 +104,9 @@ class CycleConverter extends ConverterAbstract
         $extraParameters = [];
         foreach ($attributes as $name => $value) {
             // Skip already handled attributes
-            if (in_array($name, ['values', 'delimiter', 'assign'])) continue;
+            if (in_array($name, ['values', 'delimiter', 'assign'])) {
+                continue;
+            }
 
             $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
         }
@@ -102,8 +115,8 @@ class CycleConverter extends ConverterAbstract
     }
 
     /**
-     * @param $valuesArray
-     * @param $extraParameters
+     * @param array $valuesArray
+     * @param array $extraParameters
      *
      * @return string
      */

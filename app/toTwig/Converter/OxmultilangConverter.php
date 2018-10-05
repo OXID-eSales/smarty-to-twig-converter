@@ -11,6 +11,7 @@ use toTwig\AbstractSingleTagConverter;
  */
 class OxmultilangConverter extends AbstractSingleTagConverter
 {
+
     protected $name = 'oxmultilang';
     protected $description = "Convert smarty {oxmultilang} to twig function {{ oxmultilang() }}";
     protected $priority = 100;

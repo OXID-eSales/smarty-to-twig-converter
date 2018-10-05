@@ -11,6 +11,7 @@ use toTwig\AbstractSingleTagConverter;
  */
 class OxmailtoConverter extends AbstractSingleTagConverter
 {
+
     protected $name = 'oxmailto';
     protected $description = "Convert smarty {oxmailto} to twig function {{ oxmailto() }}";
     protected $priority = 100;

@@ -18,6 +18,7 @@ use toTwig\ConverterAbstract;
  */
 class IncludeConverter extends ConverterAbstract
 {
+
     protected $name = 'include';
     protected $description = 'Convert smarty include to twig include';
     protected $priority = 100;
@@ -26,53 +27,70 @@ class IncludeConverter extends ConverterAbstract
     protected $string = '{% include :template :with :vars %}';
     protected $attrName = 'file';
 
+    /**
+     * IncludeConverter constructor.
+     */
     public function __construct()
     {
         // [{include other stuff}]
         $this->pattern = $this->getOpeningTagPattern('include');
     }
 
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
     public function convert(\SplFileInfo $file, $content)
     {
         return $this->replace($content);
     }
 
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
     private function replace($content)
     {
         $pattern = $this->pattern;
         $string = $this->string;
-        return preg_replace_callback($pattern, function($matches) use ($string) {
 
-            $match = $matches[1];
-            $attr = $this->attributes($match);
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($string) {
+                $match = $matches[1];
+                $attr = $this->attributes($match);
 
-            $replace = array();
-            $replace['template'] = $attr[$this->attrName];
+                $replace = array();
+                $replace['template'] = $attr[$this->attrName];
 
-            if(isset($attr['insert'])) {
-                unset($attr['insert']);
-            }
-
-            // If we have any other variables
-            if(count($attr) > 1) {
-                $replace['with'] = 'with';
-                unset($attr[$this->attrName]); // We won't need in vars
-
-                $vars = array();
-                foreach($attr as $key => $value) {
-                    $vars[] = $this->variable($key) . ": " . $this->value($value);
+                if (isset($attr['insert'])) {
+                    unset($attr['insert']);
                 }
 
-                $replace['vars'] = '{' . implode(', ', $vars) . '}';
-            }
+                // If we have any other variables
+                if (count($attr) > 1) {
+                    $replace['with'] = 'with';
+                    unset($attr[$this->attrName]); // We won't need in vars
 
-            $string = $this->vsprintf($string, $replace);
+                    $vars = array();
+                    foreach ($attr as $key => $value) {
+                        $vars[] = $this->variable($key) . ": " . $this->value($value);
+                    }
 
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
+                    $replace['vars'] = '{' . implode(', ', $vars) . '}';
+                }
 
-            return str_replace($matches[0], $string, $matches[0]);
+                $string = $this->vsprintf($string, $replace);
 
-        }, $content);
+                // Replace more than one space to single space
+                $string = preg_replace('!\s+!', ' ', $string);
+
+                return str_replace($matches[0], $string, $matches[0]);
+            },
+            $content
+        );
     }
 }

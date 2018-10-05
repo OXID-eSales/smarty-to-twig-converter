@@ -11,13 +11,14 @@ use toTwig\ConverterAbstract;
  */
 class BlockConverter extends ConverterAbstract
 {
+
     protected $name = 'block';
     protected $description = 'Convert block to twig';
     protected $priority = 50;
 
     /**
      * @param \SplFileInfo $file
-     * @param string $content
+     * @param string       $content
      *
      * @return string
      */
@@ -55,24 +56,28 @@ class BlockConverter extends ConverterAbstract
         // [{block other stuff}]
         $pattern = $this->getOpeningTagPattern('block');
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
 
-            $attr = $this->attributes($match);
-            if (isset($attr['name'])) {
-                $name = $this->value($attr['name']);
-            } else {
-                $name = $this->value(array_shift($attr));
-            }
+                $attr = $this->attributes($match);
+                if (isset($attr['name'])) {
+                    $name = $this->value($attr['name']);
+                } else {
+                    $name = $this->value(array_shift($attr));
+                }
 
-            $block = sprintf("{%% block %s %%}", trim($name, '"'));
+                $block = sprintf("{%% block %s %%}", trim($name, '"'));
 
-            if (isset($attr['prepend'])) {
-                $block .= "{{ parent() }}";
-            }
+                if (isset($attr['prepend'])) {
+                    $block .= "{{ parent() }}";
+                }
 
-            return $block;
-        }, $content);
+                return $block;
+            },
+            $content
+        );
     }
 
     /**
@@ -85,16 +90,20 @@ class BlockConverter extends ConverterAbstract
         // [{extends other stuff}]
         $pattern = $this->getOpeningTagPattern('extends');
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $match = $matches[1];
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
 
-            $attr = $this->attributes($match);
+                $attr = $this->attributes($match);
 
-            $file = $this->value(reset($attr));
-            $file = str_replace(".tpl", ".html.twig", $file);
+                $file = $this->value(reset($attr));
+                $file = str_replace(".tpl", ".html.twig", $file);
 
-            return sprintf("{%% extends %s %%}", $file);
-        }, $content);
+                return sprintf("{%% extends %s %%}", $file);
+            },
+            $content
+        );
     }
 
     /**
