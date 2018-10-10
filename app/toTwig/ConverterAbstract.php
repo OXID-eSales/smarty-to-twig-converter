@@ -319,4 +319,14 @@ abstract class ConverterAbstract
 
         return sprintf("{ %s }", implode(", ", $pairs));
     }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function rawString($string)
+    {
+        return rtrim(ltrim($string, '\''), '\'');
+    }
 }
