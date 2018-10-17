@@ -11,6 +11,7 @@ use toTwig\Converter\OxidIncludeDynamicConverter;
  */
 class OxidIncludeDynamicConverterTest extends AbstractConverterTest
 {
+
     /** @var OxidIncludeDynamicConverter */
     protected $converter;
 
@@ -20,7 +21,7 @@ class OxidIncludeDynamicConverterTest extends AbstractConverterTest
     }
 
     /**
-     * @covers \toTwig\Converter\OxidIncludeDynamicConverter::convert
+     * @covers       \toTwig\Converter\OxidIncludeDynamicConverter::convert
      *
      * @dataProvider Provider
      *
@@ -30,7 +31,8 @@ class OxidIncludeDynamicConverterTest extends AbstractConverterTest
     public function testThatAssignIsConverted($smarty, $twig)
     {
         // Test the above cases
-        $this->assertSame($twig,
+        $this->assertSame(
+            $twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
     }
@@ -44,17 +46,17 @@ class OxidIncludeDynamicConverterTest extends AbstractConverterTest
             // Basic usage
             [
                 "[{oxid_include_dynamic file=\"form/formparams.tpl\"}]",
-                "{{ oxid_include_dynamic(\"form/formparams.tpl\") }}"
+                "{% include_dynamic \"form/formparams.tpl\" %}"
             ],
             // Example from OXID
             [
                 "[{oxid_include_dynamic file=\"widget/product/compare_links.tpl\" testid=\"_`\$iIndex`\" type=\"compare\" aid=\$product->oxarticles__oxid->value anid=\$altproduct in_list=\$product->isOnComparisonList() page=\$oView->getActPage()}]",
-                "{{ oxid_include_dynamic(\"widget/product/compare_links.tpl\", { testid: \"_`\$iIndex`\", type: \"compare\", aid: product.oxarticles__oxid.value, anid: altproduct, in_list: product.isOnComparisonList(), page: oView.getActPage() }) }}"
+                "{% include_dynamic \"widget/product/compare_links.tpl\" with {testid: \"_`\$iIndex`\", type: \"compare\", aid: product.oxarticles__oxid.value, anid: altproduct, in_list: product.isOnComparisonList(), page: oView.getActPage()} %}"
             ],
             // With spaces
             [
                 "[{ oxid_include_dynamic file=\"form/formparams.tpl\" }]",
-                "{{ oxid_include_dynamic(\"form/formparams.tpl\") }}"
+                "{% include_dynamic \"form/formparams.tpl\" %}"
             ],
         ];
     }
