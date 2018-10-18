@@ -3,7 +3,6 @@
 namespace sankar\ST\Tests\Converter;
 
 use toTwig\Converter\OxhasrightsConverter;
-include 'AbstractConverterTest.php';
 /**
  * Class OxhasrightsConverterTest
  *
