@@ -3,7 +3,6 @@
 namespace sankar\ST\Tests\Converter;
 
 use toTwig\Converter\OxhasrightsConverter;
-
 /**
  * Class OxhasrightsConverterTest
  *
@@ -41,21 +40,26 @@ class OxhasrightsConverterTest extends AbstractConverterTest
     public function Provider()
     {
         return [
-            // Basic usage
+            //basic usage
             [
-                "[{oxhasrights ident=\"TOBASKET\"}]\nfoo\n[{/oxhasrights}]",
-                "{% oxhasrights \"TOBASKET\" %}\nfoo\n{% endoxhasrights %}"
+                '[{oxhasrights object=$edit readonly=$readonly}]',
+                '{% hasrights { "object": "edit", "readonly": "readonly", } %}'
             ],
-            // Nested blocks
+            //all arguments
             [
-                "[{oxhasrights ident=\"TOBASKET\"}]\nfoo\n[{oxhasrights ident=\"NESTED\"}]xxx\n[{/oxhasrights}][{/oxhasrights}]",
-                "{% oxhasrights \"TOBASKET\" %}\nfoo\n{% oxhasrights \"NESTED\" %}xxx\n{% endoxhasrights %}{% endoxhasrights %}"
+                '[{oxhasrights type=$type field=field right=right object=object readonly=$readonly ident=ident}]',
+                '{% hasrights {"type": "type", "field": "field", "right": "right", "object": "object", "readonly": "readonly", "ident": "ident",} %}'
             ],
-            // With spaces
+            //spaces in tags
             [
-                "[{ oxhasrights ident=\"IDENT\" }] ... [{ /oxhasrights }]",
-                "{% oxhasrights \"IDENT\" %} ... {% endoxhasrights %}"
+                '[{ oxhasrights type=$type }]',
+                '{% hasrights {"type": "type", } %}'
             ],
+            //random order of arguments
+            [
+                '[{oxhasrights ident=$ident readonly=$readonly object=$object right=$right field=$field type=$type }]',
+                '{% hasrights {"type": "type", "field": "field", "right": "right", "object": "object", "readonly": "readonly", "ident": "ident",} %}'
+            ]
         ];
     }
 
