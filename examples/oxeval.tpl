@@ -5,4 +5,4 @@
 [{oxeval var=$variable force=true}]
 
 [{* With spaces *}]
-[{ oxeval var=\$variable }]
+[{ oxeval var=$variable }]

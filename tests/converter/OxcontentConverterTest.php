@@ -11,6 +11,7 @@ use toTwig\Converter\OxcontentConverter;
  */
 class OxcontentConverterTest extends AbstractConverterTest
 {
+
     /** @var OxcontentConverter */
     protected $converter;
 
@@ -20,7 +21,7 @@ class OxcontentConverterTest extends AbstractConverterTest
     }
 
     /**
-     * @covers \toTwig\Converter\OxcontentConverter::convert
+     * @covers       \toTwig\Converter\OxcontentConverter::convert
      *
      * @dataProvider Provider
      *
@@ -30,7 +31,8 @@ class OxcontentConverterTest extends AbstractConverterTest
     public function testThatAssignIsConverted($smarty, $twig)
     {
         // Test the above cases
-        $this->assertSame($twig,
+        $this->assertSame(
+            $twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
     }
@@ -43,28 +45,28 @@ class OxcontentConverterTest extends AbstractConverterTest
         return [
             // Base usage
             [
-                "[{oxcontent ident='me@example.com'}]",
-                "{{ oxcontent({ ident: 'me@example.com' }) }}"
+                "[{oxcontent ident='oxregisteremail'}]",
+                "{% include 'content::ident::oxregisteremail' %}"
             ],
             // With additional parameters
             [
-                "[{oxcontent ident='me@example.com' text='send me some mail'}]",
-                "{{ oxcontent({ ident: 'me@example.com', text: 'send me some mail' }) }}"
+                "[{oxcontent ident='oxregisteremail' field='customfield'}]",
+                "{% include 'content::ident::oxregisteremail?field=customfield' %}"
             ],
             // Value converting and assign
             [
-                "[{oxcontent ident='me@example.com' assign=\$var}]",
-                "{% set var = oxcontent({ ident: 'me@example.com' }) %}"
+                "[{oxcontent ident='oxregisteremail' assign=\$var}]",
+                "{% set var = include('content::ident::oxregisteremail') %}"
             ],
             // As assignment
             [
-                "[{oxcontent ident='me@example.com' subject='Subject of email' assign=\$var}]",
-                "{% set var = oxcontent({ ident: 'me@example.com', subject: 'Subject of email' }) %}"
+                "[{oxcontent ident='oxregisteremail' field='customfield' assign=\$var}]",
+                "{% set var = include('content::ident::oxregisteremail?field=customfield') %}"
             ],
             // With spaces
             [
-                "[{ oxcontent ident='me@example.com' }]",
-                "{{ oxcontent({ ident: 'me@example.com' }) }}"
+                "[{ oxcontent ident='oxregisteremail' }]",
+                "{% include 'content::ident::oxregisteremail' %}"
             ],
         ];
     }
