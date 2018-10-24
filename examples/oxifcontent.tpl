@@ -4,16 +4,13 @@
 [{/oxifcontent}]
 
 [{* Values converting *}]
-[{oxifcontent ident=$x object=$y}]
+[{oxifcontent ident=$x object="y"}]
     foo
 [{/oxifcontent}]
 
-[{* Nested blocks *}]
-[{oxifcontent ident=$x object=$y}]
+[{* Assignment *}]
+[{oxifcontent ident="TOBASKET" object="aObject" assign=$var}]
     foo
-    [{oxifcontent ident=$x2 object=$y2}]
-        bar
-    [{/oxifcontent}]
 [{/oxifcontent}]
 
 [{* With spaces *}]

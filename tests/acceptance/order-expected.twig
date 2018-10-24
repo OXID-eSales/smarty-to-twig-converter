@@ -180,21 +180,21 @@
                                 <input type="hidden" name="sDeliveryAddressMD5" value="{{ oView.getDeliveryAddressMD5() }}">
 
                                 {% if oViewConf.isFunctionalityEnabled("blShowTSInternationalFeesMessage") %}
-                                    {% oxifcontent { ident: "oxtsinternationalfees", object: "oTSIFContent" } %}
+                                    {% ifcontent ident "oxtsinternationalfees" set oTSIFContent %}
                                         <hr/>
                                         <div class="clear">
                                             <span class="title">{{ oTSIFContent.oxcontents__oxcontent.value }}</span>
                                         </div>
-                                    {% endoxifcontent %}
+                                    {% endifcontent %}
                                 {% endif %}
 
                                 {% if payment.oxpayments__oxid.value eq "oxidcashondel" and oViewConf.isFunctionalityEnabled("blShowTSCODMessage") %}
-                                    {% oxifcontent { ident: "oxtscodmessage", object: "oTSCODContent" } %}
+                                    {% ifcontent ident "oxtscodmessage" set oTSCODContent %}
                                         <hr/>
                                         <div class="clear">
                                             <span class="title">{{ oTSCODContent.oxcontents__oxcontent.value }}</span>
                                         </div>
-                                    {% endoxifcontent %}
+                                    {% endifcontent %}
                                 {% endif %}
                                 <hr/>
 

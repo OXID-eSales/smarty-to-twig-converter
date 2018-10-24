@@ -44,22 +44,22 @@ class OxifcontentConverterTest extends AbstractConverterTest
             // Basic usage
             [
                 "[{oxifcontent ident=\"TOBASKET\" object=\"aObject\"}]\nfoo\n[{/oxifcontent}]",
-                "{% oxifcontent { ident: \"TOBASKET\", object: \"aObject\" } %}\nfoo\n{% endoxifcontent %}"
+                "{% ifcontent ident \"TOBASKET\" set aObject %}\nfoo\n{% endifcontent %}"
             ],
             // Values converting
             [
-                "[{oxifcontent ident=\$x object=\$y}]\nfoo\n[{/oxifcontent}]",
-                "{% oxifcontent { ident: x, object: y } %}\nfoo\n{% endoxifcontent %}"
+                "[{oxifcontent ident=\$x object=\"y\"}]\nfoo\n[{/oxifcontent}]",
+                "{% ifcontent ident x set y %}\nfoo\n{% endifcontent %}"
             ],
-            // Nested blocks
+            // Assignment
             [
-                "[{oxifcontent ident=\$x object=\$y}]\nfoo\n[{oxifcontent ident=\$x2 object=\$y2}]bar[{/oxifcontent}][{/oxifcontent}]",
-                "{% oxifcontent { ident: x, object: y } %}\nfoo\n{% oxifcontent { ident: x2, object: y2 } %}bar{% endoxifcontent %}{% endoxifcontent %}"
+                "[{oxifcontent ident=\"TOBASKET\" object=\"aObject\" assign=\$var}]\nfoo\n[{/oxifcontent}]",
+                "{% set var %}{% ifcontent ident \"TOBASKET\" set aObject %}\nfoo\n{% endifcontent %}{% endset %}"
             ],
             // With spaces
             [
                 "[{ oxifcontent ident=\"TOBASKET\" object=\"aObject\" }]\nfoo\n[{ /oxifcontent }]",
-                "{% oxifcontent { ident: \"TOBASKET\", object: \"aObject\" } %}\nfoo\n{% endoxifcontent %}"
+                "{% ifcontent ident \"TOBASKET\" set aObject %}\nfoo\n{% endifcontent %}"
             ]
         ];
     }

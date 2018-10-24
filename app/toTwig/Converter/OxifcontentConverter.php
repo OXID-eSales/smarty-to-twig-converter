@@ -24,10 +24,19 @@ class OxifcontentConverter extends ConverterAbstract
      */
     public function convert(\SplFileInfo $file, $content)
     {
+        $assignVar = null;
+        $openingPattern = $this->getOpeningTagPattern('oxifcontent');
+        if (preg_match($openingPattern, $content, $matches)) {
+            $attributes = $this->attributes($matches[1]);
+            if (isset($attributes['assign'])) {
+                $assignVar = $this->variable($attributes['assign']);
+            }
+        }
+
         $content = $this->replaceOxifcontent($content);
         $content = $this->replaceEndOxifcontent($content);
 
-        return $content;
+        return ($assignVar ? "{% set $assignVar %}" : '') . $content . ($assignVar ? "{% endset %}" : '');
     }
 
     /**
@@ -39,7 +48,7 @@ class OxifcontentConverter extends ConverterAbstract
     {
         // [{/oxifcontent}]
         $search = $this->getClosingTagPattern('oxifcontent');
-        $replace = "{% endoxifcontent %}";
+        $replace = "{% endifcontent %}";
 
         return preg_replace($search, $replace, $content);
     }
@@ -60,8 +69,11 @@ class OxifcontentConverter extends ConverterAbstract
                 $match = $matches[1];
 
                 $attributes = $this->attributes($match);
+                $key = isset($attributes['ident']) ? 'ident' : 'oxid';
+                $value = ($key == 'ident') ? $attributes['ident'] : $attributes['oxid'];
+                $set = $attributes['object'] ? (' set ' . $this->rawString($attributes['object'])) : '';
 
-                return sprintf("{%% oxifcontent %s %%}", $this->convertArrayToAssocTwigArray($attributes, []));
+                return sprintf("{%% ifcontent %s %s%s %%}", $key, $this->value($value), $set);
             },
             $content
         );

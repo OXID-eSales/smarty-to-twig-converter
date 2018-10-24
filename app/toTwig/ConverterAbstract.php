@@ -327,6 +327,6 @@ abstract class ConverterAbstract
      */
     protected function rawString($string)
     {
-        return rtrim(ltrim($string, '\''), '\'');
+        return rtrim(ltrim($string, '\'"'), '\'"');
     }
 }
