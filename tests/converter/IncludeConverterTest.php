@@ -11,51 +11,61 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\IncludeConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\IncludeConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class IncludeConverterTest extends \PHPUnit_Framework_TestCase
+class IncludeConverterTest extends TestCase
 {
+    /** @var IncludeConverter */
     protected $converter;
 
     public function setUp()
     {
         $this->converter = new IncludeConverter();
     }
-    /**
-     * @covers sankar\ST\Converter\IncludeConverter::convert
-     * @dataProvider Provider
-     */
-    public function testThatIncludeIsConverted($smarty,$twig)
-    {
 
+    /**
+     * @covers \toTwig\Converter\IncludeConverter::convert
+     * @dataProvider Provider
+     *
+     * @param $smarty
+     * @param $twig
+     */
+    public function testThatIncludeIsConverted($smarty, $twig)
+    {
         // Test the above cases
-        $this->assertSame($twig,
-            $this->converter->convert($this->getFileMock(), $smarty)
-        );
-       
+        /** @var \SplFileInfo $fileMock */
+        $fileMock = $this->getFileMock();
+        $this->assertSame($twig, $this->converter->convert($fileMock, $smarty));
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                        "{include file='page_header.tpl'}"
-                        "{% include 'page_header.tpl' %}"
-                    ),
-                array(
-                        '{include file=\'footer.tpl\' foo=\'bar\' links=$links}',
-                        '{% include \'footer.tpl\' with {\'foo\' : \'bar\', links : links} %}'
-                    )
-            );
+        return [
+            [
+                "[{include file='page_header.tpl'}]",
+                "{% include 'page_header.tpl' %}"
+            ],
+            [
+                "[{ include file='page_header.tpl' }]",
+                "{% include 'page_header.tpl' %}"
+            ],
+            [
+                "[{include file=\"footer.tpl\" foo=\"bar\" links=\$links}]",
+                "{% include \"footer.tpl\" with {foo: \"bar\", links: links} %}"
+            ],
+            [
+                "[{ include file=\"footer.tpl\" foo=\"bar\" links=\$links }]",
+                "{% include \"footer.tpl\" with {foo: \"bar\", links: links} %}"
+            ]
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\IncludeConverter::getName
+     * @covers \toTwig\Converter\IncludeConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -63,7 +73,7 @@ class IncludeConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\IncludeConverter::getDescription
+     * @covers \toTwig\Converter\IncludeConverter::getDescription
      */
     public function testThatHaveDescription()
     {
@@ -72,8 +82,6 @@ class IncludeConverterTest extends \PHPUnit_Framework_TestCase
 
     private function getFileMock()
     {
-        return $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder('\SplFileInfo')->disableOriginalConstructor()->getMock();
     }
 }

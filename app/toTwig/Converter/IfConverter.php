@@ -18,97 +18,81 @@ use toTwig\ConverterAbstract;
  */
 class IfConverter extends ConverterAbstract
 {
-	private $alt = array(
-			'gt'  => '>',
-			'lt'  => '<',
-			'eq'  => '==',
-			'neq' => '!=',
-			'ne'  => '!=',
-			'not' => '!',
-			'mod' => '%',
-			'or'  => '||',
-			'and' => '&&'
-	);
 
-	public function convert(\SplFileInfo $file, $content)
-	{
-		// Replace {if }
-		$content = $this->replaceIf($content);
-		// Replace {elseif }
-		$content = $this->replaceElseIf($content);
-		// Replace {else}
-		$content = preg_replace('#\{/if\s*\}#', "{% endif %}", $content);
-		// Replace {/if}
-		$content = preg_replace('#\{else\s*\}#', "{% else %}", $content);
+    protected $name = 'if';
+    protected $description = 'Convert smarty if/else/elseif to twig';
+    protected $priority = 50;
 
-		return $content;
-	}
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
+    public function convert(\SplFileInfo $file, $content)
+    {
+        // Replace {if }
+        $content = $this->replaceIf($content);
+        // Replace {elseif }
+        $content = $this->replaceElseIf($content);
+        // Replace {else}
+        $content = preg_replace($this->getClosingTagPattern('if'), "{% endif %}", $content);
+        // Replace {/if}
+        $content = preg_replace($this->getOpeningTagPattern('else'), "{% else %}", $content);
 
-	public function getPriority()
-	{
-		return 50;
-	}
+        return $content;
+    }
 
-	public function getName()
-	{
-		return 'if';
-	}
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function replaceIf($content)
+    {
+        // [{if other stuff}]
+        $pattern = $this->getOpeningTagPattern('if');
+        $string = '{%% if %s %%}';
 
-	public function getDescription()
-	{
-		return 'Convert smarty if/else/elseif to twig';
-	}
+        return $this->replace($pattern, $content, $string);
+    }
 
-	private function replaceIf($content)
-	{
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function replaceElseIf($content)
+    {
+        // [{elseif other stuff}]
+        $pattern = $this->getOpeningTagPattern('elseif');
+        $string = '{%% elseif %s %%}';
 
-		$pattern = "#\{if\b\s*([^{}]+)?\}#i";
-		$string  = '{%% if %s %%}';
+        return $this->replace($pattern, $content, $string);
+    }
 
-		return $this->replace($pattern, $content, $string);
-	}
+    /**
+     * @param string $pattern
+     * @param string $content
+     * @param string $string
+     *
+     * @return string
+     */
+    private function replace($pattern, $content, $string)
+    {
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($string) {
+                $match = $matches[1];
+                $search = $matches[0];
 
-	private function replaceElseIf($content)
-	{
+                $match = $this->convertExpression($match);
 
-		$pattern = "#\{elseif\b\s*([^{}]+)?\}#i";
-		$string  = '{%% elseif %s %%}';
+                $string = sprintf($string, $match);
 
-		return $this->replace($pattern, $content, $string);
-
-	}
-
-
-	private function replace($pattern, $content, $string)
-	{
-		return preg_replace_callback($pattern, function($matches) use ($string) {
-
-				$match   = $matches[1];
-				$search  = $matches[0];
-
-				foreach ($this->alt as $key => $value) {
-					$match = str_replace(" $key ", " $value ", $match);
-				}
-
-				// Replace $vars
-				$match = $this->replaceVariable($match);
-
-				$string = sprintf($string,$match);
-				
-				return str_replace($search, $string, $search);
-
-			}, $content);
-	}
-
-	private function replaceVariable($string)
-	{
-		$pattern = '/\$([\w\.\-\>\[\]]+)/';
-		return preg_replace_callback($pattern, function($matches) {
-			// Convert Object to dot
-	        $matches[1] = str_replace('->', '.',$matches[1]);
-
-			return str_replace($matches[0],$matches[1],$matches[0]);
-			
-		}, $string);
-	}
+                return str_replace($search, $string, $search);
+            },
+            $content
+        );
+    }
 }

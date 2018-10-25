@@ -19,62 +19,78 @@ use toTwig\ConverterAbstract;
 class IncludeConverter extends ConverterAbstract
 {
 
-	public function convert(\SplFileInfo $file, $content)
-	{
-		return $this->replace($content);
-	}
+    protected $name = 'include';
+    protected $description = 'Convert smarty include to twig include';
+    protected $priority = 100;
 
-	public function getPriority()
-	{
-		return 100;
-	}
+    protected $pattern;
+    protected $string = '{% include :template :with :vars %}';
+    protected $attrName = 'file';
 
-	public function getName()
-	{
-		return 'include';
-	}
+    /**
+     * IncludeConverter constructor.
+     */
+    public function __construct()
+    {
+        // [{include other stuff}]
+        $this->pattern = $this->getOpeningTagPattern('include');
+    }
 
-	public function getDescription()
-	{
-		return 'Convert smarty include to twig include';
-	}
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
+    public function convert(\SplFileInfo $file, $content)
+    {
+        return $this->replace($content);
+    }
 
-	private function replace($content)
-	{
-		$pattern = '/\{include\b\s*([^{}]+)?\}/';
-		$string = '{% include :template :with :vars %}';
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function replace($content)
+    {
+        $pattern = $this->pattern;
+        $string = $this->string;
 
-		return preg_replace_callback($pattern, function($matches) use ($string) {
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) use ($string) {
+                $match = $matches[1];
+                $attr = $this->attributes($match);
 
-	        $match   = $matches[1];
-	        $attr    = $this->attributes($match);
+                $replace = array();
+                $replace['template'] = $attr[$this->attrName];
 
-	        $replace = array();
-	        $replace['template'] = $attr['file'];
+                if (isset($attr['insert'])) {
+                    unset($attr['insert']);
+                }
 
-	        // If we have any other variables
-	        if (count($attr) > 1) {
-	            $replace['with'] = 'with';
-	            unset($attr['file']); // We won't need in vars
+                // If we have any other variables
+                if (count($attr) > 1) {
+                    $replace['with'] = 'with';
+                    unset($attr[$this->attrName]); // We won't need in vars
 
-	             $vars = array();
-	            foreach ($attr as $key => $value) {
-	            	$value  = $this->value($value);
-	                $vars[] = "'".$key."' : ".$value;
-	            }
+                    $vars = array();
+                    foreach ($attr as $key => $value) {
+                        $vars[] = $this->variable($key) . ": " . $this->value($value);
+                    }
 
-	            $replace['vars'] = '{'.implode(', ',$vars).'}';
-	        }
+                    $replace['vars'] = '{' . implode(', ', $vars) . '}';
+                }
 
-	        $string  = $this->vsprintf($string,$replace);
+                $string = $this->vsprintf($string, $replace);
 
-	        // Replace more than one space to single space
-	        $string = preg_replace('!\s+!', ' ', $string);
+                // Replace more than one space to single space
+                $string = preg_replace('!\s+!', ' ', $string);
 
-	        return str_replace($matches[0], $string, $matches[0]);
-
-	      },$content);
-
-	}
-
+                return str_replace($matches[0], $string, $matches[0]);
+            },
+            $content
+        );
+    }
 }

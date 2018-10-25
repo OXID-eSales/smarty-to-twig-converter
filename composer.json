@@ -10,15 +10,21 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": "^7.1",
         "symfony/console": "~2.1",
         "symfony/filesystem": "~2.1",
         "symfony/finder": "~2.1",
-        "sebastian/diff": "1.0.*@dev",
-        "phpunit/phpunit": "3.7.*"
+        "sebastian/diff": "2.*",
+        "phpunit/phpunit": "^6"
+    },
+    "require-dev": {
+        "oxid-esales/coding-standards": "^v3.0.5"
     },
     "autoload": {
         "psr-0": { "toTwig\\": "app/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "sankar\\ST\\Tests\\": "tests/" }
     },
     "bin": ["toTwig"]
 }

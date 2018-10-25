@@ -11,56 +11,73 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\VariableConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\VariableConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class CommentconverterTest extends \PHPUnit_Framework_TestCase
+class VariableConverterTest extends TestCase
 {
+    /** @var VariableConverter */
     protected $converter;
 
     public function setUp()
     {
         $this->converter = new VariableConverter();
     }
+
     /**
-     * @covers sankar\ST\Converter\VariableConverter::convert
+     * @covers       \toTwig\Converter\VariableConverter::convert
      * @dataProvider Provider
      */
-    public function testThatVariableIsConverted($smarty,$twig)
+    public function testThatVariableIsConverted($smarty, $twig)
     {
         $this->assertSame($twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
-       
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                    '{$var}','{{ var }}'
-                    ),
-                array(
-                    '{$contacts.fax}','{{ contacts.fax }}'
-                    ),
-                array(
-                    '{$contacts[0]}','{{ contacts[0] }}'
-                    ),
-                array(
-                    '{$contacts[2][0]}','{{ contacts[2][0] }}'
-                    ),
-                array(
-                    '{$person->name}','{{ person.name }}'
-                    )
-            );
+        return [
+            [
+                "[{\$var}]",
+                "{{ var }}"
+            ],
+            [
+                "[{\$contacts.fax}]",
+                "{{ contacts.fax }}"
+            ],
+            [
+                "[{\$contacts[0]}]",
+                "{{ contacts[0] }}"
+            ],
+            [
+                "[{\$contacts[2][0]}]",
+                "{{ contacts[2][0] }}"
+            ],
+            [
+                "[{\$person->name}]",
+                "{{ person.name }}"
+            ],
+            [
+                "[{\$oViewConf->getImageUrl(\$sLangImg)}]",
+                "{{ oViewConf.getImageUrl(sLangImg) }}"
+            ],
+            [
+                "[{\$_cur->link|oxaddparams:\$oView->getDynUrlParams()}]",
+                "{{ _cur.link|oxaddparams(oView.getDynUrlParams()) }}"
+            ],
+            [
+                "[{(\$a && \$b) || \$c}]",
+                "{{ (a and b) or c }}"
+            ]
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\Variableconverter::getName
+     * @covers \toTwig\Converter\VariableConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -68,7 +85,7 @@ class CommentconverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\Variableconverter::getDescription
+     * @covers \toTwig\Converter\VariableConverter::getDescription
      */
     public function testThatHaveDescription()
     {

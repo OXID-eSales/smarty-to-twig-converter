@@ -19,45 +19,45 @@ use toTwig\ConverterAbstract;
 class VariableConverter extends ConverterAbstract
 {
 
-	public function convert(\SplFileInfo $file, $content)
-	{
-		$content = $this->replace($content);
+    protected $name = 'variable';
+    protected $description = 'Convert smarty variable {$var.name} to twig {{ $var.name }}';
+    protected $priority = 10;
 
-		return $content;
-	}
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
+    public function convert(\SplFileInfo $file, $content)
+    {
+        $content = $this->replace($content);
 
-	public function getPriority()
-	{
-		return 100;
-	}
+        return $content;
+    }
 
-	public function getName()
-	{
-		return 'variable';
-	}
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function replace($content)
+    {
+        $pattern = '/\[\{([^{}]+)?\}\]/';
 
-	public function getDescription()
-	{
-		return 'Convert smarty variable {$var.name} to twig {{ var.name }}';
-	}
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $match = $matches[1];
+                $search = $matches[0];
 
-	private function replace($content)
-	{
-		$pattern = '/\{\$([\w\.\-\>\[\]]+)\}/';
-		return preg_replace_callback($pattern, function($matches) {
+                $match = $this->convertExpression($match);
 
-	        $match   = $matches[1];
-	        $search  = $matches[0];
+                $search = str_replace($search, '{{ ' . $match . ' }}', $search);
 
-	        // Convert Object to dot
-	        $match = str_replace('->', '.', $match);
-
-	        $search  = str_replace($search, '{{ '.$match.' }}', $search);
-
-	       return $search; 
-
-   		},$content);
-
-	}
-
+                return $search;
+            },
+            $content
+        );
+    }
 }

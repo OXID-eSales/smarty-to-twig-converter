@@ -19,37 +19,41 @@ use toTwig\ConverterAbstract;
 class MiscConverter extends ConverterAbstract
 {
 
-	// Lookup tables for performing some token
-	// replacements not addressed in the grammar.
-	private $replacements = array(
-		'\{ldelim\}' => '',
-		'\{rdelim\}' => '',
-		'\{literal\}' => '{# literal #}',
-		'\{\\/literal\}' => '{# /literal #}'
-	);
+    protected $name = 'misc';
+    protected $description = 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
+    protected $priority = 52;
 
-	public function convert(\SplFileInfo $file, $content)
-	{
-		foreach ($this->replacements as $k=>$v) {
-			$content = preg_replace('/'.$k.'/', $v, $content);
-		}
+    // Lookup tables for performing some token
+    // replacements not addressed in the grammar.
+    private $replacements;
 
-		return $content;
-	}
+    /**
+     * MiscConverter constructor.
+     */
+    public function __construct()
+    {
+        $this->replacements = [
+            $this->getOpeningTagPattern('ldelim')  => '',
+            $this->getOpeningTagPattern('rdelim')  => '',
+            $this->getOpeningTagPattern('literal') => '{# literal #}',
+            $this->getClosingTagPattern('literal') => '{# /literal #}',
+            $this->getOpeningTagPattern('strip')   => '{% spaceless %}',
+            $this->getClosingTagPattern('strip')   => '{% endspaceless %}',
+        ];
+    }
 
-	public function getPriority()
-	{
-		return 52;
-	}
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
+    public function convert(\SplFileInfo $file, $content)
+    {
+        foreach ($this->replacements as $k => $v) {
+            $content = preg_replace($k, $v, $content);
+        }
 
-	public function getName()
-	{
-		return 'misc';
-	}
-
-	public function getDescription()
-	{
-		return 'Convert smarty general tags like {ldelim} {rdelim} {literal}';
-	}
-
+        return $content;
+    }
 }

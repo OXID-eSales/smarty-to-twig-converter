@@ -19,24 +19,18 @@ use toTwig\ConverterAbstract;
 class CommentConverter extends ConverterAbstract
 {
 
-	public function convert(\SplFileInfo $file, $content)
-	{
-		return str_replace(array('{*','*}'), array('{#','#}'), $content);
-	}
+    protected $name = 'comment';
+    protected $description = 'Convert smarty comments {* *} to twig {# #}';
+    protected $priority = 52;
 
-	public function getPriority()
-	{
-		return 52;
-	}
-
-	public function getName()
-	{
-		return 'comment';
-	}
-
-	public function getDescription()
-	{
-		return 'Convert smarty comments {* *} to twig {# #}';
-	}
-
+    /**
+     * @param \SplFileInfo $file
+     * @param string       $content
+     *
+     * @return string
+     */
+    public function convert(\SplFileInfo $file, $content)
+    {
+        return str_replace(['[{*', '*}]'], ['{#', '#}'], $content);
+    }
 }

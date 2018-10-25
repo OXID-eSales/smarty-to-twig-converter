@@ -11,47 +11,46 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\CommentConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\CommentConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class CommentconverterTest extends \PHPUnit_Framework_TestCase
+class CommentConverterTest extends TestCase
 {
+    /** @var CommentConverter */
     protected $converter;
 
     public function setUp()
     {
         $this->converter = new CommentConverter();
     }
+
     /**
-     * @covers sankar\ST\Converter\CommentConverter::convert
+     * @covers       \toTwig\Converter\CommentConverter::convert
      * @dataProvider Provider
      */
-    public function testThatIfIsConverted($smarty,$twig)
+    public function testThatIfIsConverted($smarty, $twig)
     {
-
         // Test the above cases
         $this->assertSame($twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
-       
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                        '{* foo *}',
-                        '{# foo #}'
-                    )
-            );
+        return [
+            [
+                '[{* foo *}]',
+                '{# foo #}'
+            ]
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\Commentconverter::getName
+     * @covers \toTwig\Converter\CommentConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -59,7 +58,7 @@ class CommentconverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\Commentconverter::getDescription
+     * @covers \toTwig\Converter\CommentConverter::getDescription
      */
     public function testThatHaveDescription()
     {

@@ -11,53 +11,57 @@
 
 namespace sankar\ST\Tests\Converter;
 
-use sankar\ST\Converter;
-use sankar\ST\ConverterAbstract;
-use sankar\ST\Converter\MiscConverter;
+use PHPUnit\Framework\TestCase;
+use toTwig\Converter\MiscConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class CommentconverterTest extends \PHPUnit_Framework_TestCase
+class MiscConverterTest extends TestCase
 {
+    /** @var MiscConverter */
     protected $converter;
 
     public function setUp()
     {
         $this->converter = new MiscConverter();
     }
+
     /**
-     * @covers sankar\ST\Converter\MiscConverter::convert
+     * @covers       \toTwig\Converter\MiscConverter::convert
      * @dataProvider Provider
      */
-    public function testThatMiscIsConverted($smarty,$twig)
+    public function testThatMiscIsConverted($smarty, $twig)
     {
         $this->assertSame($twig,
             $this->converter->convert($this->getFileMock(), $smarty)
         );
-       
     }
 
     public function Provider()
     {
-        return array(
-                array( 
-                    '{ldelim}',''
-                    ),
-                array(
-                    '{rdelim}',''
-                    ),
-                array(
-                    '{literal}','{# literal #}'
-                    ),
-                array(
-                    '{/literal}','{# /literal #}'
-                    )
-            );
+        return [
+            [
+                '[{ldelim}]', ''
+            ],
+            [
+                '[{rdelim}]', ''
+            ],
+            [
+                '[{literal}]', '{# literal #}'
+            ],
+            [
+                '[{/literal}]', '{# /literal #}'
+            ],
+            [
+                "[{strip}]\n<tag1>\n\t<tag2>\n\t\tcontent\n\t\t</tag2>\n\t</tag1>\n[{/strip}]",
+                "{% spaceless %}\n<tag1>\n\t<tag2>\n\t\tcontent\n\t\t</tag2>\n\t</tag1>\n{% endspaceless %}"
+            ]
+        ];
     }
 
     /**
-     * @covers sankar\ST\Converter\Miscconverter::getName
+     * @covers \toTwig\Converter\MiscConverter::getName
      */
     public function testThatHaveExpectedName()
     {
@@ -65,7 +69,7 @@ class CommentconverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sankar\ST\Converter\Miscconverter::getDescription
+     * @covers \toTwig\Converter\MiscConverter::getDescription
      */
     public function testThatHaveDescription()
     {
