@@ -164,7 +164,7 @@ abstract class ConverterAbstract
      */
     protected function value($string)
     {
-        $string = rtrim(ltrim($string));
+        $string = trim($string);
 
         if (empty($string)) {
             return $string;
@@ -327,6 +327,6 @@ abstract class ConverterAbstract
      */
     protected function rawString($string)
     {
-        return rtrim(ltrim($string, '\'"'), '\'"');
+        return trim($string, '\'"');
     }
 }
