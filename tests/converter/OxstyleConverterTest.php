@@ -44,24 +44,24 @@ class OxstyleConverterTest extends AbstractConverterTest
             // OXID examples
             [
                 "[{oxstyle include=\"css/libs/chosen/chosen.min.css\"}]",
-                "{{ oxstyle({ include: \"css/libs/chosen/chosen.min.css\" }) }}"
+                "{{ style({ include: \"css/libs/chosen/chosen.min.css\" }) }}"
             ],
             [
                 "[{oxstyle}]",
-                "{{ oxstyle() }}"
+                "{{ style() }}"
             ],
             [
                 "[{oxstyle widget=\$oView->getClassName()}]",
-                "{{ oxstyle({ widget: oView.getClassName() }) }}"
+                "{{ style({ widget: oView.getClassName() }) }}"
             ],
             [
                 "[{oxstyle include=\"css/ie8.css\" if=\"IE 8\"}]",
-                "{{ oxstyle({ include: \"css/ie8.css\", if: \"IE 8\" }) }}"
+                "{{ style({ include: \"css/ie8.css\", if: \"IE 8\" }) }}"
             ],
             // With spaces
             [
                 "[{ oxstyle include=\"css/libs/chosen/chosen.min.css\" }]",
-                "{{ oxstyle({ include: \"css/libs/chosen/chosen.min.css\" }) }}"
+                "{{ style({ include: \"css/libs/chosen/chosen.min.css\" }) }}"
             ],
         ];
     }
