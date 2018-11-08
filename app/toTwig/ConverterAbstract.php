@@ -247,7 +247,9 @@ abstract class ConverterAbstract
                     $part = $this->value($part);
                 }
 
-                return sprintf("|$value(%s)", implode(", ", $parts));
+                $convertedFilterName = FilterNameMap::getConvertedFilterName($value);
+
+                return sprintf("|$convertedFilterName(%s)", implode(", ", $parts));
             },
             $string
         );
