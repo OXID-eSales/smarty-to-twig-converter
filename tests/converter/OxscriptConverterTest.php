@@ -44,28 +44,28 @@ class OxscriptConverterTest extends AbstractConverterTest
             // OXID examples
             [
                 "[{oxscript include=\"js/pages/details.min.js\" priority=10}]",
-                "{{ oxscript({ include: \"js/pages/details.min.js\", priority: 10 }) }}"
+                "{{ script({ include: \"js/pages/details.min.js\", priority: 10, dynamic: __oxid_include_dynamic }) }}"
             ],
             [
                 "[{oxscript add=\"oxVariantSelections  = [`\$_sSelectionHashCollection`];\"}]",
-                "{{ oxscript({ add: \"oxVariantSelections  = [`\$_sSelectionHashCollection`];\" }) }}"
+                "{{ script({ add: \"oxVariantSelections  = [`\$_sSelectionHashCollection`];\", dynamic: __oxid_include_dynamic }) }}"
             ],
             [
                 "[{oxscript add=\"\$( document ).ready( function() { Flow.initDetailsEvents(); });\"}]",
-                "{{ oxscript({ add: \"$(document).ready(function() { Flow.initDetailsEvents(); });\" }) }}"
+                "{{ script({ add: \"$(document).ready(function() { Flow.initDetailsEvents(); });\", dynamic: __oxid_include_dynamic }) }}"
             ],
             [
                 "[{oxscript widget=\$oView->getClassName()}]",
-                "{{ oxscript({ widget: oView.getClassName() }) }}"
+                "{{ script({ widget: oView.getClassName(), dynamic: __oxid_include_dynamic }) }}"
             ],
             [
                 "[{oxscript}]",
-                "{{ oxscript() }}"
+                "{{ script({ dynamic: __oxid_include_dynamic }) }}"
             ],
             // With spaces
             [
                 "[{ oxscript include=\"js/pages/details.min.js\" priority=10 }]",
-                "{{ oxscript({ include: \"js/pages/details.min.js\", priority: 10 }) }}"
+                "{{ script({ include: \"js/pages/details.min.js\", priority: 10, dynamic: __oxid_include_dynamic }) }}"
             ]
         ];
     }

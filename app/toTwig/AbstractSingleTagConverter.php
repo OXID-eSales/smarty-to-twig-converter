@@ -49,7 +49,7 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
                     $arguments[] = $this->value($attributes[$mandatoryField]);
                 }
 
-                if ($extraParams = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields)) {
+                if ($this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields)) {
                     $arguments[] = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields);
                 }
 

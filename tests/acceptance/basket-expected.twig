@@ -46,8 +46,8 @@
 
                 {% if oViewConf.getShowVouchers() %}
                     {% block checkout_basket_vouchers %}
-                        {{ oxscript({ include: "js/widgets/oxinputvalidator.js", priority: 10 }) }}
-                        {{ oxscript({ add: "$('form.js-oxValidate').oxInputValidator();" }) }}
+                        {{ script({ include: "js/widgets/oxinputvalidator.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+                        {{ script({ add: "$('form.js-oxValidate').oxInputValidator();", dynamic: __oxid_include_dynamic }) }}
                         <div id="basketVoucher">
                             <form name="voucher" action="{{ oViewConf.getSelfActionLink() }}" method="post" class="js-oxValidate">
                                 <div class="couponBox" id="coupon">

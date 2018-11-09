@@ -78,10 +78,10 @@
         {% endblock %}
 
         {% block change_payment %}
-            {{ oxscript({ include: "js/widgets/oxpayment.js", priority: 10 }) }}
-            {{ oxscript({ add: "$('#payment').oxPayment();" }) }}
-            {{ oxscript({ include: "js/widgets/oxinputvalidator.js", priority: 10 }) }}
-            {{ oxscript({ add: "$('form.js-oxValidate').oxInputValidator();" }) }}
+            {{ script({ include: "js/widgets/oxpayment.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+            {{ script({ add: "$('#payment').oxPayment();", dynamic: __oxid_include_dynamic }) }}
+            {{ script({ include: "js/widgets/oxinputvalidator.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+            {{ script({ add: "$('form.js-oxValidate').oxInputValidator();", dynamic: __oxid_include_dynamic }) }}
             <form action="{{ oViewConf.getSslSelfLink() }}" class="js-oxValidate payment" id="payment" name="order" method="post">
                 <div>
                     {{ oViewConf.getHiddenSid() }}
