@@ -44,21 +44,21 @@ class OxpriceConverterTest extends AbstractConverterTest
             // OXID examples
             [
                 "[{oxprice price=\$basketitem->getUnitPrice() currency=\$currency}]",
-                "{{ oxprice(basketitem.getUnitPrice(), { currency: currency }) }}"
+                "{{ formatPrice(basketitem.getUnitPrice(), { currency: currency }) }}"
             ],
             [
                 "[{oxprice price=\$VATitem currency=\$currency}]",
-                "{{ oxprice(VATitem, { currency: currency }) }}"
+                "{{ formatPrice(VATitem, { currency: currency }) }}"
             ],
             // No currency
             [
                 "[{oxprice price=\$basketitem->getUnitPrice()}]",
-                "{{ oxprice(basketitem.getUnitPrice()) }}"
+                "{{ formatPrice(basketitem.getUnitPrice()) }}"
             ],
             // With spaces
             [
                 "[{ oxprice price=\$basketitem->getUnitPrice() currency=\$currency }]",
-                "{{ oxprice(basketitem.getUnitPrice(), { currency: currency }) }}"
+                "{{ formatPrice(basketitem.getUnitPrice(), { currency: currency }) }}"
             ],
         ];
     }

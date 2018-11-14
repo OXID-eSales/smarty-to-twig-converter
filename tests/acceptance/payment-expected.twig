@@ -32,17 +32,17 @@
                     </ul>
 
                     {% set oDeliveryCostPrice = oxcmp_basket.getDeliveryCost() %}
-                    {% if oDeliveryCostPrice and oDeliveryCostPrice.getPrice() > 0 %}
+                    {% if oDeliveryCostPrice and oDeliveryCostPrice.formatPrice() > 0 %}
                         {% if oViewConf.isFunctionalityEnabled('blShowVATForDelivery') %}
                             <div id="shipSetCost">
-                                <b>{{ oxmultilang({ ident: "CHARGES", suffix: "COLON" }) }} {{ oxprice(oDeliveryCostPrice.getNettoPrice(), { currency: currency }) }}
+                                <b>{{ oxmultilang({ ident: "CHARGES", suffix: "COLON" }) }} {{ formatPrice(oDeliveryCostPrice.getNettoPrice(), { currency: currency }) }}
                                         ({{ oxmultilang({ ident: "PLUS_VAT" }) }}
-                                        {{ oxprice(oDeliveryCostPrice.getVatValue(), { currency: currency }) }})
+                                        {{ formatPrice(oDeliveryCostPrice.getVatValue(), { currency: currency }) }})
                                 </b>
                             </div>
                         {% else %}
                             <div id="shipSetCost">
-                                <b>{{ oxmultilang({ ident: "CHARGES", suffix: "COLON" }) }} {{ oxprice(oDeliveryCostPrice.getBruttoPrice(), { currency: currency }) }}</b>
+                                <b>{{ oxmultilang({ ident: "CHARGES", suffix: "COLON" }) }} {{ formatPrice(oDeliveryCostPrice.getBruttoPrice(), { currency: currency }) }}</b>
                             </div>
                         {% endif %}
                     {% endif %}
@@ -111,7 +111,7 @@
                     {% block checkout_payment_nextstep %}
                         {% if oView.isLowOrderPrice() %}
                             <div class="lineBox clear">
-                            <div><b>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ oxprice(oxcmp_basket.getMinOrderPrice(), { currency: currency }) }}</b></div>
+                            <div><b>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ formatPrice(oxcmp_basket.getMinOrderPrice(), { currency: currency }) }}</b></div>
                             </div>
                         {% else %}
                             <div class="lineBox clear">
