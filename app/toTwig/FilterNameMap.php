@@ -14,7 +14,8 @@ namespace toTwig;
 class FilterNameMap
 {
     const nameMap = [
-        'colon' => 'getTranslatedColon'
+        'colon' => 'getTranslatedColon',
+        'smartwordwrap' => 'smartWordWrap'
         ];
 
     public static function getConvertedFilterName($filterName)
