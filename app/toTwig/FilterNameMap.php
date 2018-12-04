@@ -15,7 +15,8 @@ class FilterNameMap
 {
     const nameMap = [
         'colon' => 'getTranslatedColon',
-        'smartwordwrap' => 'smartWordWrap'
+        'smartwordwrap' => 'smartWordWrap',
+        'date_format' => 'dateFormat'
         ];
 
     public static function getConvertedFilterName($filterName)
