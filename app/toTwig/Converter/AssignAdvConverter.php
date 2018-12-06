@@ -13,7 +13,7 @@ class AssignAdvConverter extends ConverterAbstract
 {
 
     protected $name = 'assign_adv';
-    protected $description = "Convert OXID {assign_adv} to twig {% set foo = oxassign('foo') %}";
+    protected $description = "Convert OXID {assign_adv} to twig {% set foo = assign_advanced('foo') %}";
     protected $priority = 100;
 
     /**
@@ -38,7 +38,7 @@ class AssignAdvConverter extends ConverterAbstract
     {
         // [{assign_adv other stuff}]
         $pattern = $this->getOpeningTagPattern('assign_adv');
-        $string = '{% set :key = oxassign(:value) %}';
+        $string = '{% set :key = assign_advanced(:value) %}';
 
         return preg_replace_callback($pattern, function($matches) use ($string) {
 

@@ -17,14 +17,14 @@
         {% if not oView.showOrderButtonOnTop() %}
             <div class="lineBox clear">
                 <span>&nbsp;</span>
-                <span class="title">{{ oxmultilang({ ident: "MESSAGE_SUBMIT_BOTTOM" }) }}</span>
+                <span class="title">{{ translate({ ident: "MESSAGE_SUBMIT_BOTTOM" }) }}</span>
             </div>
         {% endif %}
 
         {% block checkout_order_details %}
             {% if not oxcmp_basket.getProductsCount() %}
                 {% block checkout_order_emptyshippingcart %}
-                    <div class="status corners error">{{ oxmultilang({ ident: "BASKET_EMPTY" }) }}</div>
+                    <div class="status corners error">{{ translate({ ident: "BASKET_EMPTY" }) }}</div>
                 {% endblock %}
             {% else %}
                 {% set currency = oView.getActCurrency() %}
@@ -32,7 +32,7 @@
                 {% block checkout_order_next_step_top %}
                     {% if oView.isLowOrderPrice() %}
                         {% block checkout_order_loworderprice_top %}
-                            <div>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
+                            <div>{{ translate({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
                         {% endblock %}
                     {% else %}
 
@@ -50,8 +50,8 @@
                                         {% include "page/checkout/inc/agb.tpl" %}
 
                                         <div class="lineBox clear">
-                                            <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
-                                            <button type="submit" class="submitButton nextStep largeButton">{{ oxmultilang({ ident: "SUBMIT_ORDER" }) }}</button>
+                                            <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
+                                            <button type="submit" class="submitButton nextStep largeButton">{{ translate({ ident: "SUBMIT_ORDER" }) }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -62,12 +62,12 @@
 
                 {% block checkout_order_vouchers %}
                     {% if oViewConf.getShowVouchers() and oxcmp_basket.getVouchers() %}
-                        {{ oxmultilang({ ident: "USED_COUPONS" }) }}
+                        {{ translate({ ident: "USED_COUPONS" }) }}
                         <div>
                             {% for key, oEr in Errors.basket %}
                                 {% if oEr.getErrorClassType() == 'oxVoucherException' %}
-                                    {{ oxmultilang({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') }) }}<br>
-                                    {{ oxmultilang({ ident: "REASON", suffix: "COLON" }) }}
+                                    {{ translate({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') }) }}<br>
+                                    {{ translate({ ident: "REASON", suffix: "COLON" }) }}
                                     {{ oEr.getOxMessage() }}<br>
                                 {% endif %}
                             {% endfor %}
@@ -82,15 +82,15 @@
                     <div id="orderAddress">
                         <form action="{{ oViewConf.getSslSelfLink() }}" method="post">
                             <h3 class="section">
-                            <strong>{{ oxmultilang({ ident: "ADDRESSES" }) }}</strong>
+                            <strong>{{ translate({ ident: "ADDRESSES" }) }}</strong>
                             {{ oViewConf.getHiddenSid() }}
                             <input type="hidden" name="cl" value="user">
                             <input type="hidden" name="fnc" value="">
-                            <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "EDIT" }) }}</button>
+                            <button type="submit" class="submitButton largeButton">{{ translate({ ident: "EDIT" }) }}</button>
                             </h3>
                         </form>
                         <dl>
-                            <dt>{{ oxmultilang({ ident: "BILLING_ADDRESS" }) }}</dt>
+                            <dt>{{ translate({ ident: "BILLING_ADDRESS" }) }}</dt>
                             <dd>
                                 {% include "widget/address/billing_address.tpl" %}
                             </dd>
@@ -98,7 +98,7 @@
                         {% set oDelAdress = oView.getDelAddress() %}
                         {% if oDelAdress %}
                         <dl class="shippingAddress">
-                            <dt>{{ oxmultilang({ ident: "SHIPPING_ADDRESS" }) }}</dt>
+                            <dt>{{ translate({ ident: "SHIPPING_ADDRESS" }) }}</dt>
                             <dd>
                                 {% include "widget/address/shipping_address.tpl" with {delivadr: oDelAdress} %}
                             </dd>
@@ -107,7 +107,7 @@
 
                         {% if oView.getOrderRemark() %}
                             <dl class="orderRemarks">
-                                <dt>{{ oxmultilang({ ident: "WHAT_I_WANTED_TO_SAY" }) }}</dt>
+                                <dt>{{ translate({ ident: "WHAT_I_WANTED_TO_SAY" }) }}</dt>
                                 <dd>
                                     {{ oView.getOrderRemark() }}
                                 </dd>
@@ -121,11 +121,11 @@
                     <div id="orderShipping">
                     <form action="{{ oViewConf.getSslSelfLink() }}" method="post">
                         <h3 class="section">
-                            <strong>{{ oxmultilang({ ident: "SHIPPING_CARRIER" }) }}</strong>
+                            <strong>{{ translate({ ident: "SHIPPING_CARRIER" }) }}</strong>
                             {{ oViewConf.getHiddenSid() }}
                             <input type="hidden" name="cl" value="payment">
                             <input type="hidden" name="fnc" value="">
-                            <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "EDIT" }) }}</button>
+                            <button type="submit" class="submitButton largeButton">{{ translate({ ident: "EDIT" }) }}</button>
                         </h3>
                     </form>
                     {% set oShipSet = oView.getShipSet() %}
@@ -135,11 +135,11 @@
                     <div id="orderPayment">
                         <form action="{{ oViewConf.getSslSelfLink() }}" method="post">
                             <h3 class="section">
-                                <strong>{{ oxmultilang({ ident: "PAYMENT_METHOD" }) }}</strong>
+                                <strong>{{ translate({ ident: "PAYMENT_METHOD" }) }}</strong>
                                 {{ oViewConf.getHiddenSid() }}
                                 <input type="hidden" name="cl" value="payment">
                                 <input type="hidden" name="fnc" value="">
-                                <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "EDIT" }) }}</button>
+                                <button type="submit" class="submitButton largeButton">{{ translate({ ident: "EDIT" }) }}</button>
                             </h3>
                         </form>
                         {% set payment = oView.getPayment() %}
@@ -150,11 +150,11 @@
                 <div id="orderEditCart">
                     <form action="{{ oViewConf.getSslSelfLink() }}" method="post">
                         <h3 class="section">
-                            <strong>{{ oxmultilang({ ident: "CART" }) }}</strong>
+                            <strong>{{ translate({ ident: "CART" }) }}</strong>
                             {{ oViewConf.getHiddenSid() }}
                             <input type="hidden" name="cl" value="basket">
                             <input type="hidden" name="fnc" value="">
-                            <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "EDIT" }) }}</button>
+                            <button type="submit" class="submitButton largeButton">{{ translate({ ident: "EDIT" }) }}</button>
                         </h3>
                     </form>
                 </div>
@@ -167,7 +167,7 @@
                 {% block checkout_order_next_step_bottom %}
                     {% if oView.isLowOrderPrice() %}
                         {% block checkout_order_loworderprice_bottom %}
-                            <div>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
+                            <div>{{ translate({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
                         {% endblock %}
                     {% else %}
                         {% block checkout_order_btn_confirm_bottom %}
@@ -205,8 +205,8 @@
                                     {% include "page/checkout/inc/agb.tpl" with {hideButtons: true} %}
                                 {% endif %}
 
-                                <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
-                                <button type="submit" class="submitButton nextStep largeButton">{{ oxmultilang({ ident: "SUBMIT_ORDER" }) }}</button>
+                                <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
+                                <button type="submit" class="submitButton nextStep largeButton">{{ translate({ ident: "SUBMIT_ORDER" }) }}</button>
                             </form>
                         {% endblock %}
                     {% endif %}

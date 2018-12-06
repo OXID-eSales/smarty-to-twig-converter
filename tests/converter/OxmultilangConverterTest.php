@@ -44,17 +44,17 @@ class OxmultilangConverterTest extends AbstractConverterTest
             // Basic usage
             [
                 "[{oxmultilang ident=\"ERROR_404\"}]",
-                "{{ oxmultilang({ ident: \"ERROR_404\" }) }}"
+                "{{ translate({ ident: \"ERROR_404\" }) }}"
             ],
             // Example from OXID
             [
                 "[{oxmultilang noerror=true ident=\$menuitem->getAttribute('name')|default:\$menuitem->getAttribute('id')}]",
-                "{{ oxmultilang({ noerror: true, ident: menuitem.getAttribute('name')|default(menuitem.getAttribute('id')) }) }}"
+                "{{ translate({ noerror: true, ident: menuitem.getAttribute('name')|default(menuitem.getAttribute('id')) }) }}"
             ],
             // With spaces
             [
                 "[{ oxmultilang ident=\"ERROR_404\" }]",
-                "{{ oxmultilang({ ident: \"ERROR_404\" }) }}"
+                "{{ translate({ ident: \"ERROR_404\" }) }}"
             ],
         ];
     }

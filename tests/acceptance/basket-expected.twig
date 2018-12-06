@@ -7,7 +7,7 @@
         {% set currency = oView.getActCurrency() %}
         {% if not oxcmp_basket.getProductsCount() %}
             {% block checkout_basket_emptyshippingcart %}
-                <div class="status corners error">{{ oxmultilang({ ident: "BASKET_EMPTY" }) }}</div>
+                <div class="status corners error">{{ translate({ ident: "BASKET_EMPTY" }) }}</div>
             {% endblock %}
         {% else %}
             {% block checkout_basket_next_step_top %}
@@ -19,7 +19,7 @@
                                     {{ oViewConf.getHiddenSid() }}
                                     <input type="hidden" name="cl" value="basket">
                                     <input type="hidden" name="fnc" value="backtoshop">
-                                    <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "CONTINUE_SHOPPING" }) }}</button>
+                                    <button type="submit" class="submitButton largeButton">{{ translate({ ident: "CONTINUE_SHOPPING" }) }}</button>
                                 </form>
                             </div>
                         {% endblock %}
@@ -27,14 +27,14 @@
 
                     {% if oView.isLowOrderPrice() %}
                         {% block checkout_basket_loworderprice_top %}
-                            <div>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
+                            <div>{{ translate({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
                         {% endblock %}
                     {% else %}
                         {% block basket_btn_next_top %}
                             <form action="{{ oViewConf.getSslSelfLink() }}" method="post">
                                 {{ oViewConf.getHiddenSid() }}
                                 <input type="hidden" name="cl" value="user">
-                                <button type="submit" class="submitButton largeButton nextStep">{{ oxmultilang({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
+                                <button type="submit" class="submitButton largeButton nextStep">{{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
                             </form>
                         {% endblock %}
                     {% endif %}
@@ -54,20 +54,20 @@
                                     {% for key, oEr in Errors.basket %}
                                         {% if oEr.getErrorClassType() == 'oxVoucherException' %}
                                             <div class="inlineError">
-                                                {{ oxmultilang({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') }) }}
-                                                <strong>{{ oxmultilang({ ident: "REASON", suffix: "COLON" }) }}</strong>
+                                                {{ translate({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') }) }}
+                                                <strong>{{ translate({ ident: "REASON", suffix: "COLON" }) }}</strong>
                                                 {{ oEr.getOxMessage() }}
                                             </div>
                                         {% endif %}
                                     {% endfor %}
-                                    <label>{{ oxmultilang({ ident: "ENTER_COUPON_NUMBER", suffix: "COLON" }) }}</label>
+                                    <label>{{ translate({ ident: "ENTER_COUPON_NUMBER", suffix: "COLON" }) }}</label>
                                     {{ oViewConf.getHiddenSid() }}
                                     <input type="hidden" name="cl" value="basket">
                                     <input type="hidden" name="fnc" value="addVoucher">
                                     <input type="text" size="20" name="voucherNr" class="textbox js-oxValidate js-oxValidate_notEmpty">
-                                    <button type="submit" class="submitButton">{{ oxmultilang({ ident: "SUBMIT_COUPON" }) }}</button>
+                                    <button type="submit" class="submitButton">{{ translate({ ident: "SUBMIT_COUPON" }) }}</button>
                                     <p class="oxValidateError">
-                                        <span class="js-oxError_notEmpty">{{ oxmultilang({ ident: "ERROR_MESSAGE_INPUT_NOTALLFIELDS" }) }}</span>
+                                        <span class="js-oxError_notEmpty">{{ translate({ ident: "ERROR_MESSAGE_INPUT_NOTALLFIELDS" }) }}</span>
                                     </p>
                                     <input type="hidden" name="CustomError" value='basket'>
                                 </div>
@@ -86,7 +86,7 @@
                                     {{ oViewConf.getHiddenSid() }}
                                     <input type="hidden" name="cl" value="basket">
                                     <input type="hidden" name="fnc" value="backtoshop">
-                                    <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "CONTINUE_SHOPPING" }) }}</button>
+                                    <button type="submit" class="submitButton largeButton">{{ translate({ ident: "CONTINUE_SHOPPING" }) }}</button>
                                 </div>
                             </form>
                         {% endblock %}
@@ -94,21 +94,21 @@
 
                     {% if oView.isLowOrderPrice() %}
                         {% block checkout_basket_loworderprice_bottom %}
-                            <div>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
+                            <div>{{ translate({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
                         {% endblock %}
                     {% else %}
                         {% block basket_btn_next_bottom %}
                             <form action="{{ oViewConf.getSslSelfLink() }}" method="post">
                                 {{ oViewConf.getHiddenSid() }}
                                 <input type="hidden" name="cl" value="user">
-                                <button type="submit" class="submitButton largeButton nextStep">{{ oxmultilang({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
+                                <button type="submit" class="submitButton largeButton nextStep">{{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
                             </form>
                         {% endblock %}
                     {% endif %}
                 </div>
             {% endblock %}
             {% block basket_widget_bestseller %}
-                {{ oxid_include_widget({ cl: "oxwActions", action: "oxtop5", listtype: "grid" }) }}
+                {{ include_widget({ cl: "oxwActions", action: "oxtop5", listtype: "grid" }) }}
             {% endblock %}
         {% endif %}
         {% if oView.isWrapping() %}

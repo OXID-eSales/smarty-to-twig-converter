@@ -13,7 +13,7 @@ class OxscriptConverter extends AbstractSingleTagConverter
 {
 
     protected $name = 'oxscript';
-    protected $description = "Convert smarty {oxscript} to twig function {{ oxscript() }}";
+    protected $description = "Convert smarty {oxscript} to twig function {{ script() }}";
     protected $priority = 100;
 
     protected $convertedName = 'script';

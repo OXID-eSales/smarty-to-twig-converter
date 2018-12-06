@@ -15,7 +15,7 @@ class FilterNameMapTest extends TestCase
     public function provider()
     {
         return [
-            ['colon', 'getTranslatedColon'],
+            ['colon', 'get_translated_colon'],
             ['foo', 'foo']
         ];
     }

@@ -15,7 +15,7 @@
                         <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                         <input type="hidden" name="fnc" value="changeshipping">
                     </div>
-                    <h3 id="deliveryHeader" class="blockHead">{% if oView.getAllSetsCnt() > 1 %}{{ oxmultilang({ ident: "SELECT_SHIPPING_METHOD", suffix: "COLON" }) }}{% else %}{{ oxmultilang({ ident: "SELECT_SHIPPING_METHOD", suffix: "COLON" }) }}{% endif %}</h3>
+                    <h3 id="deliveryHeader" class="blockHead">{% if oView.getAllSetsCnt() > 1 %}{{ translate({ ident: "SELECT_SHIPPING_METHOD", suffix: "COLON" }) }}{% else %}{{ translate({ ident: "SELECT_SHIPPING_METHOD", suffix: "COLON" }) }}{% endif %}</h3>
                     <ul>
                         <li>
                             {% block act_shipping %}
@@ -25,24 +25,24 @@
                                     {% endfor %}
                                 </select>
                                 <noscript>
-                                    <button type="submit" class="submitButton largeButton">{{ oxmultilang({ ident: "UPDATE_SHIPPING_CARRIER" }) }}</button>
+                                    <button type="submit" class="submitButton largeButton">{{ translate({ ident: "UPDATE_SHIPPING_CARRIER" }) }}</button>
                                 </noscript>
                             {% endblock %}
                         </li>
                     </ul>
 
                     {% set oDeliveryCostPrice = oxcmp_basket.getDeliveryCost() %}
-                    {% if oDeliveryCostPrice and oDeliveryCostPrice.formatPrice() > 0 %}
+                    {% if oDeliveryCostPrice and oDeliveryCostPrice.oxprice() > 0 %}
                         {% if oViewConf.isFunctionalityEnabled('blShowVATForDelivery') %}
                             <div id="shipSetCost">
-                                <b>{{ oxmultilang({ ident: "CHARGES", suffix: "COLON" }) }} {{ formatPrice(oDeliveryCostPrice.getNettoPrice(), { currency: currency }) }}
-                                        ({{ oxmultilang({ ident: "PLUS_VAT" }) }}
-                                        {{ formatPrice(oDeliveryCostPrice.getVatValue(), { currency: currency }) }})
+                                <b>{{ translate({ ident: "CHARGES", suffix: "COLON" }) }} {{ format_price(oDeliveryCostPrice.getNettoPrice(), { currency: currency }) }}
+                                        ({{ translate({ ident: "PLUS_VAT" }) }}
+                                        {{ format_price(oDeliveryCostPrice.getVatValue(), { currency: currency }) }})
                                 </b>
                             </div>
                         {% else %}
                             <div id="shipSetCost">
-                                <b>{{ oxmultilang({ ident: "CHARGES", suffix: "COLON" }) }} {{ formatPrice(oDeliveryCostPrice.getBruttoPrice(), { currency: currency }) }}</b>
+                                <b>{{ translate({ ident: "CHARGES", suffix: "COLON" }) }} {{ format_price(oDeliveryCostPrice.getBruttoPrice(), { currency: currency }) }}</b>
                             </div>
                         {% endif %}
                     {% endif %}
@@ -54,26 +54,26 @@
         {% block checkout_payment_errors %}
             {% set iPayError = oView.getPaymentError() %}
             {% if iPayError == 1 %}
-                <div class="status error">{{ oxmultilang({ ident: "ERROR_MESSAGE_COMPLETE_FIELDS_CORRECTLY" }) }}</div>
+                <div class="status error">{{ translate({ ident: "ERROR_MESSAGE_COMPLETE_FIELDS_CORRECTLY" }) }}</div>
             {% elseif iPayError == 2 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_AUTHORIZATION_FAILED" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_AUTHORIZATION_FAILED" }) }}</div>
             {% elseif iPayError == 4 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_UNAVAILABLE_SHIPPING_METHOD" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_UNAVAILABLE_SHIPPING_METHOD" }) }}</div>
             {% elseif iPayError == 5 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT" }) }}</div>
             {% elseif iPayError >= 6 %}
                 <!--Add custom error message here-->
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT" }) }}</div>
             {% elseif iPayError == -1 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT_ERROR", suffix: "COLON" }) }} "{{ oView.getPaymentErrorText() }}").</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT_ERROR", suffix: "COLON" }) }} "{{ oView.getPaymentErrorText() }}").</div>
             {% elseif iPayError == -2 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_NO_SHIPPING_METHOD_FOUND" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_NO_SHIPPING_METHOD_FOUND" }) }}</div>
             {% elseif iPayError == -3 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_SELECT_ANOTHER_PAYMENT" }) }}</div>
             {% elseif iPayError == -4 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_BANK_CODE_INVALID" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_BANK_CODE_INVALID" }) }}</div>
             {% elseif iPayError == -5 %}
-                <div class="status error">{{ oxmultilang({ ident: "MESSAGE_PAYMENT_ACCOUNT_NUMBER_INVALID" }) }}</div>
+                <div class="status error">{{ translate({ ident: "MESSAGE_PAYMENT_ACCOUNT_NUMBER_INVALID" }) }}</div>
             {% endif %}
         {% endblock %}
 
@@ -91,7 +91,7 @@
                 </div>
 
                 {% if oView.getPaymentList() %}
-                    <h3 id="paymentHeader" class="blockHead">{{ oxmultilang({ ident: "PAYMENT_METHOD" }) }}</h3>
+                    <h3 id="paymentHeader" class="blockHead">{{ translate({ ident: "PAYMENT_METHOD" }) }}</h3>
                     {% set inptcounter = "-1" %}
                     {% for sPaymentID, paymentmethod in oView.getPaymentList() %}
                         {% set inptcounter = "`$inptcounter+1`" %}
@@ -111,12 +111,12 @@
                     {% block checkout_payment_nextstep %}
                         {% if oView.isLowOrderPrice() %}
                             <div class="lineBox clear">
-                            <div><b>{{ oxmultilang({ ident: "MIN_ORDER_PRICE" }) }} {{ formatPrice(oxcmp_basket.getMinOrderPrice(), { currency: currency }) }}</b></div>
+                            <div><b>{{ translate({ ident: "MIN_ORDER_PRICE" }) }} {{ format_price(oxcmp_basket.getMinOrderPrice(), { currency: currency }) }}</b></div>
                             </div>
                         {% else %}
                             <div class="lineBox clear">
-                                <a href="{{ seo_url({ ident: oViewConf.getOrderLink() }) }}" class="prevStep submitButton largeButton" id="paymentBackStepBottom">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
-                                <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">{{ oxmultilang({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
+                                <a href="{{ seo_url({ ident: oViewConf.getOrderLink() }) }}" class="prevStep submitButton largeButton" id="paymentBackStepBottom">{{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
+                                <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">{{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
                             </div>
                         {% endif %}
                     {% endblock %}
@@ -124,14 +124,14 @@
                 {% elseif oView.getEmptyPayment() %}
                     {% block checkout_payment_nopaymentsfound %}
                         <div class="lineBlock"></div>
-                        <h3 id="paymentHeader" class="blockHead">{{ oxmultilang({ ident: "PAYMENT_INFORMATION" }) }}</h3>
+                        <h3 id="paymentHeader" class="blockHead">{{ translate({ ident: "PAYMENT_INFORMATION" }) }}</h3>
                         {% ifcontent ident "oxnopaymentmethod" set oCont %}
                             {{ oCont.oxcontents__oxcontent.value }}
                         {% endifcontent %}
                         <input type="hidden" name="paymentid" value="oxempty">
                         <div class="lineBox clear">
-                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=user") }) }}" class="prevStep submitButton largeButton">{{ oxmultilang({ ident: "PREVIOUS_STEP" }) }}</a>
-                            <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">{{ oxmultilang({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=user") }) }}" class="prevStep submitButton largeButton">{{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
+                            <button type="submit" name="userform" class="submitButton nextStep largeButton" id="paymentNextStepBottom">{{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }}</button>
                         </div>
                     {% endblock %}
                 {% endif %}
