@@ -36,7 +36,7 @@ class ForConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $content = $this->replaceFor($content);
         $content = $this->replaceEndForEach($content);
@@ -54,7 +54,7 @@ class ForConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceEndForEach($content)
+    private function replaceEndForEach(string $content): string
     {
         // [{/foreach}]
         $search = $this->getClosingTagPattern('foreach');
@@ -68,7 +68,7 @@ class ForConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceForEachElse($content)
+    private function replaceForEachElse(string $content): string
     {
         // [{foreachelse other stuff}]
         $search = $this->getOpeningTagPattern('foreachelse');
@@ -82,7 +82,7 @@ class ForConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceFor($content)
+    private function replaceFor(string $content): string
     {
         // [{foreach other stuff}]
         $pattern = $this->getOpeningTagPattern('foreach');

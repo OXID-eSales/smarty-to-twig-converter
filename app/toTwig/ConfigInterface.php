@@ -24,7 +24,7 @@ interface ConfigInterface
      *
      * @return string The name of the configuration
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns the description of the configuration.
@@ -33,14 +33,14 @@ interface ConfigInterface
      *
      * @return string The description of the configuration
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * Returns an iterator of files to scan.
      *
      * @return \Traversable A \Traversable instance that returns \SplFileInfo instances
      */
-    public function getFinder();
+    public function getFinder(): \Traversable;
 
     /**
      * Returns the converters to run.
@@ -54,26 +54,26 @@ interface ConfigInterface
      *
      * @param string $dir The project root directory
      */
-    public function setDir($dir);
+    public function setDir(string $dir): void;
 
     /**
      * Returns the root directory of the project.
      *
      * @return string The project root directory
      */
-    public function getDir();
+    public function getDir(): string;
 
     /**
      * Adds an instance of a custom converter.
      *
      * @param ConverterAbstract $converter
      */
-    public function addCustomConverter(ConverterAbstract $converter);
+    public function addCustomConverter(ConverterAbstract $converter): void;
 
     /**
      * Returns the custom converters to use.
      *
      * @return ConverterAbstract[]
      */
-    public function getCustomConverters();
+    public function getCustomConverters(): array;
 }

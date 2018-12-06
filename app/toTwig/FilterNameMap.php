@@ -19,7 +19,7 @@ class FilterNameMap
         'date_format' => 'dateFormat'
         ];
 
-    public static function getConvertedFilterName($filterName)
+    public static function getConvertedFilterName(string $filterName): string
     {
         return isset(self::nameMap[$filterName]) ? self::nameMap[$filterName] : $filterName;
     }

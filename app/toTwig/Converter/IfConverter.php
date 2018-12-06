@@ -29,7 +29,7 @@ class IfConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         // Replace {if }
         $content = $this->replaceIf($content);
@@ -48,7 +48,7 @@ class IfConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceIf($content)
+    private function replaceIf(string $content): string
     {
         // [{if other stuff}]
         $pattern = $this->getOpeningTagPattern('if');
@@ -62,7 +62,7 @@ class IfConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceElseIf($content)
+    private function replaceElseIf(string $content): string
     {
         // [{elseif other stuff}]
         $pattern = $this->getOpeningTagPattern('elseif');
@@ -78,7 +78,7 @@ class IfConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replace($pattern, $content, $string)
+    private function replace(string $pattern, string $content, string $string): string
     {
         return preg_replace_callback(
             $pattern,

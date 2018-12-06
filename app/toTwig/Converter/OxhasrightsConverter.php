@@ -22,7 +22,7 @@ class OxhasrightsConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $content = $this->replaceOxhasrights($content);
         $content = $this->replaceEndOxhasrights($content);
@@ -35,7 +35,7 @@ class OxhasrightsConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceEndOxhasrights($content)
+    private function replaceEndOxhasrights(string $content): string
     {
         // [{/oxhasrights}]
         $search = $this->getClosingTagPattern('oxhasrights');
@@ -49,7 +49,7 @@ class OxhasrightsConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceOxhasrights($content)
+    private function replaceOxhasrights(string $content): string
     {
         // [{oxhasrights other stuff}]
         $pattern = $this->getOpeningTagPattern('oxhasrights');
@@ -84,11 +84,12 @@ class OxhasrightsConverter extends ConverterAbstract
     /**
      * Returns element of array to replace template string
      *
-     * @param $attr
-     * @param $attributeName
+     * @param array $attr
+     * @param string $attributeName
      * @return string
      */
-    private function getArrayElementToReplace($attr, $attributeName) {
+    private function getArrayElementToReplace(array $attr, string $attributeName): string
+    {
         if(isset($attr[$attributeName])) {
             $format = "\"%s\": \"%s\",";
             $variable = $this->variable($attr[$attributeName]);

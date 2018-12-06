@@ -21,7 +21,7 @@ class OxinputhelpConverter extends ConverterAbstract
      * @param string $content
      * @return mixed|string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $return = $this->replace($content);
         return $return;
@@ -31,7 +31,7 @@ class OxinputhelpConverter extends ConverterAbstract
      * @param $content
      * @return null|string|string[]
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('oxinputhelp');
         return preg_replace_callback($pattern, function($matches) {

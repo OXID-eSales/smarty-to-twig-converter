@@ -22,7 +22,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         return $this->replace($content);
     }
@@ -30,7 +30,7 @@ class MathConverter extends ConverterAbstract
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 1000;
     }
@@ -38,7 +38,7 @@ class MathConverter extends ConverterAbstract
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'math';
     }
@@ -46,7 +46,7 @@ class MathConverter extends ConverterAbstract
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'Convert smarty math to twig';
     }
@@ -56,7 +56,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         // [{math equation="x + y" x=1 y=2}]
         $pattern = '/\[\{\s*math\b\s*([^{}]+)?\s*\}\]/';
@@ -93,7 +93,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function getMatch($matches)
+    private function getMatch(array $matches): string
     {
         if (!isset($matches[1]) && $matches[0]) {
             $match = $matches[0];
@@ -111,7 +111,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function getStringForPregReplace($replace)
+    private function getStringForPregReplace(array $replace): string
     {
         if ($replace['assign']) {
             $string = '{% set :assign = :equation %}';
@@ -128,7 +128,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return mixed|null|string|string[]
      */
-    private function translateEquationTemplate($attr, $vars)
+    private function translateEquationTemplate(array $attr, array $vars): string
     {
         $equationTemplate = $this->variable($attr['equation']);
         $equationTemplate = $this->mathAllVariationsOfRoundSprintf($equationTemplate);
@@ -150,7 +150,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string Formated string
      */
-    protected function mathEquationSprintf($string, $args)
+    protected function mathEquationSprintf(string $string, array $args): string
     {
         $pattern = '/([a-zA-Z0-9]+)/';
 
@@ -176,7 +176,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string Formated string
      */
-    protected function mathAllVariationsOfRoundSprintf($equationTemplate)
+    protected function mathAllVariationsOfRoundSprintf(string $equationTemplate): string
     {
         $equationTemplate = $this->mathRoundSprintf($equationTemplate);
         $equationTemplate = $this->mathCeilSprintf($equationTemplate);
@@ -192,7 +192,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathAbsSprintf($string)
+    protected function mathAbsSprintf(string $string): string
     {
         // [{math equation="abs(x)" x=-1}]
         $pattern = '/abs\(\b\s*([^{}]+)?\)/';
@@ -215,7 +215,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathCeilSprintf($string)
+    protected function mathCeilSprintf(string $string): string
     {
         // [{math equation="ceil(x)" x=3.4}]
         $pattern = '/ceil\(\b\s*([^{}]+)?\)/';
@@ -238,7 +238,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathFloorSprintf($string)
+    protected function mathFloorSprintf(string $string): string
     {
         // [{math equation="floor(x)" x=3.4}]
         $pattern = '/floor\(\b\s*([^{}]+)?\)/';
@@ -261,7 +261,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathPowSprintf($string)
+    protected function mathPowSprintf(string $string): string
     {
         // [{math equation="pow(x,y)" x=2 y=3}]
         $pattern = '/pow\(\b\s*([^{)}]+)?\)/';
@@ -284,7 +284,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathRandSprintf($string)
+    protected function mathRandSprintf(string $string): string
     {
         //[{math equation="rand(x, y)" x=2 y=3}]
         $pattern = '/rand\(\b\s*([^{)}]+)?\)/';
@@ -307,7 +307,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathRoundSprintf($string)
+    protected function mathRoundSprintf(string $string): string
     {
         //[{math equation="round(x)" x=3.4}]
         $pattern = '/round\(\b\s*([^{}]+)?\)/';
@@ -331,7 +331,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    protected function mathFormatSprintf($string, $args)
+    protected function mathFormatSprintf(string $string, array $args): string
     {
         // [{math equation="x + y" x=1 y=2 format="%.2f"}]
         $pattern = '/format\(\b\s*([^{}]+)?\)/';
@@ -353,7 +353,7 @@ class MathConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function getAssignAttribute($attr)
+    private function getAssignAttribute(array $attr): string
     {
         $assign = '';
         if (isset($attr['assign'])) {

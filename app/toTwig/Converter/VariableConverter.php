@@ -29,7 +29,7 @@ class VariableConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $content = $this->replace($content);
 
@@ -41,7 +41,7 @@ class VariableConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         $pattern = '/\[\{([^{}]+)?\}\]/';
 

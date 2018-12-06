@@ -24,7 +24,7 @@ class ReadmeCommand extends Command
     /**
      * @see Command
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('readme')
@@ -37,7 +37,7 @@ class ReadmeCommand extends Command
      *
      * @see Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $header = <<<EOF
 PHP Smarty to Twig Converter

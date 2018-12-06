@@ -42,7 +42,7 @@ class IncludeConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         return $this->replace($content);
     }
@@ -52,7 +52,7 @@ class IncludeConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         $pattern = $this->pattern;
         $string = $this->string;

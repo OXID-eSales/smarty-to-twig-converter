@@ -48,7 +48,7 @@ abstract class ConverterAbstract
      *
      * @return string The fixed file content
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         return $content;
     }
@@ -56,7 +56,7 @@ abstract class ConverterAbstract
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -64,7 +64,7 @@ abstract class ConverterAbstract
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -72,7 +72,7 @@ abstract class ConverterAbstract
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -85,7 +85,7 @@ abstract class ConverterAbstract
      *
      * @return Boolean true if the file is supported by this converter, false otherwise
      */
-    public function supports(\SplFileInfo $file)
+    public function supports(\SplFileInfo $file): bool
     {
         return true;
     }
@@ -97,7 +97,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    protected function getOpeningTagPattern($tagName)
+    protected function getOpeningTagPattern(string $tagName): string
     {
         return sprintf("#\[\{\s*%s\b\s*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\}\]#i", preg_quote($tagName, '#'));
     }
@@ -109,7 +109,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    protected function getClosingTagPattern($tagName)
+    protected function getClosingTagPattern(string $tagName): string
     {
         return sprintf("#\[\{\s*/%s\s*\}\]#i", preg_quote($tagName, '#'));
     }
@@ -121,7 +121,7 @@ abstract class ConverterAbstract
      *
      * @return  array   Key/Value pairs for the attributes
      */
-    protected function attributes($string)
+    protected function attributes(string $string): array
     {
         //Initialize variables
         $attr = $pairs = [];
@@ -150,7 +150,7 @@ abstract class ConverterAbstract
      *
      * @return mixed
      */
-    protected function variable($string)
+    protected function variable(string $string): string
     {
         return trim(trim($string), '$"\'');
     }
@@ -162,7 +162,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    protected function value($string)
+    protected function value(string $string): string
     {
         $string = trim($string);
 
@@ -204,7 +204,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    private function convertFunctionArguments($string)
+    private function convertFunctionArguments(string $string): string
     {
         return preg_replace_callback(
             "/\([^)]*\)/",
@@ -230,7 +230,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    private function convertFilters($string)
+    private function convertFilters(string $string): string
     {
         return preg_replace_callback(
             "/\|\w+\:[^\s}|]*/",
@@ -262,7 +262,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    protected function convertExpression($expression)
+    protected function convertExpression(string $expression): string
     {
         $parts = explode(" ", $expression);
         foreach ($parts as &$part) {
@@ -280,7 +280,7 @@ abstract class ConverterAbstract
      *
      * @return string         Formated string
      */
-    protected function vsprintf($string, $args)
+    protected function vsprintf(string $string, array $args): string
     {
         $pattern = '/:([a-zA-Z0-9_-]+)/';
 
@@ -304,7 +304,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    protected function convertArrayToAssocTwigArray(array $array, array $skippedKeys)
+    protected function convertArrayToAssocTwigArray(array $array, array $skippedKeys): string
     {
         $pairs = [];
         foreach ($array as $key => $value) {
@@ -327,7 +327,7 @@ abstract class ConverterAbstract
      *
      * @return string
      */
-    protected function rawString($string)
+    protected function rawString(string $string): string
     {
         return trim($string, '\'"');
     }

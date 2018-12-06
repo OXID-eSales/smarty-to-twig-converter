@@ -22,7 +22,7 @@ class OxcontentConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         // [{oxcontent other stuff}]
         $pattern = $this->getOpeningTagPattern('oxcontent');
@@ -80,7 +80,7 @@ class OxcontentConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function extractAssignVariableName($attributes)
+    private function extractAssignVariableName(array $attributes): ?string
     {
         $assignVar = null;
         if (isset($attributes['assign'])) {

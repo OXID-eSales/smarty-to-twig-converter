@@ -15,7 +15,7 @@ class OxevalConverter extends ConverterAbstract
      * @param string $content
      * @return mixed|string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $return = $this->replace($content);
         return $return;
@@ -25,7 +25,7 @@ class OxevalConverter extends ConverterAbstract
      * @param $content
      * @return null|string|string[]
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         //[{oxeval var="foo"}]
         $pattern = $this->getOpeningTagPattern('oxeval');

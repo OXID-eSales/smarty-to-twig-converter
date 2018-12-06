@@ -27,7 +27,7 @@ class SectionConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $contentReplacedOpeningTag = $this->replaceSectionOpeningTag($content);
         $content = $this->replaceSectionClosingTag($contentReplacedOpeningTag);
@@ -42,7 +42,7 @@ class SectionConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    private function replaceSectionOpeningTag($content)
+    private function replaceSectionOpeningTag(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('section');
         $pattern = '/\[\{\s*section\b\s*([^{}]+)?\s*\}\]/';
@@ -77,7 +77,7 @@ class SectionConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    private function replaceSectionClosingTag($content)
+    private function replaceSectionClosingTag(string $content): string
     {
         $search = $this->getClosingTagPattern('section');
         $search = '#\[\{\s*/section\s*\}\]#';

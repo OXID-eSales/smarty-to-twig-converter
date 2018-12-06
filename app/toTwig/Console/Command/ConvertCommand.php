@@ -48,7 +48,7 @@ class ConvertCommand extends Command
     /**
      * @see Command
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('convert')
@@ -134,7 +134,7 @@ EOF
      *
      * @see Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $path = $input->getArgument('path');
         $filesystem = new Filesystem();
@@ -173,7 +173,7 @@ EOF
      *
      * @return Config|null
      */
-    private function getConfig(InputInterface $input, $path)
+    private function getConfig(InputInterface $input, string $path): ?Config
     {
         $addSuppliedPathFromCli = true;
 
@@ -244,7 +244,7 @@ EOF
      * @param OutputInterface $output
      * @param array           $changed
      */
-    private function outputTxt(InputInterface $input, OutputInterface $output, $changed): void
+    private function outputTxt(InputInterface $input, OutputInterface $output, array $changed): void
     {
         $i = 1;
         foreach ($changed as $file => $fixResult) {
@@ -267,7 +267,7 @@ EOF
      * @param OutputInterface $output
      * @param array           $changed
      */
-    private function outputXml(InputInterface $input, OutputInterface $output, $changed): void
+    private function outputXml(InputInterface $input, OutputInterface $output, array $changed): void
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($filesXML = $dom->createElement('files'));
@@ -299,7 +299,7 @@ EOF
     /**
      * @return string
      */
-    protected function getConvertersHelp()
+    protected function getConvertersHelp(): string
     {
         $converters = '';
         $maxName = 0;
@@ -328,7 +328,7 @@ EOF
     /**
      * @return string
      */
-    protected function getConfigsHelp()
+    protected function getConfigsHelp(): string
     {
         $configs = '';
         $maxName = 0;

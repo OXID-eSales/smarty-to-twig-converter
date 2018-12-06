@@ -20,7 +20,7 @@ interface FinderInterface
     /**
      * @param string $dir
      *
-     * @return mixed
+     * @return void
      */
-    public function setDir($dir);
+    public function setDir(string $dir): void;
 }

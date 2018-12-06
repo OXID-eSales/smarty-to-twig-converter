@@ -22,7 +22,7 @@ class AssignAdvConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $content = $this->replace($content);
 
@@ -34,7 +34,7 @@ class AssignAdvConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         // [{assign_adv other stuff}]
         $pattern = $this->getOpeningTagPattern('assign_adv');

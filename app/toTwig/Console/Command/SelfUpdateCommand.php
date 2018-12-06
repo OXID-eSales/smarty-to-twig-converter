@@ -24,7 +24,7 @@ class SelfUpdateCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('self-update')
@@ -44,7 +44,7 @@ EOT
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $remoteFilename = "https://raw.github.com/sankarsuda/toTwig/master/toTwig.phar";
         $localFilename = $_SERVER['argv'][0];

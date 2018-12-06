@@ -26,7 +26,7 @@ class CaptureConverter extends ConverterAbstract
      *
      * @return mixed|string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $return = $this->replace($content);
 
@@ -38,7 +38,7 @@ class CaptureConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    private function replace($content)
+    private function replace(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('capture');
         $strippedOpeningTag = preg_replace_callback(
@@ -77,7 +77,7 @@ class CaptureConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function stripClosingTag($strippedOpeningTag)
+    private function stripClosingTag(string $strippedOpeningTag): string
     {
         // [{/capture}]
         $pattern = '/\[{\s*\/capture([^{]*)\s*}]/';

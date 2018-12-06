@@ -29,7 +29,7 @@ class CommentConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         return str_replace(['[{*', '*}]'], ['{#', '#}'], $content);
     }

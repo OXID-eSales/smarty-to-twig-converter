@@ -22,7 +22,7 @@ class OxifcontentConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $assignVar = null;
         $openingPattern = $this->getOpeningTagPattern('oxifcontent');
@@ -44,7 +44,7 @@ class OxifcontentConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceEndOxifcontent($content)
+    private function replaceEndOxifcontent(string $content): string
     {
         // [{/oxifcontent}]
         $search = $this->getClosingTagPattern('oxifcontent');
@@ -58,7 +58,7 @@ class OxifcontentConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceOxifcontent($content)
+    private function replaceOxifcontent(string $content): string
     {
         // [{oxifcontent other stuff}]
         $pattern = $this->getOpeningTagPattern('oxifcontent');

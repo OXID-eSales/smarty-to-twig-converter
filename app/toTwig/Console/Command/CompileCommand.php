@@ -25,7 +25,7 @@ class CompileCommand extends Command
     /**
      * @see Command
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('compile')
@@ -38,7 +38,7 @@ class CompileCommand extends Command
      *
      * @see Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $compiler = new Compiler();
         $compiler->compile();

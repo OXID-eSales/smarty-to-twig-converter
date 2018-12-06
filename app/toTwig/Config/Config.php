@@ -35,7 +35,7 @@ class Config implements ConfigInterface
      * @param string $name
      * @param string $description
      */
-    public function __construct($name = 'default', $description = 'A default configuration')
+    public function __construct(string $name = 'default', string $description = 'A default configuration')
     {
         $this->name = $name;
         $this->description = $description;
@@ -47,7 +47,7 @@ class Config implements ConfigInterface
     /**
      * @return Config
      */
-    public static function create()
+    public static function create(): self
     {
         return new static();
     }
@@ -55,7 +55,7 @@ class Config implements ConfigInterface
     /**
      * @param string $dir
      */
-    public function setDir($dir)
+    public function setDir(string $dir): void
     {
         $this->dir = $dir;
     }
@@ -63,7 +63,7 @@ class Config implements ConfigInterface
     /**
      * @return string
      */
-    public function getDir()
+    public function getDir(): string
     {
         return $this->dir;
     }
@@ -73,7 +73,7 @@ class Config implements ConfigInterface
      *
      * @return $this
      */
-    public function finder(\Traversable $finder)
+    public function finder(\Traversable $finder): self
     {
         $this->finder = $finder;
 
@@ -83,7 +83,7 @@ class Config implements ConfigInterface
     /**
      * @return DefaultFinder|FinderInterface|\Traversable
      */
-    public function getFinder()
+    public function getFinder(): \Traversable
     {
         if ($this->finder instanceof FinderInterface && $this->dir !== null) {
             $this->finder->setDir($this->dir);
@@ -97,7 +97,7 @@ class Config implements ConfigInterface
      *
      * @return $this
      */
-    public function converters($converter)
+    public function converters(array $converter): self
     {
         $this->converter = $converter;
 
@@ -107,7 +107,7 @@ class Config implements ConfigInterface
     /**
      * @return ConverterAbstract[]|int
      */
-    public function getConverters()
+    public function getConverters(): array
     {
         return $this->converter;
     }
@@ -115,7 +115,7 @@ class Config implements ConfigInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -123,7 +123,7 @@ class Config implements ConfigInterface
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -131,7 +131,7 @@ class Config implements ConfigInterface
     /**
      * @param ConverterAbstract $converter
      */
-    public function addCustomConverter(ConverterAbstract $converter)
+    public function addCustomConverter(ConverterAbstract $converter): void
     {
         $this->customConverter[] = $converter;
     }
@@ -139,7 +139,7 @@ class Config implements ConfigInterface
     /**
      * @return ConverterAbstract[]
      */
-    public function getCustomConverters()
+    public function getCustomConverters(): array
     {
         return $this->customConverter;
     }

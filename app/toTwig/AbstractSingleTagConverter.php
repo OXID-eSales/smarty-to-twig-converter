@@ -33,7 +33,7 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         // [{tag other stuff}]
         $pattern = $this->getOpeningTagPattern($this->name);

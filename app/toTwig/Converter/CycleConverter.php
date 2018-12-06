@@ -22,7 +22,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         // Smarty cycle tag will be converted to custom Twig function oxcycle
         // [{cycle other stuff}]
@@ -64,7 +64,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return array
      */
-    private function extractValuesArray($attributes)
+    private function extractValuesArray(array $attributes): array
     {
         $valuesArray = [];
         if (isset($attributes['values'])) {
@@ -84,7 +84,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function extractAssignVariableName($attributes)
+    private function extractAssignVariableName(array $attributes): ?string
     {
         $assignVar = null;
         if (isset($attributes['assign'])) {
@@ -99,7 +99,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return array
      */
-    private function extractAdditionalParametersArray($attributes)
+    private function extractAdditionalParametersArray(array $attributes): array
     {
         $extraParameters = [];
         foreach ($attributes as $name => $value) {
@@ -120,7 +120,7 @@ class CycleConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function composeArgumentsString($valuesArray, $extraParameters)
+    private function composeArgumentsString(array $valuesArray, array $extraParameters): string
     {
         $argumentsString = "";
         if (!empty($valuesArray) || !empty($extraParameters)) {

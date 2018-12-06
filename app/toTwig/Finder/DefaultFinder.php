@@ -45,7 +45,7 @@ class DefaultFinder extends Finder implements FinderInterface
     /**
      * @param string $dir
      */
-    public function setDir($dir)
+    public function setDir(string $dir): void
     {
         $this->in($this->getDirs($dir));
     }
@@ -57,7 +57,7 @@ class DefaultFinder extends Finder implements FinderInterface
      *
      * @return array
      */
-    protected function getDirs($dir)
+    protected function getDirs(string $dir): array
     {
         return array($dir);
     }
@@ -67,7 +67,7 @@ class DefaultFinder extends Finder implements FinderInterface
      *
      * @return array
      */
-    protected function getFilesToExclude()
+    protected function getFilesToExclude(): array
     {
         return array();
     }

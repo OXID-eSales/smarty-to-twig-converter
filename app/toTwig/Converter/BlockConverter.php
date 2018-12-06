@@ -22,7 +22,7 @@ class BlockConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         $content = $this->replaceBlock($content);
         $content = $this->replaceEndBlock($content);
@@ -37,7 +37,7 @@ class BlockConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceEndBlock($content)
+    private function replaceEndBlock(string $content): string
     {
         // [{/block}]
         $search = $this->getClosingTagPattern('block');
@@ -51,7 +51,7 @@ class BlockConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceBlock($content)
+    private function replaceBlock(string $content): string
     {
         // [{block other stuff}]
         $pattern = $this->getOpeningTagPattern('block');
@@ -85,7 +85,7 @@ class BlockConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceExtends($content)
+    private function replaceExtends(string $content): string
     {
         // [{extends other stuff}]
         $pattern = $this->getOpeningTagPattern('extends');
@@ -111,7 +111,7 @@ class BlockConverter extends ConverterAbstract
      *
      * @return string
      */
-    private function replaceParent($content)
+    private function replaceParent(string $content): string
     {
         // [{$smarty.block.parent}]
         $pattern = $this->getOpeningTagPattern('$smarty.block.parent');

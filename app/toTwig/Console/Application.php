@@ -42,7 +42,7 @@ class Application extends BaseApplication
     /**
      * @return string
      */
-    public function getLongVersion()
+    public function getLongVersion(): string
     {
         return parent::getLongVersion() . ' by <comment>sankar</comment>';
     }

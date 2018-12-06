@@ -48,7 +48,7 @@ class MiscConverter extends ConverterAbstract
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, $content)
+    public function convert(\SplFileInfo $file, string $content): string
     {
         foreach ($this->replacements as $k => $v) {
             $content = preg_replace($k, $v, $content);

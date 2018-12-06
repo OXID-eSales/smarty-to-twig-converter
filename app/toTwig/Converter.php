@@ -38,7 +38,7 @@ class Converter
     /**
      * registerBuiltInConverters
      */
-    public function registerBuiltInConverters()
+    public function registerBuiltInConverters(): void
     {
         foreach (Finder::create()->files()->in(__DIR__ . '/Converter') as $file) {
             $class = 'toTwig\\Converter\\' . basename($file, '.php');
@@ -49,7 +49,7 @@ class Converter
     /**
      * @param array $converter
      */
-    public function registerCustomConverters($converter)
+    public function registerCustomConverters(array $converter): void
     {
         foreach ($converter as $convert) {
             $this->addConverter($convert);
@@ -59,7 +59,7 @@ class Converter
     /**
      * @param ConverterAbstract $convert
      */
-    public function addConverter(ConverterAbstract $convert)
+    public function addConverter(ConverterAbstract $convert): void
     {
         $this->converters[] = $convert;
     }
@@ -67,7 +67,7 @@ class Converter
     /**
      * @return ConverterAbstract[]
      */
-    public function getConverters()
+    public function getConverters(): array
     {
         $this->sortConverters();
 
@@ -77,7 +77,7 @@ class Converter
     /**
      * registerBuiltInConfigs
      */
-    public function registerBuiltInConfigs()
+    public function registerBuiltInConfigs(): void
     {
         foreach (Finder::create()->files()->in(__DIR__ . '/Config') as $file) {
             $class = 'toTwig\\Config\\' . basename($file, '.php');
@@ -88,7 +88,7 @@ class Converter
     /**
      * @param ConfigInterface $config
      */
-    public function addConfig(ConfigInterface $config)
+    public function addConfig(ConfigInterface $config): void
     {
         $this->configs[] = $config;
     }
@@ -96,7 +96,7 @@ class Converter
     /**
      * @return array
      */
-    public function getConfigs()
+    public function getConfigs(): array
     {
         return $this->configs;
     }
@@ -111,7 +111,7 @@ class Converter
      *
      * @return array
      */
-    public function convert(ConfigInterface $config, $dryRun = false, $diff = false, $outputExt = '')
+    public function convert(ConfigInterface $config, bool $dryRun = false, bool $diff = false, string $outputExt = ''): array
     {
         $this->sortConverters();
 
@@ -143,7 +143,7 @@ class Converter
      *
      * @return array
      */
-    public function conVertFile(\SplFileInfo $file, array $converter, $dryRun, $diff, $outputExt)
+    public function conVertFile(\SplFileInfo $file, array $converter, bool $dryRun, bool $diff, string $outputExt): array
     {
         $new = $old = file_get_contents($file->getRealpath());
         $appliedConverters = array();
@@ -188,7 +188,7 @@ class Converter
      *
      * @return string
      */
-    protected function stringDiff($old, $new)
+    protected function stringDiff(string $old, string $new): string
     {
         $diff = $this->diff->diff($old, $new);
 
@@ -218,7 +218,7 @@ class Converter
      *
      * @return void
      */
-    private function sortConverters()
+    private function sortConverters(): void
     {
         usort(
             $this->converters,
