@@ -29,6 +29,8 @@ class FilterNameMap
         'oxwordwrap'        => 'wordwrap',
         'count'             => 'length',
         'strip_tags'        => 'striptags',
+        'oxupper'           => 'upper',
+        'oxlower'           => 'lower'
     ];
 
     public static function getConvertedFilterName(string $filterName): string
