@@ -13,7 +13,7 @@ class OxpriceConverter extends AbstractSingleTagConverter
 {
 
     protected $name = 'oxprice';
-    protected $description = "Convert smarty {oxprice} to twig function {{ oxprice() }}";
+    protected $description = "Convert smarty {oxprice} to twig function {{ format_price() }}";
     protected $priority = 100;
     protected $convertedName = 'format_price';
 

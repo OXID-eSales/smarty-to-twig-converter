@@ -13,7 +13,7 @@ class OxcontentConverter extends ConverterAbstract
 {
 
     protected $name = 'oxcontent';
-    protected $description = "Convert smarty {oxcontent} to twig function {{ oxcontent() }}";
+    protected $description = "Convert smarty {oxcontent} to twig function {% include 'content::...' %}";
     protected $priority = 100;
 
     /**
