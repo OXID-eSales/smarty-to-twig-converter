@@ -63,7 +63,7 @@ class AssignConverterTest extends TestCase
             ],
             [
                 "[{assign var=\"template_title\" value=\"MY_WISH_LIST\"|oxmultilangassign}]",
-                "{% set template_title = \"MY_WISH_LIST\"|oxmultilangassign %}"
+                "{% set template_title = \"MY_WISH_LIST\"|translate %}"
             ]
         ];
     }

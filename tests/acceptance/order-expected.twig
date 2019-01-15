@@ -2,11 +2,11 @@
 
     {% block checkout_order_errors %}
         {% if oView.isConfirmAGBError() == 1 %}
-            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|oxmultilangassign} %}
+            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}
         {% endif %}
         {% set iError = oView.getAddressError() %}
         {% if iError == 1 %}
-           {% include "message/error.html.twig" with {statusMessage: "ERROR_DELIVERY_ADDRESS_WAS_CHANGED_DURING_CHECKOUT"|oxmultilangassign} %}
+           {% include "message/error.html.twig" with {statusMessage: "ERROR_DELIVERY_ADDRESS_WAS_CHANGED_DURING_CHECKOUT"|translate} %}
         {% endif %}
     {% endblock %}
 
@@ -188,7 +188,7 @@
                                     {% endifcontent %}
                                 {% endif %}
 
-                                {% if payment.oxpayments__oxid.value eq "oxidcashondel" and oViewConf.isFunctionalityEnabled("blShowTSCODMessage") %}
+                                {% if payment.oxpayments__oxid.value == "oxidcashondel" and oViewConf.isFunctionalityEnabled("blShowTSCODMessage") %}
                                     {% ifcontent ident "oxtscodmessage" set oTSCODContent %}
                                         <hr/>
                                         <div class="clear">

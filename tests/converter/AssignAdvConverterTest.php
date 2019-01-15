@@ -56,7 +56,7 @@ class AssignAdvConverterTest extends AbstractConverterTest
             ],
             [
                 "[{assign_adv var=\"template_title\" value=\"MY_WISH_LIST\"|oxmultilangassign}]",
-                "{% set template_title = assign_advanced(\"MY_WISH_LIST\"|oxmultilangassign) %}"
+                "{% set template_title = assign_advanced(\"MY_WISH_LIST\"|translate) %}"
             ],
             // Example for assign_dev function
             [

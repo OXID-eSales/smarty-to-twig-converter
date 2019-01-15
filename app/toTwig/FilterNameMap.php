@@ -14,19 +14,21 @@ namespace toTwig;
 class FilterNameMap
 {
     const nameMap = [
-        'smartwordwrap' => 'smart_wordwrap',
-        'date_format' => 'date_format',
-        'oxaddparams' => 'add_url_parameters',
-        'oxaddslashes' => 'add_slashes',
-        'oxenclose' => 'enclose',
-        'oxfilesize' => 'file_size',
-        'oxformattime' => 'format_time',
-        'oxformdate' => 'format_date',
+        'smartwordwrap'     => 'smart_wordwrap',
+        'date_format'       => 'date_format',
+        'oxaddparams'       => 'add_url_parameters',
+        'oxaddslashes'      => 'add_slashes',
+        'oxenclose'         => 'enclose',
+        'oxfilesize'        => 'file_size',
+        'oxformattime'      => 'format_time',
+        'oxformdate'        => 'format_date',
         'oxmultilangassign' => 'translate',
-        'oxmultilangsal' => 'translate_salutation',
-        'oxnubmerformat' => 'format_currency',
-        'oxtruncate' => 'truncate',
-        'oxwordwrap' => 'wordwrap',
+        'oxmultilangsal'    => 'translate_salutation',
+        'oxnubmerformat'    => 'format_currency',
+        'oxtruncate'        => 'truncate',
+        'oxwordwrap'        => 'wordwrap',
+        'count'             => 'length',
+        'strip_tags'        => 'striptags',
     ];
 
     public static function getConvertedFilterName(string $filterName): string
