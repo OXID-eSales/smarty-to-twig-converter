@@ -64,7 +64,7 @@ class IncludeConverter extends ConverterAbstract
                 $attr = $this->attributes($match);
 
                 $replace = array();
-                $replace['template'] = $attr[$this->attrName];
+                $replace['template'] = preg_replace('/\.tpl/', '.html.twig', $attr[$this->attrName]);
 
                 if (isset($attr['insert'])) {
                     unset($attr['insert']);

@@ -2,16 +2,16 @@
 
     {% block checkout_order_errors %}
         {% if oView.isConfirmAGBError() == 1 %}
-            {% include "message/error.tpl" with {statusMessage: "READ_AND_CONFIRM_TERMS"|oxmultilangassign} %}
+            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|oxmultilangassign} %}
         {% endif %}
         {% set iError = oView.getAddressError() %}
         {% if iError == 1 %}
-           {% include "message/error.tpl" with {statusMessage: "ERROR_DELIVERY_ADDRESS_WAS_CHANGED_DURING_CHECKOUT"|oxmultilangassign} %}
+           {% include "message/error.html.twig" with {statusMessage: "ERROR_DELIVERY_ADDRESS_WAS_CHANGED_DURING_CHECKOUT"|oxmultilangassign} %}
         {% endif %}
     {% endblock %}
 
     {# ordering steps #}
-    {% include "page/checkout/inc/steps.tpl" with {active: 4} %}
+    {% include "page/checkout/inc/steps.html.twig" with {active: 4} %}
 
     {% block checkout_order_main %}
         {% if not oView.showOrderButtonOnTop() %}
@@ -47,7 +47,7 @@
                                         <input type="hidden" name="challenge" value="{{ challenge }}">
                                         <input type="hidden" name="sDeliveryAddressMD5" value="{{ oView.getDeliveryAddressMD5() }}">
 
-                                        {% include "page/checkout/inc/agb.tpl" %}
+                                        {% include "page/checkout/inc/agb.html.twig" %}
 
                                         <div class="lineBox clear">
                                             <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
@@ -92,7 +92,7 @@
                         <dl>
                             <dt>{{ translate({ ident: "BILLING_ADDRESS" }) }}</dt>
                             <dd>
-                                {% include "widget/address/billing_address.tpl" %}
+                                {% include "widget/address/billing_address.html.twig" %}
                             </dd>
                         </dl>
                         {% set oDelAdress = oView.getDelAddress() %}
@@ -100,7 +100,7 @@
                         <dl class="shippingAddress">
                             <dt>{{ translate({ ident: "SHIPPING_ADDRESS" }) }}</dt>
                             <dd>
-                                {% include "widget/address/shipping_address.tpl" with {delivadr: oDelAdress} %}
+                                {% include "widget/address/shipping_address.html.twig" with {delivadr: oDelAdress} %}
                             </dd>
                         </dl>
                         {% endif %}
@@ -161,7 +161,7 @@
 
                 <div id="basketContent" class="lineBox clear">
                 {% block order_basket %}
-                    {% include "page/checkout/inc/basketcontents.tpl" with {editable: false} %}
+                    {% include "page/checkout/inc/basketcontents.html.twig" with {editable: false} %}
                 {% endblock %}
 
                 {% block checkout_order_next_step_bottom %}
@@ -199,10 +199,10 @@
                                 <hr/>
 
                                 {% if not oView.showOrderButtonOnTop() %}
-                                    {% include "page/checkout/inc/agb.tpl" %}
+                                    {% include "page/checkout/inc/agb.html.twig" %}
                                     <hr/>
                                 {% else %}
-                                    {% include "page/checkout/inc/agb.tpl" with {hideButtons: true} %}
+                                    {% include "page/checkout/inc/agb.html.twig" with {hideButtons: true} %}
                                 {% endif %}
 
                                 <a href="{{ seo_url({ ident: oViewConf.getPaymentLink() }) }}" class="prevStep submitButton largeButton">{{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
@@ -216,4 +216,4 @@
         {% endblock %}
     {% endblock %}
 {% endset %}
-{% include "layout/page.tpl" %}
+{% include "layout/page.html.twig" %}

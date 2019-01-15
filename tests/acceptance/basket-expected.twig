@@ -1,7 +1,7 @@
 {% set oxidBlock_content %}{{ oxidBlock_content }}
 
     {# ordering steps #}
-    {% include "page/checkout/inc/steps.tpl" with {active: 1} %}
+    {% include "page/checkout/inc/steps.html.twig" with {active: 1} %}
 
     {% block checkout_basket_main %}
         {% set currency = oView.getActCurrency() %}
@@ -42,7 +42,7 @@
             {% endblock %}
 
             <div id="basketContainer" class="lineBox">
-                {% include "page/checkout/inc/basketcontents.tpl" with {editable: true} %}
+                {% include "page/checkout/inc/basketcontents.html.twig" with {editable: true} %}
 
                 {% if oViewConf.getShowVouchers() %}
                     {% block checkout_basket_vouchers %}
@@ -112,9 +112,9 @@
             {% endblock %}
         {% endif %}
         {% if oView.isWrapping() %}
-           {% include "page/checkout/inc/wrapping.tpl" %}
+           {% include "page/checkout/inc/wrapping.html.twig" %}
         {% endif %}
     {% endblock %}
 {% endset %}
 
-{% include "layout/page.tpl" %}
+{% include "layout/page.html.twig" %}

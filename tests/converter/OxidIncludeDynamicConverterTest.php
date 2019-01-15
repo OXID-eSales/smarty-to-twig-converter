@@ -46,17 +46,17 @@ class OxidIncludeDynamicConverterTest extends AbstractConverterTest
             // Basic usage
             [
                 "[{oxid_include_dynamic file=\"form/formparams.tpl\"}]",
-                "{% include_dynamic \"form/formparams.tpl\" %}"
+                "{% include_dynamic \"form/formparams.html.twig\" %}"
             ],
             // Example from OXID
             [
                 "[{oxid_include_dynamic file=\"widget/product/compare_links.tpl\" testid=\"_`\$iIndex`\" type=\"compare\" aid=\$product->oxarticles__oxid->value anid=\$altproduct in_list=\$product->isOnComparisonList() page=\$oView->getActPage()}]",
-                "{% include_dynamic \"widget/product/compare_links.tpl\" with {testid: \"_`\$iIndex`\", type: \"compare\", aid: product.oxarticles__oxid.value, anid: altproduct, in_list: product.isOnComparisonList(), page: oView.getActPage()} %}"
+                "{% include_dynamic \"widget/product/compare_links.html.twig\" with {testid: \"_`\$iIndex`\", type: \"compare\", aid: product.oxarticles__oxid.value, anid: altproduct, in_list: product.isOnComparisonList(), page: oView.getActPage()} %}"
             ],
             // With spaces
             [
                 "[{ oxid_include_dynamic file=\"form/formparams.tpl\" }]",
-                "{% include_dynamic \"form/formparams.tpl\" %}"
+                "{% include_dynamic \"form/formparams.html.twig\" %}"
             ],
         ];
     }

@@ -1,7 +1,7 @@
 {% set oxidBlock_content %}{{ oxidBlock_content }}
 
     {# ordering steps #}
-    {% include "page/checkout/inc/steps.tpl" with {active: 3} %}
+    {% include "page/checkout/inc/steps.html.twig" with {active: 3} %}
 
     {% block checkout_payment_main %}
         {% set currency = oView.getActCurrency() %}
@@ -97,13 +97,13 @@
                         {% set inptcounter = "`$inptcounter+1`" %}
                         {% block select_payment %}
                             {% if sPaymentID == "oxidcashondel" %}
-                                {% include "page/checkout/inc/payment_oxidcashondel.tpl" %}
+                                {% include "page/checkout/inc/payment_oxidcashondel.html.twig" %}
                             {% elseif sPaymentID == "oxidcreditcard" %}
-                                {% include "page/checkout/inc/payment_oxidcreditcard.tpl" %}
+                                {% include "page/checkout/inc/payment_oxidcreditcard.html.twig" %}
                             {% elseif sPaymentID == "oxiddebitnote" %}
-                                {% include "page/checkout/inc/payment_oxiddebitnote.tpl" %}
+                                {% include "page/checkout/inc/payment_oxiddebitnote.html.twig" %}
                             {% else %}
-                                {% include "page/checkout/inc/payment_other.tpl" %}
+                                {% include "page/checkout/inc/payment_other.html.twig" %}
                             {% endif %}
                         {% endblock %}
                     {% endfor %}
@@ -140,4 +140,4 @@
     {% endblock %}
 {% endset %}
 
-{% include "layout/page.tpl" %}
+{% include "layout/page.html.twig" %}

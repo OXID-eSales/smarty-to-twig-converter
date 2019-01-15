@@ -1,7 +1,7 @@
 {% set oxidBlock_content %}{{ oxidBlock_content }}
 
     {# ordering steps #}
-    {% include "page/checkout/inc/steps.tpl" with {active: 5} %}
+    {% include "page/checkout/inc/steps.html.twig" with {active: 5} %}
 
     {% block checkout_thankyou_main %}
         {% set order = oView.getOrder() %}
@@ -39,9 +39,9 @@
                 <h1 class="pageHead">
                      {{ translate({ ident: "WHO_BOUGHT_ALSO_BOUGHT", suffix: "COLON" }) }}
                 </h1>
-                {% include "widget/product/list.tpl" with {type: oView.getListDisplayType(), listId: "alsoBoughtThankyou", products: oView.getAlsoBoughtTheseProducts(), blDisableToCart: true} %}
+                {% include "widget/product/list.html.twig" with {type: oView.getListDisplayType(), listId: "alsoBoughtThankyou", products: oView.getAlsoBoughtTheseProducts(), blDisableToCart: true} %}
             {% endif %}
         </div>
     {% endblock %}
 {% endset %}
-{% include "layout/page.tpl" %}
+{% include "layout/page.html.twig" %}
