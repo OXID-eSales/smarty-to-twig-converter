@@ -125,7 +125,7 @@ abstract class ConverterAbstract
     {
         //Initialize variables
         $attr = $pairs = [];
-        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?[^\s}]*))/';
+        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}])*))/';
 
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
@@ -170,12 +170,22 @@ abstract class ConverterAbstract
             return $string;
         }
 
-        // Handle && and ||
-        if ($string == '&&') {
-            return 'and';
+        // Handle "..." and '...'
+        if (preg_match("/^\".*\"$/", $string) ||  preg_match("/^'.*'$/", $string)) {
+            return $string;
         }
-        if ($string == '||') {
-            return 'or';
+
+        // Handle operators
+        switch ($string) {
+            case '&&':              return 'and';
+            case '||':              return 'or';
+            case 'eq':              return '==';
+            case 'ne':case 'neq':   return '!=';
+            case 'gt':              return '>';
+            case 'lt':              return '<';
+            case 'gte':case 'ge':   return '>=';
+            case 'lte':case 'le':   return '<=';
+            case 'mod':             return '%';
         }
 
         // Handle "($var"
@@ -184,7 +194,7 @@ abstract class ConverterAbstract
         }
 
         // Handle "!$var"
-        if (preg_match("/(?<=[(\\s]|^)!(?=[$]?\\w*)/", $string)) {
+        if (preg_match("/(?<=[(\\s]|^)!(?!=)(?=[$]?\\w*)/", $string)) {
             return "not " . $this->value(ltrim($string, "!"));
         }
 
@@ -233,7 +243,7 @@ abstract class ConverterAbstract
     private function convertFilters(string $string): string
     {
         return preg_replace_callback(
-            "/\|\w+\:[^\s}|]*/",
+            '/\|@?(?:\w+)(?:\:|\b)(?:"\s+"|\'\s+\'|[^\s}|])*/',
             function ($matches) {
                 $expression = $matches[0];
                 $expression = ltrim($expression, "|");
@@ -241,6 +251,7 @@ abstract class ConverterAbstract
                 $parts = explode(":", $expression);
 
                 $value = array_shift($parts);
+                $value = ltrim($value, "@");
                 $value = $this->value($value);
 
                 foreach ($parts as &$part) {
@@ -249,7 +260,7 @@ abstract class ConverterAbstract
 
                 $convertedFilterName = FilterNameMap::getConvertedFilterName($value);
 
-                return sprintf("|$convertedFilterName(%s)", implode(", ", $parts));
+                return "|$convertedFilterName" . (!empty($parts) ? ("(" . implode(", ", $parts) . ")") : "");
             },
             $string
         );
@@ -264,6 +275,16 @@ abstract class ConverterAbstract
      */
     protected function convertExpression(string $expression): string
     {
+        $expression = $this->convertFilters($expression);
+
+        $expression = preg_replace_callback(
+            "/(\S+)(\+|-(?!>)|\*|\/|%)(\S+)/",
+            function ($matches) {
+                return $matches[1] . " " . $matches[2] . " " . $matches[3];
+            },
+            $expression
+        );
+
         $parts = explode(" ", $expression);
         foreach ($parts as &$part) {
             $part = $this->value($part);

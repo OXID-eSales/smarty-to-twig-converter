@@ -52,7 +52,7 @@ class OxscriptConverterTest extends AbstractConverterTest
             ],
             [
                 "[{oxscript add=\"\$( document ).ready( function() { Flow.initDetailsEvents(); });\"}]",
-                "{{ script({ add: \"$(document).ready(function() { Flow.initDetailsEvents(); });\", dynamic: __oxid_include_dynamic }) }}"
+                "{{ script({ add: \"$( document ).ready( function() { Flow.initDetailsEvents(); });\", dynamic: __oxid_include_dynamic }) }}"
             ],
             [
                 "[{oxscript widget=\$oView->getClassName()}]",
