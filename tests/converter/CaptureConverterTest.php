@@ -61,7 +61,7 @@ class CaptureConverterTest extends TestCase
      */
     public function testThatHaveExpectedName()
     {
-        $this->assertEquals('CaptureConverter', $this->converter->getName());
+        $this->assertEquals('capture', $this->converter->getName());
     }
 
     /**

@@ -57,7 +57,7 @@ class OxevalConverterTest extends AbstractConverterTest
      */
     public function testThatHaveExpectedName()
     {
-        $this->assertEquals('OxevalConverter', $this->converter->getName());
+        $this->assertEquals('oxeval', $this->converter->getName());
     }
 
     /**

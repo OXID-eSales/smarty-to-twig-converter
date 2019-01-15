@@ -6,7 +6,7 @@ use toTwig\ConverterAbstract;
 
 class OxevalConverter extends ConverterAbstract
 {
-    protected $name = 'OxevalConverter';
+    protected $name = 'oxeval';
     protected $description = 'Converts oxeval function into Twig\'s template_from_string';
     protected $priority = 1000;
 

@@ -16,7 +16,7 @@ use toTwig\ConverterAbstract;
 class CaptureConverter extends ConverterAbstract
 {
 
-    protected $name = 'CaptureConverter';
+    protected $name = 'capture';
     protected $description = 'Converts Smarty Capture into Twig set';
     protected $priority = 100;
 
