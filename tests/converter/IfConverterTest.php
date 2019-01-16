@@ -60,7 +60,7 @@ class IfConverterTest extends TestCase
             [
                 // Test an if with an elseif and else clause.
                 "[{if \$foo|bar:3 or !\$foo[3]}]\nbar\n[{elseif \$awesome->sauce[1] and blue and \"hello\"}]\nfoo\n[{else}]\nbar\n[{/if}]",
-                "{% if foo|bar(3) or not foo[3] %}\nbar\n{% elseif awesome.sauce[1] and blue and \"hello\" %}\nfoo\n{% else %}\nbar\n{% endif %}"
+                "{% if foo|bar(3) or not foo[3] %}\nbar\n{% elseif awesome.sauce[1] and \"blue\" and \"hello\" %}\nfoo\n{% else %}\nbar\n{% endif %}"
             ],
             [
                 // Test an if statement with parenthesis.

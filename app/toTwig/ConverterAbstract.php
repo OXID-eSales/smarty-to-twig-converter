@@ -171,7 +171,7 @@ abstract class ConverterAbstract
         }
 
         // Handle "..." and '...'
-        if (preg_match("/^\".*\"$/", $string) ||  preg_match("/^'.*'$/", $string)) {
+        if (preg_match("/^\"[^\"]*\"$/", $string) ||  preg_match("/^'[^']*'$/", $string)) {
             return $string;
         }
 
@@ -186,6 +186,13 @@ abstract class ConverterAbstract
             case 'gte':case 'ge':   return '>=';
             case 'lte':case 'le':   return '<=';
             case 'mod':             return '%';
+        }
+
+        // Handle non-quoted strings
+        if (preg_match("/^[a-zA-Z]\w+$/", $string)) {
+            if (!in_array($string, ["true", "false", "and", "or"])) {
+                return "\"" . $string . "\"";
+            }
         }
 
         // Handle "($var"
@@ -252,7 +259,6 @@ abstract class ConverterAbstract
 
                 $value = array_shift($parts);
                 $value = ltrim($value, "@");
-                $value = $this->value($value);
 
                 foreach ($parts as &$part) {
                     $part = $this->value($part);
@@ -278,7 +284,7 @@ abstract class ConverterAbstract
         $expression = $this->convertFilters($expression);
 
         $expression = preg_replace_callback(
-            "/(\S+)(\+|-(?!>)|\*|\/|%)(\S+)/",
+            "/(\S+)(\+|-(?!>)|\*|\/|%|&&|\|\|)(\S+)/",
             function ($matches) {
                 return $matches[1] . " " . $matches[2] . " " . $matches[3];
             },
