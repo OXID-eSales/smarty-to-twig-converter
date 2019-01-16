@@ -367,4 +367,14 @@ abstract class ConverterAbstract
     {
         return trim($string, '\'"');
     }
+
+    /**
+     * @param $templateName
+     *
+     * @return string
+     */
+    public function convertFileExtension($templateName): string
+    {
+        return preg_replace('/\.tpl/', '.html.twig', $templateName);
+    }
 }

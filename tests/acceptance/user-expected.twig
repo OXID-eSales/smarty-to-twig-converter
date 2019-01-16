@@ -25,4 +25,6 @@
         {% endblock %}
     {% endblock %}
 {% endset %}
+{{ insert_new_basket_item({tpl: "widget/minibasket/newbasketitemmsg.html.twig", type: "message"}) }}
+{% include "oxid_content" with {ident: "foo"} %}
 {% include "layout/page.html.twig" %}

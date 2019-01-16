@@ -1,12 +1,7 @@
 <?php
-
 /**
- * This file is part of the PHP ST utility.
- *
- * (c) Sankar suda <sankar.suda@gmail.com>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
 
 namespace toTwig\Converter;
@@ -14,26 +9,29 @@ namespace toTwig\Converter;
 use toTwig\ConverterAbstract;
 
 /**
- * @author sankara <sankar.suda@gmail.com>
+ * Class InsertTrackerConverter
+ *
+ * @package toTwig\Converter
+ * @author  Jędrzej Skoczek
  */
-class IncludeConverter extends ConverterAbstract
+class InsertTrackerConverter extends ConverterAbstract
 {
 
-    protected $name = 'include';
-    protected $description = 'Convert smarty include to twig include';
-    protected $priority = 100;
+    protected $name = 'oxid_tracker';
+    protected $description = 'Convert insert oxid_tracker to twig insert_tracker';
+    protected $priority = 110;
 
     protected $pattern;
-    protected $string = '{% include :template :with :vars %}';
-    protected $attrName = 'file';
+    protected $string = '{{ insert_tracker(:vars) }}';
+    protected $attrName = 'name';
 
     /**
-     * IncludeConverter constructor.
+     * InsertTrackerConverter constructor.
      */
     public function __construct()
     {
-        // [{include other stuff}]
-        $this->pattern = $this->getOpeningTagPattern('include');
+        // [{insert other stuff}]
+        $this->pattern = $this->getOpeningTagPattern('insert');
     }
 
     /**
@@ -56,15 +54,21 @@ class IncludeConverter extends ConverterAbstract
     {
         $pattern = $this->pattern;
         $string = $this->string;
+        $name = $this->name;
 
         return preg_replace_callback(
             $pattern,
-            function ($matches) use ($string) {
+            function ($matches) use ($string, $name) {
                 $match = $matches[1];
                 $attr = $this->attributes($match);
 
                 $replace = array();
-                $replace['template'] = $this->convertFileExtension($attr[$this->attrName]);
+                $templateName = $this->variable($attr[$this->attrName]);
+                if ($templateName != $name) {
+                    return $matches[0];
+                }
+
+                $replace['template'] = $attr[$this->attrName];
 
                 if (isset($attr['insert'])) {
                     unset($attr['insert']);

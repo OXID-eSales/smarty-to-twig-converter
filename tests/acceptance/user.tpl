@@ -25,4 +25,6 @@
         [{/block}]
     [{/block}]
 [{/capture}]
+[{insert name="oxid_newbasketitem" tpl="widget/minibasket/newbasketitemmsg.tpl" type="message"}]
+[{insert name="oxid_content" ident="foo"}]
 [{include file="layout/page.tpl"}]

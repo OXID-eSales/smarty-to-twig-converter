@@ -98,7 +98,7 @@ class BlockConverter extends ConverterAbstract
                 $attr = $this->attributes($match);
 
                 $file = $this->value(reset($attr));
-                $file = str_replace(".tpl", ".html.twig", $file);
+                $file = $this->convertFileExtension($file);
 
                 return sprintf("{%% extends %s %%}", $file);
             },
