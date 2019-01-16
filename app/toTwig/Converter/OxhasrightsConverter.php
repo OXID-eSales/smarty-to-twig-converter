@@ -39,7 +39,7 @@ class OxhasrightsConverter extends ConverterAbstract
     {
         // [{/oxhasrights}]
         $search = $this->getClosingTagPattern('oxhasrights');
-        $replace = "{% endoxhasrights %}";
+        $replace = "{% endhasrights %}";
 
         return preg_replace($search, $replace, $content);
     }
