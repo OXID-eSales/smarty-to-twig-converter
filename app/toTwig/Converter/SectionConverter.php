@@ -19,6 +19,8 @@ class SectionConverter extends ConverterAbstract
     protected $name = 'section';
     protected $description = 'Convert smarty {section} to twig {for}';
 
+    protected $priority = 20;
+
     /**
      * Function converts smarty {section} tags to twig {for}
      *
@@ -45,7 +47,6 @@ class SectionConverter extends ConverterAbstract
     private function replaceSectionOpeningTag(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('section');
-        $pattern = '/\[\{\s*section\b\s*([^{}]+)?\s*\}\]/';
         $string = '{% for :name in :start..:loop %}';
 
         return preg_replace_callback(
@@ -58,6 +59,9 @@ class SectionConverter extends ConverterAbstract
                 if (!isset($attr['start'])) {
                     $attr['start'] = 0;
                 }
+
+                $attr['name'] = $this->variable($attr['name']);
+
                 $replace = $attr;
                 $string = $this->vsprintf($string, $replace);
 
