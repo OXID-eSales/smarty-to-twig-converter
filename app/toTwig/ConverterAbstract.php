@@ -179,6 +179,7 @@ abstract class ConverterAbstract
         switch ($string) {
             case '&&':              return 'and';
             case '||':              return 'or';
+            case '===':             return '==';
             case 'eq':              return '==';
             case 'ne':case 'neq':   return '!=';
             case 'gt':              return '>';
