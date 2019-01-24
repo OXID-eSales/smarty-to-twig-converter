@@ -33,7 +33,7 @@ class OxevalConverter extends ConverterAbstract
 
             $match = $matches[1];
             $attr = $this->attributes($match);
-            $attr['var'] = $this->variable($attr['var']);
+            $attr['var'] = $this->value($attr['var']);
             $string = '{{ include(template_from_string(:var)) }}';
             $string = $this->vsprintf($string, $attr);
 
