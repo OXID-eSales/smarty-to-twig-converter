@@ -39,10 +39,10 @@ class OxinputhelpConverter extends ConverterAbstract
             $match = $matches[1];
             $attr = $this->attributes($match);
             if(isset($attr['ident'])) {
-                $attr['ident'] = $this->variable($attr['ident']);
+                $attr['ident'] = $this->value($attr['ident']);
             }
 
-            $string = '{% include "inputhelp.tpl" with {\'sHelpId\': getSHelpId(:ident), \'sHelpText\': getSHelpText(:ident)} %}';
+            $string = '{% include "inputhelp.html.twig" with {\'sHelpId\': help_id(:ident), \'sHelpText\': help_text(:ident)} %}';
 
             $string = $this->vsprintf($string, $attr);
             // Replace more than one space to single space

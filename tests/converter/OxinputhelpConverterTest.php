@@ -39,7 +39,7 @@ class OxinputhelpConverterTest extends TestCase
         return [
             [
                 '[{oxinputhelp ident="foo"}]',
-                '{% include "inputhelp.tpl" with {\'sHelpId\': getSHelpId(foo), \'sHelpText\': getSHelpText(foo)} %}'
+                '{% include "inputhelp.html.twig" with {\'sHelpId\': help_id("foo"), \'sHelpText\': help_text("foo")} %}'
             ]
         ];
     }
