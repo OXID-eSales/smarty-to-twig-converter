@@ -125,7 +125,7 @@ abstract class ConverterAbstract
     {
         //Initialize variables
         $attr = $pairs = [];
-        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}])*))/';
+        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}]|(}(?!])))*))/';
 
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
@@ -177,21 +177,29 @@ abstract class ConverterAbstract
 
         // Handle operators
         switch ($string) {
-            case '&&':              return 'and';
-            case '||':              return 'or';
-            case '===':             return '==';
-            case 'eq':              return '==';
-            case 'ne':case 'neq':   return '!=';
-            case 'gt':              return '>';
-            case 'lt':              return '<';
-            case 'gte':case 'ge':   return '>=';
-            case 'lte':case 'le':   return '<=';
-            case 'mod':             return '%';
+            case '&&':  return 'and';
+            case '||':  return 'or';
+            case 'mod': return '%';
+            case 'gt':  return '>';
+            case 'lt':  return '<';
+
+            case '===':
+            case 'eq':  return '==';
+
+            case 'ne':
+            case 'neq':
+            case '!==': return '!=';
+
+            case 'gte':
+            case 'ge':  return '>=';
+
+            case 'lte':
+            case 'le':  return '<=';
         }
 
         // Handle non-quoted strings
         if (preg_match("/^[a-zA-Z]\w+$/", $string)) {
-            if (!in_array($string, ["true", "false", "and", "or"])) {
+            if (!in_array($string, ["true", "false", "and", "or", "not"])) {
                 return "\"" . $string . "\"";
             }
         }
