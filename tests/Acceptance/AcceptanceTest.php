@@ -28,7 +28,7 @@ class AcceptanceTest extends TestCase
     {
         $command = new ConvertCommand();
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['path' => $this->getSmartyTemplatePath($templateName), '--ext' => 'twig']);
+        $commandTester->execute(['--path' => $this->getSmartyTemplatePath($templateName), '--ext' => 'twig']);
 
         $this->assertTrue(file_exists($this->getTwigTemplatePath($templateName)));
         $actualTemplate = file_get_contents($this->getTwigTemplatePath($templateName));

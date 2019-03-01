@@ -10,10 +10,11 @@
  */
 
 namespace toTwig\Config;
+
 use toTwig\Converter\ConverterAbstract;
 use toTwig\Finder\FinderInterface;
-use toTwig\ConfigInterface;
-use toTwig\Finder\DefaultFinder;
+use toTwig\SourceConverter\FileConverter;
+use toTwig\SourceConverter\SourceConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
@@ -21,12 +22,32 @@ use toTwig\Finder\DefaultFinder;
 class Config implements ConfigInterface
 {
 
+    /** @var string */
     protected $name;
+
+    /** @var string */
     protected $description;
+
+    /** @var FinderInterface */
     protected $finder;
-    protected $converter;
+
+    /** @var string[] */
+    protected $converters = [];
+
+    /** @var string */
     protected $dir;
-    protected $customConverter;
+
+    /** @var ConverterAbstract[] */
+    protected $customConverters;
+
+    /** @var bool */
+    protected $dryRun = false;
+
+    /** @var bool */
+    protected $diff = false;
+
+    /** @var SourceConverter */
+    private $sourceConverter;
 
     /**
      * Config constructor.
@@ -38,9 +59,8 @@ class Config implements ConfigInterface
     {
         $this->name = $name;
         $this->description = $description;
-        $this->converter = ConverterAbstract::ALL_LEVEL;
-        $this->finder = new DefaultFinder();
-        $this->customConverter = array();
+        $this->customConverters = [];
+        $this->sourceConverter = new FileConverter();
     }
 
     /**
@@ -52,63 +72,23 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $dir
-     */
-    public function setDir(string $dir): void
-    {
-        $this->dir = $dir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDir(): string
-    {
-        return $this->dir;
-    }
-
-    /**
-     * @param \Traversable $finder
+     * @param string[] $converters
      *
      * @return $this
      */
-    public function finder(\Traversable $finder): self
+    public function converters(array $converters): self
     {
-        $this->finder = $finder;
+        $this->converters = $converters;
 
         return $this;
     }
 
     /**
-     * @return DefaultFinder|FinderInterface|\Traversable
-     */
-    public function getFinder(): \Traversable
-    {
-        if ($this->finder instanceof FinderInterface && $this->dir !== null) {
-            $this->finder->setDir($this->dir);
-        }
-
-        return $this->finder;
-    }
-
-    /**
-     * @param ConverterAbstract[] $converter
-     *
-     * @return $this
-     */
-    public function converters(array $converter): self
-    {
-        $this->converter = $converter;
-
-        return $this;
-    }
-
-    /**
-     * @return ConverterAbstract[]|int
+     * @return string[]
      */
     public function getConverters(): array
     {
-        return $this->converter;
+        return $this->converters;
     }
 
     /**
@@ -132,7 +112,7 @@ class Config implements ConfigInterface
      */
     public function addCustomConverter(ConverterAbstract $converter): void
     {
-        $this->customConverter[] = $converter;
+        $this->customConverters[] = $converter;
     }
 
     /**
@@ -140,6 +120,42 @@ class Config implements ConfigInterface
      */
     public function getCustomConverters(): array
     {
-        return $this->customConverter;
+        return $this->customConverters;
+    }
+
+    public function setSourceConverter(SourceConverter $converter): ConfigInterface
+    {
+        $this->sourceConverter = $converter;
+
+        return $this;
+    }
+
+    public function getSourceConverter(): SourceConverter
+    {
+        return $this->sourceConverter;
+    }
+
+    public function isDiff(): bool
+    {
+        return $this->diff;
+    }
+
+    public function diff($diff = true): self
+    {
+        $this->diff = $diff;
+
+        return $this;
+    }
+
+    public function isDryRun(): bool
+    {
+        return $this->dryRun;
+    }
+
+    public function dryRun($dryRun = true): self
+    {
+        $this->dryRun = $dryRun;
+
+        return $this;
     }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="table_a">
+        <column>id</column>
+        <column>column_a</column>
+        <column>column_b</column>
+        <column>column_c</column>
+        <row>
+            <value>1</value>
+            <value>Plain text A</value>
+            <value>Plain text B</value>
+            <value>Plain text C</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>{{ varA }}</value>
+            <value>{{ varB }}</value>
+            <value>[{$varC}]</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>{{ varA }}</value>
+            <null/>
+            <value>[{$varC}]</value>
+        </row>
+    </table>
+    <table name="table_b">
+        <column>id</column>
+        <column>column_a</column>
+        <column>column_b</column>
+        <column>column_c</column>
+        <row>
+            <value>2</value>
+            <value>[{$varA}]</value>
+            <value>[{$varB}}</value>
+            <value>{{ varC }}</value>
+        </row>
+    </table>
+</dataset>

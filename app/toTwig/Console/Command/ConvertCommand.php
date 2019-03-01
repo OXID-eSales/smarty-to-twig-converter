@@ -11,15 +11,21 @@
 
 namespace toTwig\Console\Command;
 
+use DOMDocument;
+use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use toTwig\Config\ConfigInterface;
+use toTwig\ConversionResult;
 use toTwig\Converter;
 use toTwig\Config\Config;
-use toTwig\ConfigInterface;
+use toTwig\SourceConverter\DatabaseConverter;
+use toTwig\SourceConverter\SourceConverter;
+use toTwig\SourceConverter\FileConverter;
 
 /**
  * @author sankar <sankar.suda@gmail.com>
@@ -52,17 +58,20 @@ class ConvertCommand extends Command
         $this
             ->setName('convert')
             ->setDefinition(
-                array(
-                    new InputArgument('path', InputArgument::REQUIRED, 'The path'),
+                [
+                    new InputOption('path', '', InputOption::VALUE_OPTIONAL, 'The path'),
+                    new InputOption('database', '', InputOption::VALUE_REQUIRED, 'Database parameters'),
+                    new InputOption('database-columns', '', InputOption::VALUE_REQUIRED, 'Database columns to convert'),
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration name', null),
+                    new InputOption('config-path', '', InputOption::VALUE_REQUIRED, 'The configuration file path'),
                     new InputOption('converters', '', InputOption::VALUE_REQUIRED, 'A list of converters to run'),
                     new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension'),
                     new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
                     new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt')
-                )
+                ]
             )
-            ->setDescription('Convert a directory or a file')
+            ->setDescription('Convert a directory, file or database entities.')
             ->setHelp(
                 <<<EOF
 The <info>%command.name%</info> command tries to fix as much coding standards
@@ -135,22 +144,19 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $path = $input->getArgument('path');
-        $filesystem = new Filesystem();
-        if (!$filesystem->isAbsolutePath($path)) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
-        }
+        $this->checkInputConstraints($input);
 
-        $config = $this->getConfig($input, $path);
+        $config = $this->getConfig($input);
 
+        $this->converter->setSourceConverter($config->getSourceConverter());
         // register custom converters from config
         $this->converter->registerCustomConverters($config->getCustomConverters());
 
-        $converters = $this->getConverters($input);
+        if ($input->getOption('converters')) {
+            $this->converter->filterConverters(explode(',', $input->getOption('converters')));
+        }
 
-        $config->converters($converters);
-
-        $changed = $this->converter->convert($config, $input->getOption('dry-run'), $input->getOption('diff'), $input->getOption('ext'));
+        $changed = $this->converter->convert($config->isDryRun(), $config->isDiff());
 
         switch ($input->getOption('format')) {
             case 'txt':
@@ -160,7 +166,7 @@ EOF
                 $this->outputXml($input, $output, $changed);
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('The format "%s" is not defined.', $input->getOption('format')));
+                throw new InvalidArgumentException(sprintf('The format "%s" is not defined.', $input->getOption('format')));
         }
 
         return empty($changed) ? 0 : 1;
@@ -168,92 +174,97 @@ EOF
 
     /**
      * @param InputInterface $input
-     * @param string         $path
-     *
-     * @return Config|null
      */
-    private function getConfig(InputInterface $input, string $path): ?Config
+    private function checkInputConstraints(InputInterface $input)
     {
-        $addSuppliedPathFromCli = true;
-
-        if ($input->getOption('config')) {
-            $config = null;
-            foreach ($this->converter->getConfigs() as $c) {
-                if ($c->getName() == $input->getOption('config')) {
-                    $config = $c;
-                    break;
-                }
-            }
-
-            if (null === $config) {
-                throw new \InvalidArgumentException(sprintf('The configuration "%s" is not defined', $input->getOption('config')));
-            }
-        } elseif (file_exists($file = $path . '/.php_st')) {
-            $config = include $file;
-            $addSuppliedPathFromCli = false;
-        } else {
-            $config = $this->defaultConfig;
+        if ($input->getOption('path') && $input->getOption('database')) {
+            throw new InvalidOptionException("Only one of 'path' or 'database' options should be defined.");
         }
-
-        if ($addSuppliedPathFromCli) {
-            if (is_file($path)) {
-                $config->finder(new \ArrayIterator(array(new \SplFileInfo($path))));
-            } else {
-                $config->setDir($path);
-            }
-        }
-
-        return $config;
     }
 
     /**
      * @param InputInterface $input
      *
-     * @return array
+     * @return ConfigInterface
      */
-    private function getConverters(InputInterface $input): array
+    private function getConfig(InputInterface $input): ConfigInterface
     {
-        $allConverters = $this->converter->getConverters();
-
-        $converters = array();
-        // remove/add converters based on the converters option
-        if (preg_match('{(^|,)-}', $input->getOption('converters'))) {
-            foreach ($converters as $key => $converter) {
-                if (preg_match('{(^|,)-' . preg_quote($converter->getName()) . '}', $input->getOption('converters'))) {
-                    unset($converters[$key]);
+        if ($input->getOption('config')) {
+            $config = null;
+            foreach ($this->converter->getConfigs() as $config) {
+                if ($config->getName() == $input->getOption('config')) {
+                    return $config;
                 }
             }
-        } elseif ($input->getOption('converters')) {
-            $names = array_map('trim', explode(',', $input->getOption('converters')));
 
-            foreach ($allConverters as $converter) {
-                if (in_array($converter->getName(), $names) && !in_array($converter, $converters)) {
-                    $converters[] = $converter;
-                }
+            throw new InvalidOptionException(sprintf('The configuration "%s" is not defined', $input->getOption('config')));
+        } elseif ($configPath = $input->getOption('config-path')) {
+            if (!file_exists($configPath)) {
+                throw new InvalidOptionException("The configuration filepath is incorrect. File doesn't exist.");
             }
+
+            return include $configPath;
         } else {
-            $converters = $allConverters;
+            return $this->buildConfig($input);
         }
-
-        return $converters;
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param array           $changed
+     * @param InputInterface $input
+     *
+     * @return Config
+     */
+    private function buildConfig(InputInterface $input)
+    {
+        $config = $this->defaultConfig;
+
+        /** @var SourceConverter */
+        $sourceConverter = null;
+
+        if ($input->getOption('path')) {
+            $sourceConverter = new FileConverter();
+
+            $path = $input->getOption('path');
+
+            if ($path) {
+                $filesystem = new Filesystem();
+                if (!$filesystem->isAbsolutePath($path)) {
+                    $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+                }
+            }
+
+            $sourceConverter
+                ->setPath($path)
+                ->setOutputExtension($input->getOption('ext'));
+        } elseif ($databaseUrl = $input->getOption('database')) {
+            $sourceConverter = new DatabaseConverter($databaseUrl);
+            $sourceConverter->setColumns(explode(',', $input->getOption('database-columns')));
+        }
+
+        $config
+            ->dryRun($input->getOption('dry-run'))
+            ->diff($input->getOption('diff'))
+            ->setSourceConverter($sourceConverter);
+
+        return $config;
+    }
+
+    /**
+     * @param InputInterface     $input
+     * @param OutputInterface    $output
+     * @param ConversionResult[] $changed
      */
     private function outputTxt(InputInterface $input, OutputInterface $output, array $changed): void
     {
         $i = 1;
-        foreach ($changed as $file => $fixResult) {
-            $output->write(sprintf('%4d) %s', $i++, $file));
+        foreach ($changed as $id => $conversionResult) {
+            $output->write(sprintf('%4d) %s', $i++, $id));
             if ($input->hasOption('verbose')) {
-                $output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $fixResult['appliedConverters'])));
+                $output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $conversionResult->getAppliedConverters())));
                 if ($input->getOption('diff')) {
                     $output->writeln('');
                     $output->writeln('<comment>      ---------- begin diff ----------</comment>');
-                    $output->writeln($fixResult['diff']);
+                    $output->writeln($conversionResult->getDiff());
                     $output->writeln('<comment>      ---------- end diff ----------</comment>');
                 }
             }
@@ -268,7 +279,7 @@ EOF
      */
     private function outputXml(InputInterface $input, OutputInterface $output, array $changed): void
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($filesXML = $dom->createElement('files'));
         $i = 1;
         foreach ($changed as $file => $fixResult) {

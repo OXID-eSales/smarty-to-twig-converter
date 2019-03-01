@@ -9,9 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace toTwig;
+namespace toTwig\Config;
 
 use toTwig\Converter\ConverterAbstract;
+use toTwig\SourceConverter\SourceConverter;
 
 /**
  * @author sankar <sankar.suda@gmail.com>
@@ -38,32 +39,11 @@ interface ConfigInterface
     public function getDescription(): string;
 
     /**
-     * Returns an iterator of files to scan.
-     *
-     * @return \Traversable A \Traversable instance that returns \SplFileInfo instances
-     */
-    public function getFinder(): \Traversable;
-
-    /**
      * Returns the converters to run.
      *
-     * @return array|integer A level or a list of converter names
+     * @return ConverterAbstract[] A level or a list of converter names
      */
     public function getConverters();
-
-    /**
-     * Sets the root directory of the project.
-     *
-     * @param string $dir The project root directory
-     */
-    public function setDir(string $dir): void;
-
-    /**
-     * Returns the root directory of the project.
-     *
-     * @return string The project root directory
-     */
-    public function getDir(): string;
 
     /**
      * Adds an instance of a custom converter.
@@ -78,4 +58,17 @@ interface ConfigInterface
      * @return ConverterAbstract[]
      */
     public function getCustomConverters(): array;
+
+    /**
+     * @param SourceConverter $converter
+     *
+     * @return ConfigInterface
+     */
+    public function setSourceConverter(SourceConverter $converter): self;
+
+    public function getSourceConverter(): SourceConverter;
+
+    public function isDryRun(): bool;
+
+    public function isDiff(): bool;
 }

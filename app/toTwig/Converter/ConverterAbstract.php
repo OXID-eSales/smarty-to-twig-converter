@@ -19,8 +19,6 @@ use toTwig\FilterNameMap;
 abstract class ConverterAbstract
 {
 
-    const ALL_LEVEL = 15;
-
     /**
      * @var string Name of the converter.
      *
