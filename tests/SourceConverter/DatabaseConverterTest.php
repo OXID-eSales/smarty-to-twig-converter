@@ -27,12 +27,15 @@ class DatabaseConverterTest extends TestCase
     /** @var Connection */
     private $conn = null;
 
+    /** @var string */
+    private $databasePath = '_datasets/init.db';
+
     /**
      * @covers \toTwig\SourceConverter\DatabaseConverter::convert
      */
     public function testConvert()
     {
-        $databaseConverter = new DatabaseConverter('mysql://converter:converter@localhost:3306/test');
+        $databaseConverter = new DatabaseConverter("sqlite:///$this->databasePath");
 
         $databaseConverter->setColumns(['table_a.column_a', 'table_a.column_b', 'table_b.column_c']);
         $changed = $databaseConverter->convert(false, false, [new VariableConverter()]);
@@ -93,7 +96,7 @@ class DatabaseConverterTest extends TestCase
      */
     public function testConvertDiff()
     {
-        $databaseConverter = new DatabaseConverter('mysql://converter:converter@localhost:3306/test');
+        $databaseConverter = new DatabaseConverter("sqlite:///$this->databasePath");
 
         $databaseConverter->setColumns(['table_a.column_a']);
         $changed = $databaseConverter->convert(true, true, [new VariableConverter()]);
@@ -146,7 +149,7 @@ class DatabaseConverterTest extends TestCase
      */
     public function testConvertDryRun()
     {
-        $databaseConverter = new DatabaseConverter('mysql://converter:converter@localhost:3306/test');
+        $databaseConverter = new DatabaseConverter("sqlite:///$this->databasePath");
 
         $databaseConverter->setColumns(['table_a.column_a']);
         $changed = $databaseConverter->convert(true, false, [new VariableConverter()]);
@@ -198,10 +201,10 @@ class DatabaseConverterTest extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new PDO('mysql:host=localhost;dbname=test', 'converter', 'converter');
+                self::$pdo = new PDO("sqlite:$this->databasePath");
             }
 
-            $this->conn = $this->createDefaultDBConnection(self::$pdo, 'test');
+            $this->conn = $this->createDefaultDBConnection(self::$pdo);
         }
 
         return $this->conn;
