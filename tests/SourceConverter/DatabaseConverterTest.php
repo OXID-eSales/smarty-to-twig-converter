@@ -28,7 +28,7 @@ class DatabaseConverterTest extends TestCase
     private $conn = null;
 
     /** @var string */
-    private $databasePath = '_datasets/init.db';
+    private $databasePath = __DIR__ . '/_datasets/init.db';
 
     /**
      * @covers \toTwig\SourceConverter\DatabaseConverter::convert
