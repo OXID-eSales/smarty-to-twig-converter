@@ -11,8 +11,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * @author sankar <sankar.suda@gmail.com>
  */
@@ -24,12 +22,11 @@ class IfConverter extends ConverterAbstract
     protected $priority = 50;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         // Replace {if }
         $content = $this->replaceIf($content);
@@ -83,11 +80,9 @@ class IfConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                $match = $matches[1];
+                $match = isset($matches[1]) ? $matches[1] : '';
                 $search = $matches[0];
-
                 $match = $this->convertExpression($match);
-
                 $string = sprintf($string, $match);
 
                 return str_replace($search, $string, $search);

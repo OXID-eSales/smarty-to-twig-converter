@@ -14,6 +14,7 @@ namespace toTwig;
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo as FinderSplFileInfo;
+use toTwig\Converter\ConverterAbstract;
 
 /**
  * @author sankar <sankar.suda@gmail.com>
@@ -42,8 +43,22 @@ class Converter
     {
         foreach (Finder::create()->files()->in(__DIR__ . '/Converter') as $file) {
             $class = 'toTwig\\Converter\\' . basename($file, '.php');
+            if(!$this->isInstantiable($class)) {
+                continue;
+            }
             $this->addConverter(new $class());
         }
+    }
+
+    private function isInstantiable($class)
+    {
+        try {
+            $reflectionClass = new \ReflectionClass($class);
+            $isInstantiable = $reflectionClass->isInstantiable();
+        } catch (\ReflectionException $exception) {
+            $isInstantiable = false;
+        }
+        return $isInstantiable;
     }
 
     /**
@@ -153,7 +168,7 @@ class Converter
                 continue;
             }
 
-            $new1 = $convert->convert($file, $new);
+            $new1 = $convert->convert($new);
             if ($new1 != $new) {
                 $appliedConverters[] = $convert->getName();
             }

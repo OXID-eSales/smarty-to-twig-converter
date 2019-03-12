@@ -8,8 +8,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class SectionConverter
  */
@@ -18,18 +16,16 @@ class SectionConverter extends ConverterAbstract
 
     protected $name = 'section';
     protected $description = 'Convert smarty {section} to twig {for}';
-
     protected $priority = 20;
 
     /**
      * Function converts smarty {section} tags to twig {for}
      *
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         $contentReplacedOpeningTag = $this->replaceSectionOpeningTag($content);
         $content = $this->replaceSectionClosingTag($contentReplacedOpeningTag);
@@ -52,23 +48,12 @@ class SectionConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                $match = $matches[1];
-                $search = $matches[0];
+                $replacement = $this->getAttributes($matches);
+                $replacement['start'] = isset($replacement['start']) ? $replacement['start'] : 0;
+                $replacement['name'] = $this->sanitizeVariableName($replacement['name']);
+                $string = $this->replaceNamedArguments($string, $replacement);
 
-                $attr = $this->attributes($match);
-                if (!isset($attr['start'])) {
-                    $attr['start'] = 0;
-                }
-
-                $attr['name'] = $this->variable($attr['name']);
-
-                $replace = $attr;
-                $string = $this->vsprintf($string, $replace);
-
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
-
-                return str_replace($search, $string, $search);
+                return str_replace($matches[0], $string, $matches[0]);
             },
             $content
         );
@@ -84,7 +69,6 @@ class SectionConverter extends ConverterAbstract
     private function replaceSectionClosingTag(string $content): string
     {
         $search = $this->getClosingTagPattern('section');
-        $search = '#\[\{\s*/section\s*\}\]#';
         $replace = '{% endfor %}';
 
         return preg_replace($search, $replace, $content);

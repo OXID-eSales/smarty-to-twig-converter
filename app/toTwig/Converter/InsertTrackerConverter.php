@@ -6,8 +6,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class InsertTrackerConverter
  *
@@ -35,22 +33,11 @@ class InsertTrackerConverter extends ConverterAbstract
     }
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
-     *
-     * @return string
-     */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        return $this->replace($content);
-    }
-
-    /**
      * @param string $content
      *
      * @return string
      */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         $pattern = $this->pattern;
         $string = $this->string;
@@ -59,15 +46,12 @@ class InsertTrackerConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string, $name) {
-                $match = $matches[1];
-                $attr = $this->attributes($match);
-
-                $replace = array();
-                $templateName = $this->variable($attr[$this->attrName]);
+                $attr = $this->getAttributes($matches);
+                $replace = [];
+                $templateName = $this->sanitizeVariableName($attr[$this->attrName]);
                 if ($templateName != $name) {
                     return $matches[0];
                 }
-
                 $replace['template'] = $attr[$this->attrName];
 
                 if (isset($attr['insert'])) {
@@ -79,18 +63,9 @@ class InsertTrackerConverter extends ConverterAbstract
                     $replace['with'] = 'with';
                     unset($attr[$this->attrName]); // We won't need in vars
 
-                    $vars = array();
-                    foreach ($attr as $key => $value) {
-                        $vars[] = $this->variable($key) . ": " . $this->value($value);
-                    }
-
-                    $replace['vars'] = '{' . implode(', ', $vars) . '}';
+                    $replace['vars'] = $this->getOptionalReplaceVariables($attr);
                 }
-
-                $string = $this->vsprintf($string, $replace);
-
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $string = $this->replaceNamedArguments($string, $replace);
 
                 return str_replace($matches[0], $string, $matches[0]);
             },

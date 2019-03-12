@@ -2,8 +2,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class BlockConverter
  *
@@ -17,12 +15,11 @@ class BlockConverter extends ConverterAbstract
     protected $priority = 50;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         $content = $this->replaceBlock($content);
         $content = $this->replaceEndBlock($content);
@@ -59,25 +56,46 @@ class BlockConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = $matches[1];
-
-                $attr = $this->attributes($match);
-                if (isset($attr['name'])) {
-                    $name = $this->value($attr['name']);
-                } else {
-                    $name = $this->value(array_shift($attr));
-                }
-
-                $block = sprintf("{%% block %s %%}", trim($name, '"'));
-
-                if (isset($attr['prepend'])) {
-                    $block .= "{{ parent() }}";
-                }
+                $attr = $this->getAttributes($matches);
+                $name = $this->getSanitizedName($attr);
+                $block = $this->getBlockOpeningTag($name, $attr);
 
                 return $block;
             },
             $content
         );
+    }
+
+    /**
+     * @param array $attr
+     *
+     * @return string
+     */
+    private function getSanitizedName(array $attr): string
+    {
+        if (isset($attr['name'])) {
+            $name = $this->sanitizeValue($attr['name']);
+        } else {
+            $name = $this->sanitizeValue(array_shift($attr));
+        }
+
+        return $name;
+    }
+
+    /**
+     * @param string $name
+     * @param array  $attr
+     *
+     * @return string
+     */
+    private function getBlockOpeningTag(string $name, array $attr): string
+    {
+        $block = sprintf("{%% block %s %%}", trim($name, '"'));
+        if (isset($attr['prepend'])) {
+            $block .= "{{ parent() }}";
+        }
+
+        return $block;
     }
 
     /**
@@ -93,11 +111,8 @@ class BlockConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = $matches[1];
-
-                $attr = $this->attributes($match);
-
-                $file = $this->value(reset($attr));
+                $attr = $this->getAttributes($matches);
+                $file = $this->sanitizeValue(reset($attr));
                 $file = $this->convertFileExtension($file);
 
                 return sprintf("{%% extends %s %%}", $file);

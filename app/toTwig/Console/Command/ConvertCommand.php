@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use toTwig\Converter;
-use toTwig\ConverterAbstract;
 use toTwig\Config\Config;
 use toTwig\ConfigInterface;
 

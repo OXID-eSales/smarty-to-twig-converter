@@ -2,8 +2,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\AbstractSingleTagConverter;
-
 /**
  * Class OxscriptConverter
  *
@@ -15,16 +13,14 @@ class OxscriptConverter extends AbstractSingleTagConverter
     protected $name = 'oxscript';
     protected $description = "Convert smarty {oxscript} to twig function {{ script() }}";
     protected $priority = 100;
-
     protected $convertedName = 'script';
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         // [{tag other stuff}]
         $pattern = $this->getOpeningTagPattern($this->name);
@@ -33,14 +29,13 @@ class OxscriptConverter extends AbstractSingleTagConverter
             $pattern,
             function ($matches) {
                 $match = isset($matches[1]) ? $matches[1] : '';
-                $attributes = $this->attributes($match);
+                $attributes = $this->extractAttributes($match);
                 $attributes['dynamic'] = '__oxid_include_dynamic';
 
                 $arguments = [];
                 foreach ($this->mandatoryFields as $mandatoryField) {
-                    $arguments[] = $this->value($attributes[$mandatoryField]);
+                    $arguments[] = $this->sanitizeValue($attributes[$mandatoryField]);
                 }
-
 
                 if ($this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields)) {
                     $arguments[] = $this->convertArrayToAssocTwigArray($attributes, $this->mandatoryFields);

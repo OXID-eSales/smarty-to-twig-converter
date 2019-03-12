@@ -11,8 +11,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
@@ -24,24 +22,11 @@ class AssignConverter extends ConverterAbstract
     protected $priority = 100;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
-     *
-     * @return string
-     */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        $content = $this->replace($content);
-
-        return $content;
-    }
-
-    /**
      * @param string $content
      *
      * @return string
      */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         // [{assign other stuff}]
         $pattern = $this->getOpeningTagPattern('assign');
@@ -50,8 +35,7 @@ class AssignConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                $match = $matches[1];
-                $attr = $this->attributes($match);
+                $attr = $this->getAttributes($matches);
 
                 if (isset($attr['var'])) {
                     $key = $attr['var'];
@@ -70,12 +54,9 @@ class AssignConverter extends ConverterAbstract
                     $value = next($attr);
                 }
 
-                $key = $this->variable($key);
-                $value = $this->value($value);
-
-                $string = $this->vsprintf($string, ['key' => $key, 'value' => $value]);
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $key = $this->sanitizeVariableName($key);
+                $value = $this->sanitizeValue($value);
+                $string = $this->replaceNamedArguments($string, ['key' => $key, 'value' => $value]);
 
                 return str_replace($matches[0], $string, $matches[0]);
             },

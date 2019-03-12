@@ -11,8 +11,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
@@ -24,12 +22,11 @@ class CommentConverter extends ConverterAbstract
     protected $priority = 52;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         return str_replace(['[{*', '*}]'], ['{#', '#}'], $content);
     }

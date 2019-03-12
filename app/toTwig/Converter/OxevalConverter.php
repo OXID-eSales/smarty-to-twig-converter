@@ -2,47 +2,34 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 class OxevalConverter extends ConverterAbstract
 {
+
     protected $name = 'oxeval';
     protected $description = 'Converts oxeval function into Twig\'s template_from_string';
     protected $priority = 1000;
 
     /**
-     * @param \SplFileInfo $file
      * @param string $content
+     *
      * @return mixed|string
      */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        $return = $this->replace($content);
-        return $return;
-    }
-
-    /**
-     * @param $content
-     * @return null|string|string[]
-     */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         //[{oxeval var="foo"}]
         $pattern = $this->getOpeningTagPattern('oxeval');
-        return preg_replace_callback($pattern, function($matches) {
 
-            $match = $matches[1];
-            $attr = $this->attributes($match);
-            $attr['var'] = $this->value($attr['var']);
-            $string = '{{ include(template_from_string(:var)) }}';
-            $string = $this->vsprintf($string, $attr);
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $attr = $this->getAttributes($matches);
+                $attr['var'] = $this->sanitizeValue($attr['var']);
+                $string = '{{ include(template_from_string(:var)) }}';
+                $string = $this->replaceNamedArguments($string, $attr);
 
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
-
-            return str_replace($matches[0], $string, $matches[0]);
-
-        }, $content);
+                return str_replace($matches[0], $string, $matches[0]);
+            },
+            $content
+        );
     }
-
 }

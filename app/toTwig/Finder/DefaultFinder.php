@@ -12,7 +12,6 @@
 namespace toTwig\Finder;
 
 use Symfony\Component\Finder\Finder;
-use toTwig\FinderInterface;
 
 /**
  * @author sankar <sankar.suda@gmail.com>

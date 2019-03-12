@@ -11,8 +11,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * @author sankar <sankar.suda@gmail.com>
  */
@@ -25,18 +23,17 @@ class ForConverter extends ConverterAbstract
 
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
-    private $replacements = array(
-        'smarty\.foreach.*\.index'     => 'loop.index0',
+    private $replacements = [
+        'smarty\.foreach.*\.index' => 'loop.index0',
         'smarty\.foreach.*\.iteration' => 'loop.index'
-    );
+    ];
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         $content = $this->replaceFor($content);
         $content = $this->replaceEndForEach($content);
@@ -93,40 +90,69 @@ class ForConverter extends ConverterAbstract
             function ($matches) use ($string) {
                 $match = $matches[1];
                 $search = $matches[0];
-                $replace = [];
 
-                // {foreach $users as $user}
                 if (preg_match("/(.*)(?:\bas\b)(.*)/i", $match, $mcs)) {
-                    // {foreach $users as $k => $val}
-                    if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {
-                        if (!isset($replace['key'])) {
-                            $replace['key'] = '';
-                        }
-                        $replace['key'] .= $this->variable($match[1]) . ',';
-                        $mcs[2] = $match[2];
-                    }
-                    $replace['item'] = $this->variable($mcs[2]);
-                    $replace['from'] = $mcs[1];
+                    $replace = $this->getReplaceArgumentsForSmarty3($mcs);
                 } else {
-                    $attr = $this->attributes($match);
-
-                    if (isset($attr['key'])) {
-                        $replace['key'] = $this->variable($attr['key']) . ',';
-                    }
-
-                    $replace['item'] = $this->variable($attr['item']);
-                    $replace['from'] = $attr['from'];
+                    $replace = $this->getReplaceArgumentsForSmarty2($matches);
                 }
-
-                $replace['from'] = $this->value($replace['from']);
-
-                $string = $this->vsprintf($string, $replace);
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $replace['from'] = $this->sanitizeValue($replace['from']);
+                $string = $this->replaceNamedArguments($string, $replace);
 
                 return str_replace($search, $string, $search);
             },
             $content
         );
+    }
+
+    /**
+     * Returns array of replace arguments for foreach function in smarty 3
+     * For example:
+     * {foreach $arrayVar as $itemVar}
+     * or
+     * {foreach $arrayVar as $keyVar=>$itemVar}
+     *
+     * @param array $mcs
+     *
+     * @return array
+     */
+    private function getReplaceArgumentsForSmarty3(array $mcs): array
+    {
+        $replace = [];
+        // {foreach $arrayVar as $keyVar=>$itemVar}
+        if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {
+            if (!isset($replace['key'])) {
+                $replace['key'] = '';
+            }
+            $replace['key'] .= $this->sanitizeVariableName($match[1]) . ',';
+            $mcs[2] = $match[2];
+        }
+        $replace['item'] = $this->sanitizeVariableName($mcs[2]);
+        $replace['from'] = $mcs[1];
+
+        return $replace;
+    }
+
+    /**
+     * Returns array of replace arguments for foreach function in smarty 2
+     * For example:
+     * {foreach from=$myArray key="myKey" item="myItem"}
+     *
+     * @param array $matches
+     *
+     * @return array
+     */
+    private function getReplaceArgumentsForSmarty2(array $matches): array
+    {
+        $attr = $this->getAttributes($matches);
+
+        if (isset($attr['key'])) {
+            $replace['key'] = $this->sanitizeVariableName($attr['key']) . ',';
+        }
+
+        $replace['item'] = $this->sanitizeVariableName($attr['item']);
+        $replace['from'] = $attr['from'];
+
+        return $replace;
     }
 }

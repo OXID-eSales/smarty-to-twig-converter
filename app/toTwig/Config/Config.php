@@ -10,8 +10,7 @@
  */
 
 namespace toTwig\Config;
-
-use toTwig\ConverterAbstract;
+use toTwig\Converter\ConverterAbstract;
 use toTwig\FinderInterface;
 use toTwig\ConfigInterface;
 use toTwig\Finder\DefaultFinder;

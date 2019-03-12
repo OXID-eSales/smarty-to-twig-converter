@@ -1,14 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: jskoczek
- * Date: 24/08/18
- * Time: 16:09
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
 
 namespace toTwig\Converter;
-
-use toTwig\ConverterAbstract;
 
 /**
  * Class CaptureConverter
@@ -17,52 +13,35 @@ class CaptureConverter extends ConverterAbstract
 {
 
     protected $name = 'capture';
-    protected $description = 'Converts Smarty Capture into Twig set';
+    protected $description = 'Converts Smarty Capture into Twig';
     protected $priority = 100;
-
-    /**
-     * @param \SplFileInfo $file
-     * @param string       $content
-     *
-     * @return mixed|string
-     */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        $return = $this->replace($content);
-
-        return $return;
-    }
 
     /**
      * @param string $content
      *
-     * @return null|string|string[]
+     * @return mixed|string
      */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('capture');
         $strippedOpeningTag = preg_replace_callback(
             $pattern,
             function ($matches) {
-
-                $match = $matches[1];
-                $attr = $this->attributes($match);
+                $attr = $this->getAttributes($matches);
                 if (isset($attr['name'])) {
-                    $attr['name'] = $this->variable($attr['name']);
+                    $attr['name'] = $this->sanitizeVariableName($attr['name']);
+                    $string = '{% capture name = ":name" %}';
+                } elseif (isset($attr['append'])) {
+                    $attr['append'] = $this->sanitizeVariableName($attr['append']);
+                    $string = '{% capture append = ":append" %}';
+                } elseif (isset($attr['assign'])) {
+                    $attr['assign'] = $this->sanitizeVariableName($attr['assign']);
+                    $string = '{% capture assign = ":assign" %}';
+                } else {
+                    return $matches[0];
                 }
 
-                $string = '{% set :name %}';
-                if (isset($attr['append'])) {
-                    $attr['append'] = $this->variable($attr['append']);
-                    if (!isset($attr['name'])) {
-                        $attr['name'] = $attr['append'];
-                    }
-                    $string .= '{{ :append }}';
-                }
-
-                $string = $this->vsprintf($string, $attr);
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $string = $this->replaceNamedArguments($string, $attr);
 
                 return str_replace($matches[0], $string, $matches[0]);
             },
@@ -81,17 +60,13 @@ class CaptureConverter extends ConverterAbstract
     {
         // [{/capture}]
         $pattern = '/\[{\s*\/capture([^{]*)\s*}]/';
-        $string = '{% endset %}';
+        $string = '{% endcapture %}';
 
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                $match = $matches[1];
-                $attr = $this->attributes($match);
-
-                $string = $this->vsprintf($string, $attr);
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $attr = $this->getAttributes($matches);
+                $string = $this->replaceNamedArguments($string, $attr);
 
                 return str_replace($matches[0], $string, $matches[0]);
             },

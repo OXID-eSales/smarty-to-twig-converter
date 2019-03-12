@@ -11,8 +11,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
@@ -24,35 +22,19 @@ class VariableConverter extends ConverterAbstract
     protected $priority = 10;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
-     *
-     * @return string
-     */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        $content = $this->replace($content);
-
-        return $content;
-    }
-
-    /**
      * @param string $content
      *
      * @return string
      */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         $pattern = '/\[\{([^{}]+)?\}\]/';
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = $matches[1];
                 $search = $matches[0];
-
-                $match = $this->convertExpression($match);
-
+                $match = $this->convertExpression($matches[1]);
                 $search = str_replace($search, '{{ ' . $match . ' }}', $search);
 
                 return $search;

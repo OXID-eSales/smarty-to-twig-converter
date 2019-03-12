@@ -11,8 +11,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
@@ -33,22 +31,21 @@ class MiscConverter extends ConverterAbstract
     public function __construct()
     {
         $this->replacements = [
-            $this->getOpeningTagPattern('ldelim')  => '',
-            $this->getOpeningTagPattern('rdelim')  => '',
+            $this->getOpeningTagPattern('ldelim') => '',
+            $this->getOpeningTagPattern('rdelim') => '',
             $this->getOpeningTagPattern('literal') => '{# literal #}',
             $this->getClosingTagPattern('literal') => '{# /literal #}',
-            $this->getOpeningTagPattern('strip')   => '{% spaceless %}',
-            $this->getClosingTagPattern('strip')   => '{% endspaceless %}',
+            $this->getOpeningTagPattern('strip') => '{% spaceless %}',
+            $this->getClosingTagPattern('strip') => '{% endspaceless %}',
         ];
     }
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         foreach ($this->replacements as $k => $v) {
             $content = preg_replace($k, $v, $content);

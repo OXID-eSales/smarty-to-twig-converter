@@ -8,8 +8,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class CounterConverter
  */
@@ -21,22 +19,11 @@ class CounterConverter extends ConverterAbstract
     protected $priority = 1000;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
-     *
-     * @return string
-     */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        return $this->replace($content);
-    }
-
-    /**
      * @param string $content
      *
      * @return string
      */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         // [{counter other stuff}]
         $pattern = $this->getOpeningTagPattern('counter');
@@ -45,13 +32,7 @@ class CounterConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                if (!isset($matches[1]) && $matches[0]) {
-                    $match = $matches[0];
-                } else {
-                    $match = $matches[1];
-                }
-
-                $attr = $this->attributes($match);
+                $attr = $this->getAttributes($matches);
 
                 $replace['name'] = $this->getNameAttribute($attr);
                 $replace['direction'] = $this->getDirectionAttribute($attr);
@@ -60,10 +41,7 @@ class CounterConverter extends ConverterAbstract
                 $replace['print'] = $this->getPrintAttribute($attr, $replace['name']);
                 $replace['assign'] = $this->getAssignAttribute($attr, $replace['name']);
 
-                $string = $this->vsprintf($string, $replace);
-
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $string = $this->replaceNamedArguments($string, $replace);
 
                 return str_replace($matches[0], $string, $matches[0]);
             },
@@ -81,7 +59,7 @@ class CounterConverter extends ConverterAbstract
         if (!isset($attr['name'])) {
             $name = 'defaultCounter'; //default name in Smarty
         } else {
-            $name = $this->variable($attr['name']);
+            $name = $this->sanitizeVariableName($attr['name']);
         }
 
         return $name;
@@ -168,7 +146,7 @@ class CounterConverter extends ConverterAbstract
     {
         $assign = '';
         if (isset($attr['assign'])) {
-            $assign = ' {% set ' . $this->variable($attr['assign']) . ' = ' . $name . ' %}';
+            $assign = ' {% set ' . $this->sanitizeVariableName($attr['assign']) . ' = ' . $name . ' %}';
         }
 
         return $assign;

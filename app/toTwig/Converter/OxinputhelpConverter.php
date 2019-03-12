@@ -2,8 +2,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class OxinputhelpConverter
  *
@@ -17,41 +15,28 @@ class OxinputhelpConverter extends ConverterAbstract
     protected $priority = 100;
 
     /**
-     * @param \SplFileInfo $file
      * @param string $content
+     *
      * @return mixed|string
      */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        $return = $this->replace($content);
-        return $return;
-    }
-
-    /**
-     * @param $content
-     * @return null|string|string[]
-     */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('oxinputhelp');
-        return preg_replace_callback($pattern, function($matches) {
 
-            $match = $matches[1];
-            $attr = $this->attributes($match);
-            if(isset($attr['ident'])) {
-                $attr['ident'] = $this->value($attr['ident']);
-            }
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $attr = $this->getAttributes($matches);
+                if (isset($attr['ident'])) {
+                    $attr['ident'] = $this->sanitizeValue($attr['ident']);
+                }
 
-            $string = '{% include "inputhelp.html.twig" with {\'sHelpId\': help_id(:ident), \'sHelpText\': help_text(:ident)} %}';
+                $pattern = '{% include "inputhelp.html.twig" with {\'sHelpId\': help_id(:ident), \'sHelpText\': help_text(:ident)} %}';
+                $string = $this->replaceNamedArguments($pattern, $attr);
 
-            $string = $this->vsprintf($string, $attr);
-            // Replace more than one space to single space
-            $string = preg_replace('!\s+!', ' ', $string);
-
-            return str_replace($matches[0], $string, $matches[0]);
-
-        }, $content);
-
+                return str_replace($matches[0], $string, $matches[0]);
+            },
+            $content
+        );
     }
-
 }

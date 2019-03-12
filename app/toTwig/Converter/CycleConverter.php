@@ -2,8 +2,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class CycleConverter
  *
@@ -17,12 +15,11 @@ class CycleConverter extends ConverterAbstract
     protected $priority = 100;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         // Smarty cycle tag will be converted to custom Twig function oxcycle
         // [{cycle other stuff}]
@@ -33,7 +30,7 @@ class CycleConverter extends ConverterAbstract
             function ($matches) {
                 // If short form [{cycle}] - attributes are empty
                 $match = isset($matches[1]) ? $matches[1] : "";
-                $attributes = $this->attributes($match);
+                $attributes = $this->extractAttributes($match);
 
                 // Different approaches for syntax with and without assignment
                 $assignVar = $this->extractAssignVariableName($attributes);
@@ -88,7 +85,7 @@ class CycleConverter extends ConverterAbstract
     {
         $assignVar = null;
         if (isset($attributes['assign'])) {
-            $assignVar = $this->variable($attributes['assign']);
+            $assignVar = $this->sanitizeVariableName($attributes['assign']);
         }
 
         return $assignVar;
@@ -108,7 +105,7 @@ class CycleConverter extends ConverterAbstract
                 continue;
             }
 
-            $extraParameters[] = $this->variable($name) . ": " . $this->value($value);
+            $extraParameters[] = $this->sanitizeVariableName($name) . ": " . $this->sanitizeValue($value);
         }
 
         return $extraParameters;

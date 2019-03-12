@@ -2,8 +2,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class OxifcontentConverter
  *
@@ -17,19 +15,18 @@ class OxifcontentConverter extends ConverterAbstract
     protected $priority = 50;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return string
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         $assignVar = null;
         $openingPattern = $this->getOpeningTagPattern('oxifcontent');
         if (preg_match($openingPattern, $content, $matches)) {
-            $attributes = $this->attributes($matches[1]);
+            $attributes = $this->getAttributes($matches);
             if (isset($attributes['assign'])) {
-                $assignVar = $this->variable($attributes['assign']);
+                $assignVar = $this->sanitizeVariableName($attributes['assign']);
             }
         }
 
@@ -66,14 +63,12 @@ class OxifcontentConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = $matches[1];
-
-                $attributes = $this->attributes($match);
+                $attributes = $this->getAttributes($matches);
                 $key = isset($attributes['ident']) ? 'ident' : 'oxid';
                 $value = ($key == 'ident') ? $attributes['ident'] : $attributes['oxid'];
                 $set = $attributes['object'] ? (' set ' . $this->rawString($attributes['object'])) : '';
 
-                return sprintf("{%% ifcontent %s %s%s %%}", $key, $this->value($value), $set);
+                return sprintf("{%% ifcontent %s %s%s %%}", $key, $this->sanitizeValue($value), $set);
             },
             $content
         );

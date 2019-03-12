@@ -8,55 +8,22 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class MathConverter
  */
 class MathConverter extends ConverterAbstract
 {
 
-    /**
-     * @param \SplFileInfo $file
-     * @param string       $content
-     *
-     * @return string
-     */
-    public function convert(\SplFileInfo $file, string $content): string
-    {
-        return $this->replace($content);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority(): int
-    {
-        return 1000;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return 'math';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return 'Convert smarty math to twig';
-    }
+    protected $name = 'math';
+    protected $description = "Convert smarty math to twig";
+    protected $priority = 1000;
 
     /**
      * @param string $content
      *
      * @return string
      */
-    private function replace(string $content): string
+    public function convert(string $content): string
     {
         // [{math equation="x + y" x=1 y=2}]
         $pattern = '/\[\{\s*math\b\s*([^{}]+)?\s*\}\]/';
@@ -64,8 +31,7 @@ class MathConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = $this->getMatch($matches);
-                $attr = $this->attributes($match);
+                $attr = $this->getAttributes($matches);
                 $vars = $attr;
                 unset($vars['equation']);
                 unset($vars['format']);
@@ -77,31 +43,12 @@ class MathConverter extends ConverterAbstract
                 $equationTemplate = $this->translateEquationTemplate($attr, $vars);
                 $formattedEquation = $this->mathEquationSprintf($equationTemplate, $vars);
                 $replace['equation'] = $formattedEquation;
-                $string = $this->vsprintf($string, $replace);
-
-                // Replace more than one space to single space
-                $string = preg_replace('!\s+!', ' ', $string);
+                $string = $this->replaceNamedArguments($string, $replace);
 
                 return str_replace($matches[0], $string, $matches[0]);
             },
             $content
         );
-    }
-
-    /**
-     * @param array $matches
-     *
-     * @return string
-     */
-    private function getMatch(array $matches): string
-    {
-        if (!isset($matches[1]) && $matches[0]) {
-            $match = $matches[0];
-        } else {
-            $match = $matches[1];
-        }
-
-        return $match;
     }
 
     /**
@@ -130,7 +77,7 @@ class MathConverter extends ConverterAbstract
      */
     private function translateEquationTemplate(array $attr, array $vars): string
     {
-        $equationTemplate = $this->variable($attr['equation']);
+        $equationTemplate = $this->sanitizeVariableName($attr['equation']);
         $equationTemplate = $this->mathAllVariationsOfRoundSprintf($equationTemplate);
         $equationTemplate = $this->mathAbsSprintf($equationTemplate);
         $equationTemplate = $this->mathPowSprintf($equationTemplate);
@@ -158,7 +105,7 @@ class MathConverter extends ConverterAbstract
             $pattern,
             function ($matches) use ($args) {
                 if (isset($args[$matches[1]])) {
-                    $replace = $this->value($args[$matches[1]]);
+                    $replace = $this->sanitizeValue($args[$matches[1]]);
 
                     return str_replace($matches[0], $replace, $matches[0]);
                 } else {
@@ -357,7 +304,7 @@ class MathConverter extends ConverterAbstract
     {
         $assign = '';
         if (isset($attr['assign'])) {
-            $assign = $this->variable($attr['assign']);
+            $assign = $this->sanitizeVariableName($attr['assign']);
         }
 
         return $assign;

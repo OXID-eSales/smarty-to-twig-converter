@@ -11,6 +11,8 @@
 
 namespace toTwig;
 
+use toTwig\Converter\ConverterAbstract;
+
 /**
  * @author sankar <sankar.suda@gmail.com>
  */

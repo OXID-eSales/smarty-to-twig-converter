@@ -2,8 +2,6 @@
 
 namespace toTwig\Converter;
 
-use toTwig\ConverterAbstract;
-
 /**
  * Class OxcontentConverter
  *
@@ -17,12 +15,11 @@ class OxcontentConverter extends ConverterAbstract
     protected $priority = 100;
 
     /**
-     * @param \SplFileInfo $file
-     * @param string       $content
+     * @param string $content
      *
      * @return null|string|string[]
      */
-    public function convert(\SplFileInfo $file, string $content): string
+    public function convert(string $content): string
     {
         // [{oxcontent other stuff}]
         $pattern = $this->getOpeningTagPattern('oxcontent');
@@ -30,8 +27,7 @@ class OxcontentConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = $matches[1];
-                $attributes = $this->attributes($match);
+                $attributes = $this->getAttributes($matches);
 
                 $key = null;
                 if (isset($attributes['ident'])) {
@@ -40,13 +36,13 @@ class OxcontentConverter extends ConverterAbstract
                     $key = 'oxid';
                 }
 
-                $value = $this->rawString($this->value($attributes[$key]));
+                $value = $this->rawString($this->sanitizeValue($attributes[$key]));
 
                 $templateName = "content::$key::$value";
 
                 $parameters = array_map(
                     function ($attribute) {
-                        return $this->rawString($this->value($attribute));
+                        return $this->rawString($this->sanitizeValue($attribute));
                     },
                     array_filter(
                         $attributes,
@@ -84,7 +80,7 @@ class OxcontentConverter extends ConverterAbstract
     {
         $assignVar = null;
         if (isset($attributes['assign'])) {
-            $assignVar = $this->variable($attributes['assign']);
+            $assignVar = $this->sanitizeVariableName($attributes['assign']);
         }
 
         return $assignVar;
