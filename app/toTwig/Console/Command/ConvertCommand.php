@@ -238,7 +238,9 @@ EOF
                 ->setOutputExtension($input->getOption('ext'));
         } elseif ($databaseUrl = $input->getOption('database')) {
             $sourceConverter = new DatabaseConverter($databaseUrl);
-            $sourceConverter->setColumns(explode(',', $input->getOption('database-columns')));
+            if ($input->getOption('database-columns')) {
+                $sourceConverter->filterColumns(explode(',', $input->getOption('database-columns')));
+            }
         }
 
         $config

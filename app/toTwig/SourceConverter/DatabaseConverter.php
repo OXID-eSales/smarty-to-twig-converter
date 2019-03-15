@@ -18,7 +18,12 @@ class DatabaseConverter extends SourceConverter
     private $connection;
 
     /** @var string[] */
-    private $columns;
+    private $columns = [
+        'oxactions.OXLONGDESC',
+        'oxactions.OXLONGDESC_1',
+        'oxcontents.OXCONTENT',
+        'oxcontents.OXCONTENT_1'
+    ];
 
     /**
      * DatabaseConverter constructor.
@@ -62,30 +67,50 @@ class DatabaseConverter extends SourceConverter
     {
         list($table, $column) = explode('.', $column, 2);
 
-        $sm = $this->connection->getSchemaManager();
-        $primaryKey = $sm->listTableDetails($table)->getPrimaryKey()->getColumns()[0];
+        $schemaManager = $this->connection->getSchemaManager();
+        $primaryKey = $schemaManager->listTableDetails($table)->getPrimaryKey()->getColumns()[0];
 
-        $qb = $this->connection->createQueryBuilder();
-        $qb
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
             ->select($primaryKey, $column)
             ->from($table)
-            ->where($qb->expr()->notLike($column, '""'));
+            ->where($queryBuilder->expr()->notLike($column, '""'));
 
-        $rows = $qb->execute()->fetchAll();
+        $rows = $queryBuilder->execute()->fetchAll();
 
         $changed = [];
         foreach ($rows as $key => $row) {
-            $conversionResult = $this->convertTemplate($row[$column], $diff, $converters);
+            $changed += $this->convertRow($table, $column, $primaryKey, $row, $dryRun, $diff, $converters);
+        }
 
-            if ($conversionResult->hasAppliedConverters()) {
-                if (!$dryRun) {
-                    $this->updateRow($table, $column, $primaryKey, $row[$primaryKey], $conversionResult->getConvertedTemplate());
-                }
+        return $changed;
+    }
 
-                $id = sprintf("%s.%s(%s:%s)", $table, $column, $primaryKey, $row[$primaryKey]);
+    /**
+     * @param string              $table
+     * @param string              $column
+     * @param string              $primaryKey
+     * @param array               $row
+     * @param bool                $dryRun
+     * @param bool                $diff
+     * @param ConverterAbstract[] $converters
+     *
+     * @return array
+     */
+    private function convertRow(string $table, string $column, string $primaryKey, array $row, bool $dryRun, bool $diff, array $converters): array
+    {
+        $changed = [];
 
-                $changed[$id] = $conversionResult;
+        $conversionResult = $this->convertTemplate($row[$column], $diff, $converters);
+
+        if ($conversionResult->hasAppliedConverters()) {
+            if (!$dryRun) {
+                $this->updateRow($table, $column, $primaryKey, $row[$primaryKey], $conversionResult->getConvertedTemplate());
             }
+
+            $id = sprintf("%s.%s(%s:%s)", $table, $column, $primaryKey, $row[$primaryKey]);
+
+            $changed[$id] = $conversionResult;
         }
 
         return $changed;
@@ -100,16 +125,16 @@ class DatabaseConverter extends SourceConverter
      */
     private function updateRow(string $table, string $column, string $primaryKey, string $primaryKeyValue, string $newValue): void
     {
-        $qb = $this->connection->createQueryBuilder();
+        $queryBuilder = $this->connection->createQueryBuilder();
 
-        $qb
+        $queryBuilder
             ->update($table)
             ->set($column, ':newValue')
-            ->where($qb->expr()->eq($primaryKey, ':primaryKeyValue'))
+            ->where($queryBuilder->expr()->eq($primaryKey, ':primaryKeyValue'))
             ->setParameter('newValue', $newValue)
             ->setParameter('primaryKeyValue', $primaryKeyValue);
 
-        $qb->execute();
+        $queryBuilder->execute();
     }
 
     /**
@@ -118,5 +143,33 @@ class DatabaseConverter extends SourceConverter
     public function setColumns(array $columns): void
     {
         $this->columns = $columns;
+    }
+
+    /**
+     * @param string[] $columns
+     */
+    public function filterColumns(array $columns): void
+    {
+        $columns = array_map('trim', $columns);
+
+        if (empty($columns) || $columns[0][0] == '-') {
+            $columns = array_map(
+                function ($column) {
+                    return ltrim($column, '-');
+                }, $columns
+            );
+
+            $this->columns = array_filter(
+                $this->columns, function ($column) use ($columns) {
+                return !in_array($column, $columns);
+            }
+            );
+        } else {
+            $this->columns = array_filter(
+                $this->columns, function ($column) use ($columns) {
+                return in_array($column, $columns);
+            }
+            );
+        }
     }
 }

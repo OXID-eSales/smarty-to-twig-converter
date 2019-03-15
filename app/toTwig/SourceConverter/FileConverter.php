@@ -57,25 +57,41 @@ class FileConverter extends SourceConverter
                 continue;
             }
 
-            $conversionResult = $this->convertTemplate(file_get_contents($file->getRealpath()), $diff, $converters);
-            if ($conversionResult->hasAppliedConverters()) {
-                if (!$dryRun) {
-                    $filename = $this->getConvertedFilename($file);
-
-                    file_put_contents($filename, $conversionResult->getConvertedTemplate());
-                }
-
-                if ($file instanceof FinderSplFileInfo) {
-                    $changed[$file->getRelativePathname()] = $conversionResult;
-                } else {
-                    $changed[$file->getPathname()] = $conversionResult;
-                }
-            }
+            $changed += $this->convertFile($file, $dryRun, $diff, $converters);
         }
 
         return $changed;
     }
 
+    /**
+     * @param SplFileInfo         $file
+     * @param bool                $dryRun
+     * @param bool                $diff
+     * @param ConverterAbstract[] $converters
+     *
+     * @return array
+     */
+    private function convertFile(SplFileInfo $file, bool $dryRun, bool $diff, array $converters): array
+    {
+        $changed = [];
+
+        $conversionResult = $this->convertTemplate(file_get_contents($file->getRealpath()), $diff, $converters);
+        if ($conversionResult->hasAppliedConverters()) {
+            if (!$dryRun) {
+                $filename = $this->getConvertedFilename($file);
+
+                file_put_contents($filename, $conversionResult->getConvertedTemplate());
+            }
+
+            if ($file instanceof FinderSplFileInfo) {
+                $changed[$file->getRelativePathname()] = $conversionResult;
+            } else {
+                $changed[$file->getPathname()] = $conversionResult;
+            }
+        }
+
+        return $changed;
+    }
 
     /**
      * @param Finder $finder

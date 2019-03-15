@@ -25,7 +25,7 @@ class DatabaseConverterTest extends TestCase
     static private $pdo = null;
 
     /** @var Connection */
-    private $conn = null;
+    private $connection = null;
 
     /** @var string */
     private $databasePath = __DIR__ . '/_datasets/init.db';
@@ -45,7 +45,7 @@ class DatabaseConverterTest extends TestCase
         // Compare ConversionResult objects
         $this->assertEquals($expected, $changed);
 
-        $dataset = $this->conn->createDataSet(['table_a', 'table_b']);
+        $dataset = $this->connection->createDataSet(['table_a', 'table_b']);
         $expectedDataset = $this->createXMLDataSet(__DIR__.'/_datasets/expectedConvert.xml');
 
         // Compare database sets
@@ -159,7 +159,7 @@ class DatabaseConverterTest extends TestCase
         // Compare ConversionResult objects
         $this->assertEquals($expected, $changed);
 
-        $dataset = $this->conn->createDataSet(['table_a', 'table_b']);
+        $dataset = $this->connection->createDataSet(['table_a', 'table_b']);
         $expectedDataset = $this->createXMLDataSet(__DIR__.'/_datasets/initial.xml');
 
         // Compare database sets
@@ -199,15 +199,15 @@ class DatabaseConverterTest extends TestCase
      */
     protected function getConnection()
     {
-        if ($this->conn === null) {
+        if ($this->connection === null) {
             if (self::$pdo == null) {
                 self::$pdo = new PDO("sqlite:$this->databasePath");
             }
 
-            $this->conn = $this->createDefaultDBConnection(self::$pdo);
+            $this->connection = $this->createDefaultDBConnection(self::$pdo);
         }
 
-        return $this->conn;
+        return $this->connection;
     }
 
     /**
