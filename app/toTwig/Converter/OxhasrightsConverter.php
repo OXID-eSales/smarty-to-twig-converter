@@ -34,7 +34,6 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceEndOxhasrights(string $content): string
     {
-        // [{/oxhasrights}]
         $search = $this->getClosingTagPattern('oxhasrights');
         $replace = "{% endhasrights %}";
 
@@ -48,7 +47,6 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceOxhasrights(string $content): string
     {
-        // [{oxhasrights other stuff}]
         $pattern = $this->getOpeningTagPattern('oxhasrights');
 
         return preg_replace_callback(

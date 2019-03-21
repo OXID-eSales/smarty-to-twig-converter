@@ -25,12 +25,18 @@ class MathConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{math equation="x + y" x=1 y=2}]
-        $pattern = '/\[\{\s*math\b\s*([^{}]+)?\s*\}\]/';
+        $pattern = $this->getOpeningTagPattern('math');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{math equation="x + y" x=1 y=2}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.
+                 * 'equation="x + y" x=1 y=2}'
+                 */
                 $attr = $this->getAttributes($matches);
                 $vars = $attr;
                 unset($vars['equation']);
@@ -92,8 +98,8 @@ class MathConverter extends ConverterAbstract
     /**
      * Replace named args in string
      *
-     * @param  string $string
-     * @param  array  $args
+     * @param string $string
+     * @param array  $args
      *
      * @return string Formated string
      */

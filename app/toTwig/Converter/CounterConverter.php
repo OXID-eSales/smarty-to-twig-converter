@@ -25,7 +25,6 @@ class CounterConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{counter other stuff}]
         $pattern = $this->getOpeningTagPattern('counter');
         $string = '{% set :name = ( :name | default(:start) ) :direction :skip %}:print:assign';
 

@@ -28,7 +28,6 @@ class AssignConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{assign other stuff}]
         $pattern = $this->getOpeningTagPattern('assign');
         $string = '{% set :key = :value %}';
 

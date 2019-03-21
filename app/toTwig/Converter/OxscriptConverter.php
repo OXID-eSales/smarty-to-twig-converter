@@ -22,7 +22,6 @@ class OxscriptConverter extends AbstractSingleTagConverter
      */
     public function convert(string $content): string
     {
-        // [{tag other stuff}]
         $pattern = $this->getOpeningTagPattern($this->name);
 
         return preg_replace_callback(

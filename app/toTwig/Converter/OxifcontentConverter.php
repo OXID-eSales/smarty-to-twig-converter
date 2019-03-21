@@ -30,7 +30,7 @@ class OxifcontentConverter extends ConverterAbstract
             }
         }
 
-        $content = $this->replaceOxifcontent($content);
+        $content = $this->replaceOxifcontent($openingPattern, $content);
         $content = $this->replaceEndOxifcontent($content);
 
         return ($assignVar ? "{% set $assignVar %}" : '') . $content . ($assignVar ? "{% endset %}" : '');
@@ -43,7 +43,6 @@ class OxifcontentConverter extends ConverterAbstract
      */
     private function replaceEndOxifcontent(string $content): string
     {
-        // [{/oxifcontent}]
         $search = $this->getClosingTagPattern('oxifcontent');
         $replace = "{% endifcontent %}";
 
@@ -51,15 +50,13 @@ class OxifcontentConverter extends ConverterAbstract
     }
 
     /**
+     * @param string $pattern
      * @param string $content
      *
      * @return string
      */
-    private function replaceOxifcontent(string $content): string
+    private function replaceOxifcontent(string $pattern, string $content): string
     {
-        // [{oxifcontent other stuff}]
-        $pattern = $this->getOpeningTagPattern('oxifcontent');
-
         return preg_replace_callback(
             $pattern,
             function ($matches) {

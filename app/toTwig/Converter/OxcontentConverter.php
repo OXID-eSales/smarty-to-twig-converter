@@ -21,7 +21,6 @@ class OxcontentConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{oxcontent other stuff}]
         $pattern = $this->getOpeningTagPattern('oxcontent');
 
         return preg_replace_callback(

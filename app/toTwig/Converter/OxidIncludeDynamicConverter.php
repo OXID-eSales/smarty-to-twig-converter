@@ -22,7 +22,7 @@ class OxidIncludeDynamicConverter extends IncludeConverter
     public function __construct()
     {
         parent::__construct();
-        // [{oxid_include_dynamic other stuff}]
+
         $this->pattern = $this->getOpeningTagPattern('oxid_include_dynamic');
     }
 }

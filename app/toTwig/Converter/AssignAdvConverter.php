@@ -21,7 +21,6 @@ class AssignAdvConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{assign_adv other stuff}]
         $pattern = $this->getOpeningTagPattern('assign_adv');
         $string = '{% set :key = assign_advanced(:value) %}';
 

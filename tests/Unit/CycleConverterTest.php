@@ -97,17 +97,4 @@ class CycleConverterTest extends TestCase
     {
         $this->assertNotEmpty($this->converter->getDescription());
     }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $mock */
-        $mock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $mock;
-    }
 }

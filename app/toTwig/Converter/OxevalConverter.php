@@ -16,7 +16,6 @@ class OxevalConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        //[{oxeval var="foo"}]
         $pattern = $this->getOpeningTagPattern('oxeval');
 
         return preg_replace_callback(

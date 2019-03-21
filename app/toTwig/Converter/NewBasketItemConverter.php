@@ -33,7 +33,6 @@ class NewBasketItemConverter extends ConverterAbstract
      */
     public function __construct()
     {
-        // [{insert other stuff}]
         $this->pattern = $this->getOpeningTagPattern('insert');
     }
 

@@ -36,7 +36,6 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceEndBlock(string $content): string
     {
-        // [{/block}]
         $search = $this->getClosingTagPattern('block');
         $replace = "{% endblock %}";
 
@@ -50,7 +49,6 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceBlock(string $content): string
     {
-        // [{block other stuff}]
         $pattern = $this->getOpeningTagPattern('block');
 
         return preg_replace_callback(
@@ -105,7 +103,6 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceExtends(string $content): string
     {
-        // [{extends other stuff}]
         $pattern = $this->getOpeningTagPattern('extends');
 
         return preg_replace_callback(
@@ -128,7 +125,6 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceParent(string $content): string
     {
-        // [{$smarty.block.parent}]
         $pattern = $this->getOpeningTagPattern('$smarty.block.parent');
 
         return preg_replace($pattern, "{{ parent() }}", $content);

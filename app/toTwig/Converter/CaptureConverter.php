@@ -58,8 +58,7 @@ class CaptureConverter extends ConverterAbstract
      */
     private function stripClosingTag(string $strippedOpeningTag): string
     {
-        // [{/capture}]
-        $pattern = '/\[{\s*\/capture([^{]*)\s*}]/';
+        $pattern = $this->getClosingTagPattern('capture');
         $string = '{% endcapture %}';
 
         return preg_replace_callback(

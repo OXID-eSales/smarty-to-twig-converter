@@ -53,7 +53,6 @@ class ForConverter extends ConverterAbstract
      */
     private function replaceEndForEach(string $content): string
     {
-        // [{/foreach}]
         $search = $this->getClosingTagPattern('foreach');
         $replace = "{% endfor %}";
 
@@ -67,7 +66,6 @@ class ForConverter extends ConverterAbstract
      */
     private function replaceForEachElse(string $content): string
     {
-        // [{foreachelse other stuff}]
         $search = $this->getOpeningTagPattern('foreachelse');
         $replace = "{% else %}";
 
@@ -81,7 +79,6 @@ class ForConverter extends ConverterAbstract
      */
     private function replaceFor(string $content): string
     {
-        // [{foreach other stuff}]
         $pattern = $this->getOpeningTagPattern('foreach');
         $string = '{% for :key :item in :from %}';
 
@@ -119,7 +116,10 @@ class ForConverter extends ConverterAbstract
     private function getReplaceArgumentsForSmarty3(array $mcs): array
     {
         $replace = [];
-        // {foreach $arrayVar as $keyVar=>$itemVar}
+        /**
+         * $pattern is supposed to detect key variable and value variable in structure like this:
+         * [{foreach $arrayVar as $keyVar=>$itemVar}]
+         **/
         if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {
             if (!isset($replace['key'])) {
                 $replace['key'] = '';

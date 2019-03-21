@@ -27,7 +27,10 @@ class InsertConverter extends IncludeConverter
     {
         parent::__construct();
 
-        // [{insert other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{insert name="oxid_content" ident="foo"}]
+         **/
         $this->pattern = $this->getOpeningTagPattern('insert');
     }
 }

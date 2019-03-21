@@ -30,7 +30,6 @@ class IncludeConverter extends ConverterAbstract
      */
     public function __construct()
     {
-        // [{include other stuff}]
         $this->pattern = $this->getOpeningTagPattern('include');
     }
 

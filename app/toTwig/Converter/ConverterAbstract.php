@@ -92,7 +92,13 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Get opening tag pattern: [{tagName other stuff}]
+     * Get opening tag patterns like:
+     *   [{tagName other stuff}]
+     *   [{foreach $myColors as $color}]
+     *
+     * Matching this pattern will give these results:
+     *   $matches[0] contains a string with full matched tag i.e.'[{tagName foo="bar" something="somevalue"}]'
+     *   $matches[1] should contain a string with all other configuration coming with a tag i.e.'foo = "bar" something="somevalue"'
      *
      * @param string $tagName
      *
@@ -104,7 +110,7 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Get closing tag pattern: [{\tagName}]
+     * Get closing tag pattern: [{/tagName}]
      *
      * @param string $tagName
      *
@@ -118,7 +124,7 @@ abstract class ConverterAbstract
     /**
      * Method to extract key/value pairs out of a string with xml style attributes
      *
-     * @param   string $string String containing xml style attributes
+     * @param string $string String containing xml style attributes
      *
      * @return  array   Key/Value pairs for the attributes
      */
@@ -234,7 +240,10 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Handle function arguments (arg1, arg2, arg3)
+     * Handles a case when smarty variable is passed to a function as a parameter
+     * For example:
+     *   smarty: [{ foo($bar)}]
+     *   twig:   {{ foo(bar) }]
      *
      * @param string $string
      *
@@ -260,7 +269,10 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Handle filters [{$var|filter:$var->from:'to'}]
+     * Handle translation of filters
+     * For example:
+     *   smarty: [{ "foo"|smarty_bar) }]
+     *   twig:   {{ "foo"|twig_bar }}
      *
      * @param string $string
      *
@@ -292,7 +304,16 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Explodes expression to parts and converts them separately
+     * Explodes expression to parts to converts them separately
+     * For example:
+     *  input:  ($a+$b)
+     *  output: ($a + $b)
+     *
+     * Matching input pattern will give these results:
+     *   $matches[0] contains a string with full matched tag i.e.'[{($a+$b)}]'
+     *   $matches[1] should contain a string with first part of an expression i.e. $a
+     *   $matches[2] should contain a string with one of following characters: +, -, >, <, *, /, %, &&, ||
+     *   $matches[3] should contain a string with second part of an expression i.e. $b
      *
      * @param string $expression
      *
@@ -320,9 +341,14 @@ abstract class ConverterAbstract
 
     /**
      * Replace named args in string
+     * For example:
+     *   $string = '{% set :key = :value %}'
+     *   $args = ['key' => 'foo', 'value' => 'bar']
      *
-     * @param  string $string
-     * @param  array  $args
+     * return '{% set 'foo' = 'bar' %}'
+     *
+     * @param string $string
+     * @param array  $args
      *
      * @return string
      */
@@ -432,6 +458,7 @@ abstract class ConverterAbstract
 
     /**
      * Used in InsertTrackerConverter nad IncludeConverter
+     *
      * @param array $attr
      *
      * @return string
