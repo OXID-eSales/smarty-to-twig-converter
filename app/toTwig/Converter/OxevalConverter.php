@@ -16,12 +16,21 @@ class OxevalConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        //[{oxeval var="foo"}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{oxeval var=$variable}]
+         **/
         $pattern = $this->getOpeningTagPattern('oxeval');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{oxeval var=$variable}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'var=$variable'
+                 */
                 $attr = $this->getAttributes($matches);
                 $attr['var'] = $this->sanitizeValue($attr['var']);
                 $string = '{{ include(template_from_string(:var)) }}';

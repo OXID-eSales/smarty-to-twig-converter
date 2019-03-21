@@ -28,13 +28,22 @@ class AssignConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{assign other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{assign parameters}]
+         **/
         $pattern = $this->getOpeningTagPattern('assign');
         $string = '{% set :key = :value %}';
 
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{assign var="name" value="Bob""}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'var="name" value="Bob"'
+                 */
                 $attr = $this->getAttributes($matches);
 
                 if (isset($attr['var'])) {

@@ -34,12 +34,21 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{tag other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{tag parameters}]
+         **/
         $pattern = $this->getOpeningTagPattern($this->name);
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{tag foo="bar"}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'foo = "bar"'
+                 */
                 $match = isset($matches[1]) ? $matches[1] : '';
                 $attributes = $this->extractAttributes($match);
 

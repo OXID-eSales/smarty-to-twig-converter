@@ -21,12 +21,21 @@ class OxcontentConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // [{oxcontent other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{oxcontent ident='foo' field='bar'}]
+         **/
         $pattern = $this->getOpeningTagPattern('oxcontent');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{oxcontent ident='foo' field='bar'}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'ident="foo" field="bar"'
+                 */
                 $attributes = $this->getAttributes($matches);
 
                 $key = null;

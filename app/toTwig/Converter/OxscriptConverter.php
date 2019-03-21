@@ -22,12 +22,24 @@ class OxscriptConverter extends AbstractSingleTagConverter
      */
     public function convert(string $content): string
     {
-        // [{tag other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{oxscript include="foo.js" priority=10}]
+         **/
         $pattern = $this->getOpeningTagPattern($this->name);
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.
+                 * '[{oxscript include="foo.js" priority=10}]'
+                 *
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.
+                 * 'include="foo.js" priority=10'
+                 */
                 $match = isset($matches[1]) ? $matches[1] : '';
                 $attributes = $this->extractAttributes($match);
                 $attributes['dynamic'] = '__oxid_include_dynamic';

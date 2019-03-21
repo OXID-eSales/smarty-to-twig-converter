@@ -42,12 +42,25 @@ class SectionConverter extends ConverterAbstract
      */
     private function replaceSectionOpeningTag(string $content): string
     {
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{section name=foo start=1 loop=10}]
+         **/
         $pattern = $this->getOpeningTagPattern('section');
         $string = '{% for :name in :start..:loop %}';
 
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'
+                 * [{section name=foo start=1 loop=10}]'
+                 *
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.
+                 * 'name=foo start=1 loop=10'
+                 */
                 $replacement = $this->getAttributes($matches);
                 $replacement['start'] = isset($replacement['start']) ? $replacement['start'] : 0;
                 $replacement['name'] = $this->sanitizeVariableName($replacement['name']);

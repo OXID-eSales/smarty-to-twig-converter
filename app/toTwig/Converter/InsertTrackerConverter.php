@@ -28,7 +28,10 @@ class InsertTrackerConverter extends ConverterAbstract
      */
     public function __construct()
     {
-        // [{insert other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{insert name="foo" title="foo"}]
+         **/
         $this->pattern = $this->getOpeningTagPattern('insert');
     }
 
@@ -46,6 +49,12 @@ class InsertTrackerConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string, $name) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{insert name="foo" title="foo"}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'name="foo" title="foo"'
+                 */
                 $attr = $this->getAttributes($matches);
                 $replace = [];
                 $templateName = $this->sanitizeVariableName($attr[$this->attrName]);

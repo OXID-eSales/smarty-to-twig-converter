@@ -28,11 +28,21 @@ class VariableConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{$foo}]
+         **/
         $pattern = '/\[\{([^{}]+)?\}\]/';
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{$foo}]'
+                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'$foo'
+                 */
                 $search = $matches[0];
                 $match = $this->convertExpression($matches[1]);
                 $search = str_replace($search, '{{ ' . $match . ' }}', $search);

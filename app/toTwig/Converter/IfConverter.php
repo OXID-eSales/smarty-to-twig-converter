@@ -47,7 +47,10 @@ class IfConverter extends ConverterAbstract
      */
     private function replaceIf(string $content): string
     {
-        // [{if other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{if logic statement}]
+         **/
         $pattern = $this->getOpeningTagPattern('if');
         $string = '{%% if %s %%}';
 
@@ -61,7 +64,10 @@ class IfConverter extends ConverterAbstract
      */
     private function replaceElseIf(string $content): string
     {
-        // [{elseif other stuff}]
+        /**
+         * $pattern is supposed to detect structure like this:
+         * [{elseif logic statement}]
+         **/
         $pattern = $this->getOpeningTagPattern('elseif');
         $string = '{%% elseif %s %%}';
 
@@ -80,6 +86,12 @@ class IfConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
+                /**
+                 * $matches contains an array of strings.
+                 *
+                 * $matches[0] contains a string with full matched tag i.e.'[{if logic statement}]'
+                 * $matches[1] should contain a string with logic statement i.e.'foo === "bar"'
+                 */
                 $match = isset($matches[1]) ? $matches[1] : '';
                 $search = $matches[0];
                 $match = $this->convertExpression($match);
