@@ -144,7 +144,12 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->checkInputConstraints($input);
+        try {
+            $this->checkInputConstraints($input);
+        } catch (InvalidArgumentException $exception) {
+            $output->writeln($this->getHelp());
+            throw $exception;
+        }
 
         $config = $this->getConfig($input);
 
@@ -179,6 +184,14 @@ EOF
     {
         if ($input->getOption('path') && $input->getOption('database')) {
             throw new InvalidOptionException("Only one of 'path' or 'database' options should be defined.");
+        }
+
+        if (
+            $input->getOption('path') == null &&
+            $input->getOption('database') == null &&
+            $input->getOption('config-path') == null
+        ) {
+            throw new InvalidOptionException("One of 'path', 'database' or 'config-path' options should be defined.");
         }
     }
 
