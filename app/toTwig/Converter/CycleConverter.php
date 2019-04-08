@@ -21,21 +21,11 @@ class CycleConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{cycle values="foo, bar"}]
-         **/
         $pattern = $this->getOpeningTagPattern('cycle');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{cycle values="foo, bar"}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'values="foo, bar"'
-                 */
                 // If short form [{cycle}] - attributes are empty
                 $match = isset($matches[1]) ? $matches[1] : "";
                 $attributes = $this->extractAttributes($match);

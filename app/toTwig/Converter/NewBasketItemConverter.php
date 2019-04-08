@@ -33,10 +33,6 @@ class NewBasketItemConverter extends ConverterAbstract
      */
     public function __construct()
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{insert name="foo" tpl="foo.tpl" type="message"}]
-         **/
         $this->pattern = $this->getOpeningTagPattern('insert');
     }
 
@@ -54,14 +50,6 @@ class NewBasketItemConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string, $name) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.
-                 * '[{insert name="foo" tpl="foo.tpl" type="message"}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.
-                 * 'name="foo" tpl="foo.tpl" type="message"'
-                 */
                 $attr = $this->getAttributes($matches);
 
                 $replace = [];

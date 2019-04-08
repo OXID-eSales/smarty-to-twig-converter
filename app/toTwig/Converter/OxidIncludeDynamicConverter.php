@@ -22,10 +22,7 @@ class OxidIncludeDynamicConverter extends IncludeConverter
     public function __construct()
     {
         parent::__construct();
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{oxid_include_dynamic file="form/formparams.tpl"}]
-         **/
+
         $this->pattern = $this->getOpeningTagPattern('oxid_include_dynamic');
     }
 }

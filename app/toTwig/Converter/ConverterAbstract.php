@@ -92,7 +92,13 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Get opening tag pattern: [{tagName other stuff}]
+     * Get opening tag patterns like:
+     *   [{tagName other stuff}]
+     *   [{foreach $myColors as $color}]
+     *
+     * Matching this pattern will give these results:
+     *   $matches[0] contains a string with full matched tag i.e.'[{tagName foo="bar" something="somevalue"}]'
+     *   $matches[1] should contain a string with all other configuration coming with a tag i.e.'foo = "bar" something="somevalue"'
      *
      * @param string $tagName
      *
@@ -104,7 +110,7 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Get closing tag pattern: [{\tagName}]
+     * Get closing tag pattern: [{/tagName}]
      *
      * @param string $tagName
      *
@@ -118,7 +124,7 @@ abstract class ConverterAbstract
     /**
      * Method to extract key/value pairs out of a string with xml style attributes
      *
-     * @param   string $string String containing xml style attributes
+     * @param string $string String containing xml style attributes
      *
      * @return  array   Key/Value pairs for the attributes
      */
@@ -321,8 +327,8 @@ abstract class ConverterAbstract
     /**
      * Replace named args in string
      *
-     * @param  string $string
-     * @param  array  $args
+     * @param string $string
+     * @param array $args
      *
      * @return string
      */

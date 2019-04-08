@@ -34,10 +34,6 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceEndOxhasrights(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{/oxhasrights}]
-         **/
         $search = $this->getClosingTagPattern('oxhasrights');
         $replace = "{% endhasrights %}";
 
@@ -51,21 +47,11 @@ class OxhasrightsConverter extends ConverterAbstract
      */
     private function replaceOxhasrights(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{oxhasrights type=$type}]
-         **/
         $pattern = $this->getOpeningTagPattern('oxhasrights');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{oxhasrights type=$type}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'type=$type'
-                 */
                 $string = "{% hasrights {:type :field :right :object :readonly :ident} %}";
                 $replace = [];
                 $attr = $this->getAttributes($matches);

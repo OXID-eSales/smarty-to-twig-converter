@@ -53,10 +53,6 @@ class ForConverter extends ConverterAbstract
      */
     private function replaceEndForEach(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{/endforeach}]
-         **/
         $search = $this->getClosingTagPattern('foreach');
         $replace = "{% endfor %}";
 
@@ -70,10 +66,6 @@ class ForConverter extends ConverterAbstract
      */
     private function replaceForEachElse(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{foreachelse}]
-         **/
         $search = $this->getOpeningTagPattern('foreachelse');
         $replace = "{% else %}";
 
@@ -87,22 +79,12 @@ class ForConverter extends ConverterAbstract
      */
     private function replaceFor(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{foreach $myColors as $color}]
-         **/
         $pattern = $this->getOpeningTagPattern('foreach');
         $string = '{% for :key :item in :from %}';
 
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{foreach $myColors as $color}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'$myColors as $color'
-                 */
                 $match = $matches[1];
                 $search = $matches[0];
 
@@ -135,7 +117,7 @@ class ForConverter extends ConverterAbstract
     {
         $replace = [];
         /**
-         * $pattern is supposed to detect structure like this:
+         * $pattern is supposed to detect key variable and value variable in structure like this:
          * [{foreach $arrayVar as $keyVar=>$itemVar}]
          **/
         if (preg_match("/(.*)\=\>(.*)/", $mcs[2], $match)) {

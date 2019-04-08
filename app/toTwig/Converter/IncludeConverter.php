@@ -30,10 +30,6 @@ class IncludeConverter extends ConverterAbstract
      */
     public function __construct()
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{include file='page_header.tpl}]
-         **/
         $this->pattern = $this->getOpeningTagPattern('include');
     }
 
@@ -50,12 +46,6 @@ class IncludeConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{include file='page_header.tpl}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'file='page_header.tpl'
-                 */
                 $attr = $this->getAttributes($matches);
                 $replace = [];
                 $replace['template'] = $this->convertFileExtension($attr[$this->attrName]);

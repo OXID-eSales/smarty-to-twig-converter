@@ -36,10 +36,6 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceEndBlock(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{/block}]
-         */
         $search = $this->getClosingTagPattern('block');
         $replace = "{% endblock %}";
 
@@ -53,21 +49,11 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceBlock(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{block name="title"}]
-         */
         $pattern = $this->getOpeningTagPattern('block');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{block name="title"}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'name="title"'
-                 */
                 $attr = $this->getAttributes($matches);
                 $name = $this->getSanitizedName($attr);
                 $block = $this->getBlockOpeningTag($name, $attr);
@@ -117,21 +103,11 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceExtends(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{extends file="foo.tpl"}]
-         */
         $pattern = $this->getOpeningTagPattern('extends');
 
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{extends file="foo.tpl"}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'file="foo.tpl"
-                 */
                 $attr = $this->getAttributes($matches);
                 $file = $this->sanitizeValue(reset($attr));
                 $file = $this->convertFileExtension($file);
@@ -149,10 +125,6 @@ class BlockConverter extends ConverterAbstract
      */
     private function replaceParent(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{$smarty.block.parent}]
-         */
         $pattern = $this->getOpeningTagPattern('$smarty.block.parent');
 
         return preg_replace($pattern, "{{ parent() }}", $content);

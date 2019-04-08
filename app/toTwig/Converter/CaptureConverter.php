@@ -23,20 +23,10 @@ class CaptureConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{capture name="foo"}]
-         **/
         $pattern = $this->getOpeningTagPattern('capture');
         $strippedOpeningTag = preg_replace_callback(
             $pattern,
             function ($matches) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{capture name="foo"}]'
-                 * $matches[1] should contain a string with all attributes passed to a tag i.e.'name="foo"'
-                 */
                 $attr = $this->getAttributes($matches);
                 if (isset($attr['name'])) {
                     $attr['name'] = $this->sanitizeVariableName($attr['name']);

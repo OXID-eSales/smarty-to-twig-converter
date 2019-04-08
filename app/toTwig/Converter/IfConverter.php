@@ -28,29 +28,25 @@ class IfConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        // Replace {if }
         $content = $this->replaceIf($content);
-        // Replace {elseif }
         $content = $this->replaceElseIf($content);
-        // Replace {else}
+        // Replace smarty {/if} to its twig analogue
         $content = preg_replace($this->getClosingTagPattern('if'), "{% endif %}", $content);
-        // Replace {/if}
+        // Replace smarty {else} to its twig analogue
         $content = preg_replace($this->getOpeningTagPattern('else'), "{% else %}", $content);
 
         return $content;
     }
 
     /**
+     * Replace smarty "if" tag to its twig analogue
+     *
      * @param string $content
      *
      * @return string
      */
     private function replaceIf(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{if logic statement}]
-         **/
         $pattern = $this->getOpeningTagPattern('if');
         $string = '{%% if %s %%}';
 
@@ -58,16 +54,14 @@ class IfConverter extends ConverterAbstract
     }
 
     /**
+     * Replace smarty "elseif" tag to its twig analogue
+     *
      * @param string $content
      *
      * @return string
      */
     private function replaceElseIf(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{elseif logic statement}]
-         **/
         $pattern = $this->getOpeningTagPattern('elseif');
         $string = '{%% elseif %s %%}';
 
@@ -75,6 +69,9 @@ class IfConverter extends ConverterAbstract
     }
 
     /**
+     * Helper for replacing starting tag patterns with additional checks and
+     * converting of the arguments coming with those tags
+     *
      * @param string $pattern
      * @param string $content
      * @param string $string
@@ -86,12 +83,6 @@ class IfConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                /**
-                 * $matches contains an array of strings.
-                 *
-                 * $matches[0] contains a string with full matched tag i.e.'[{if logic statement}]'
-                 * $matches[1] should contain a string with logic statement i.e.'foo === "bar"'
-                 */
                 $match = isset($matches[1]) ? $matches[1] : '';
                 $search = $matches[0];
                 $match = $this->convertExpression($match);
