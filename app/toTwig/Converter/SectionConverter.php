@@ -18,6 +18,15 @@ class SectionConverter extends ConverterAbstract
     protected $description = 'Convert smarty {section} to twig {for}';
     protected $priority = 20;
 
+    // Lookup tables for performing some token
+    // replacements not addressed in the grammar.
+    private $replacements = [
+        '\$smarty\.section.*\.index' => 'loop.index0',
+        '\$smarty\.section.*\.iteration' => 'loop.index',
+        '\$smarty\.section.*\.first' => 'loop.first',
+        '\$smarty\.section.*\.last' => 'loop.last',
+    ];
+
     /**
      * Function converts smarty {section} tags to twig {for}
      *
@@ -29,6 +38,10 @@ class SectionConverter extends ConverterAbstract
     {
         $contentReplacedOpeningTag = $this->replaceSectionOpeningTag($content);
         $content = $this->replaceSectionClosingTag($contentReplacedOpeningTag);
+
+        foreach ($this->replacements as $k => $v) {
+            $content = preg_replace('/' . $k . '/', $v, $content);
+        }
 
         return $content;
     }

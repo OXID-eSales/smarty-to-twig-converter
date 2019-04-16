@@ -11,7 +11,7 @@
 
 namespace toTwig\Config;
 use toTwig\Converter\ConverterAbstract;
-use toTwig\FinderInterface;
+use toTwig\Finder\FinderInterface;
 use toTwig\ConfigInterface;
 use toTwig\Finder\DefaultFinder;
 

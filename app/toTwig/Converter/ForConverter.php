@@ -25,7 +25,9 @@ class ForConverter extends ConverterAbstract
     // replacements not addressed in the grammar.
     private $replacements = [
         'smarty\.foreach.*\.index' => 'loop.index0',
-        'smarty\.foreach.*\.iteration' => 'loop.index'
+        'smarty\.foreach.*\.iteration' => 'loop.index',
+        'smarty\.foreach.*\.first' => 'loop.first',
+        'smarty\.foreach.*\.last' => 'loop.last',
     ];
 
     /**

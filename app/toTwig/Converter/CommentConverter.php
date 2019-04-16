@@ -28,6 +28,17 @@ class CommentConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        return str_replace(['[{*', '*}]'], ['{#', '#}'], $content);
+        $pattern = '#\[\{\*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\*\}\]#is';
+
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $string = "{# :comment #}";
+                $string = $this->replaceNamedArguments($string, ['comment' => $matches[1]]);
+
+                return str_replace($matches[0], $string, $matches[0]);
+            },
+            $content
+        );
     }
 }

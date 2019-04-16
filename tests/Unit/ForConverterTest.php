@@ -63,7 +63,27 @@ class ForConverterTest extends TestCase
             [
                 "[{foreach from=\$Errors.basket item=oEr key=key}]\n[{/foreach}]",
                 "{% for key, oEr in Errors.basket %}\n{% endfor %}"
-            ]
+            ],
+            [
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.first}]\n[{/foreach}]",
+                "{% for iProdNr, product in articleList %}\n[{\$loop.first}]\n{% endfor %}"
+            ],
+            [
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.first}]\n[{/foreach}]",
+                "{% for iProdNr, product in articleList %}\n[{\$loop.first}]\n{% endfor %}"
+            ],
+            [
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.last}]\n[{/foreach}]",
+                "{% for iProdNr, product in articleList %}\n[{\$loop.last}]\n{% endfor %}"
+            ],
+            [
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.index}]\n[{/foreach}]",
+                "{% for iProdNr, product in articleList %}\n[{\$loop.index0}]\n{% endfor %}"
+            ],
+            [
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.iteration}]\n[{/foreach}]",
+                "{% for iProdNr, product in articleList %}\n[{\$loop.index}]\n{% endfor %}"
+            ],
         ];
     }
 

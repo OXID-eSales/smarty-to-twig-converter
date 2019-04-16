@@ -62,18 +62,18 @@ class SectionConverterTest extends TestCase
             ],
             [
                 '[{section name=picRow start=1 loop=$iPicCount+1 step=1}]
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=$smarty.section.picRow.first}]
                 [{/section}]',
                 '{% for picRow in 1..$iPicCount+1 %}
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=loop.first}]
                 {% endfor %}'
             ],
             [
                 '[{ section name=picRow start=1 loop=$iPicCount+1 step=1 }]
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=$smarty.section.picRow.last}]
                 [{ /section }]',
                 '{% for picRow in 1..$iPicCount+1 %}
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=loop.last}]
                 {% endfor %}'
             ],
             [
@@ -81,15 +81,15 @@ class SectionConverterTest extends TestCase
                     [{assign var="iIndex" value=$smarty.section.picRow.index}]
                 [{/section}]',
                 '{% for picRow in 0..$iPicCount+1 %}
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=loop.index0}]
                 {% endfor %}'
             ],
             [
                 '[{ section name=picRow loop=$iPicCount+1 step=1 }]
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=$smarty.section.picRow.iteration}]
                 [{ /section }]',
                 '{% for picRow in 0..$iPicCount+1 %}
-                    [{assign var="iIndex" value=$smarty.section.picRow.index}]
+                    [{assign var="iIndex" value=loop.index}]
                 {% endfor %}'
             ]
         ];
