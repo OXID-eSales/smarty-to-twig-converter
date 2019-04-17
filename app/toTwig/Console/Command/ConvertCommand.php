@@ -65,7 +65,7 @@ class ConvertCommand extends Command
                     new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration name', null),
                     new InputOption('config-path', '', InputOption::VALUE_REQUIRED, 'The configuration file path'),
                     new InputOption('converters', '', InputOption::VALUE_REQUIRED, 'A list of converters to run'),
-                    new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension'),
+                    new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension', '.html.twig'),
                     new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
                     new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt')
@@ -183,7 +183,7 @@ EOF
     private function checkInputConstraints(InputInterface $input)
     {
         if ($input->getOption('path') && $input->getOption('database')) {
-            throw new InvalidOptionException("Only one of 'path' or 'database' options should be defined.");
+            throw new InvalidOptionException("Only one of '--path' or '--database' options should be defined.");
         }
 
         if (
@@ -191,7 +191,7 @@ EOF
             $input->getOption('database') == null &&
             $input->getOption('config-path') == null
         ) {
-            throw new InvalidOptionException("One of 'path', 'database' or 'config-path' options should be defined.");
+            throw new InvalidOptionException("One of '--path', '--database' or '--config-path' options should be defined.");
         }
     }
 
