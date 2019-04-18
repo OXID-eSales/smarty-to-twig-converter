@@ -240,7 +240,10 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Handle function arguments (arg1, arg2, arg3)
+     * Handles a case when smarty variable is passed to a function as a parameter
+     * For example:
+     *   smarty: [{ foo($bar)}]
+     *   twig:   {{ foo(bar) }]
      *
      * @param string $string
      *
@@ -266,7 +269,10 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Handle filters [{$var|filter:$var->from:'to'}]
+     * Handle translation of filters
+     * For example:
+     *   smarty: [{ "foo"|smarty_bar) }]
+     *   twig:   {{ "foo"|twig_bar }}
      *
      * @param string $string
      *
@@ -298,7 +304,16 @@ abstract class ConverterAbstract
     }
 
     /**
-     * Explodes expression to parts and converts them separately
+     * Explodes expression to parts to converts them separately
+     * For example:
+     *  input:  ($a+$b)
+     *  output: ($a + $b)
+     *
+     * Matching input pattern will give these results:
+     *   $matches[0] contains a string with full matched tag i.e.'[{($a+$b)}]'
+     *   $matches[1] should contain a string with first part of an expression i.e. $a
+     *   $matches[2] should contain a string with one of following characters: +, -, >, <, *, /, %, &&, ||
+     *   $matches[3] should contain a string with second part of an expression i.e. $b
      *
      * @param string $expression
      *
@@ -326,9 +341,14 @@ abstract class ConverterAbstract
 
     /**
      * Replace named args in string
+     * For example:
+     *   $string = '{% set :key = :value %}'
+     *   $args = ['key' => 'foo', 'value' => 'bar']
+     *
+     * return '{% set 'foo' = 'bar' %}'
      *
      * @param string $string
-     * @param array $args
+     * @param array  $args
      *
      * @return string
      */
@@ -438,6 +458,7 @@ abstract class ConverterAbstract
 
     /**
      * Used in InsertTrackerConverter nad IncludeConverter
+     *
      * @param array $attr
      *
      * @return string

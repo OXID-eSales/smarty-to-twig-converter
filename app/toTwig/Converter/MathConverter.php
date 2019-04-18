@@ -25,11 +25,7 @@ class MathConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        /**
-         * $pattern is supposed to detect structure like this:
-         * [{math equation="x + y" x=1 y=2}]
-         **/
-        $pattern = '/\[\{\s*math\b\s*([^{}]+)?\s*\}\]/';
+        $pattern = $this->getOpeningTagPattern('math');
 
         return preg_replace_callback(
             $pattern,

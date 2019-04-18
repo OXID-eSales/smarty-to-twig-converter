@@ -31,22 +31,14 @@ class CycleConverter extends ConverterAbstract
                 $attributes = $this->extractAttributes($match);
 
                 // Different approaches for syntax with and without assignment
-                $assignVar = $this->extractAssignVariableName($attributes);
-
-                if ($assignVar) {
+                if ($assignVar = $this->extractAssignVariableName($attributes)) {
                     unset($attributes['print']);
                 }
 
                 $valuesArray = $this->extractValuesArray($attributes);
                 $extraParameters = $this->extractAdditionalParametersArray($attributes);
                 $argumentsString = $this->composeArgumentsString($valuesArray, $extraParameters);
-
-                // Different approaches for syntax with and without assignment
-                if ($assignVar) {
-                    $twigTag = "{% set $assignVar = smarty_cycle($argumentsString) %}";
-                } else {
-                    $twigTag = "{{ smarty_cycle($argumentsString) }}";
-                }
+                $twigTag = $this->getTag($argumentsString, $assignVar);
 
                 return $twigTag;
             },
@@ -129,5 +121,23 @@ class CycleConverter extends ConverterAbstract
         }
 
         return $argumentsString;
+    }
+
+    /**
+     * In twig we have to use different syntax, when we want to use assignment in cycle
+     *
+     * @param $assignVar
+     * @param $argumentsString
+     *
+     * @return string
+     */
+    private function getTag($argumentsString, $assignVar = false)
+    {
+        if ($assignVar) {
+            $twigTag = "{% set $assignVar = smarty_cycle($argumentsString) %}";
+        } else {
+            $twigTag = "{{ smarty_cycle($argumentsString) }}";
+        }
+        return $twigTag;
     }
 }
