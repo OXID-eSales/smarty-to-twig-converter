@@ -30,8 +30,6 @@ class NewBasketItemConverterTest extends TestCase
     public function testThatIncludeIsConverted($smarty, $twig)
     {
         // Test the above cases
-        /** @var \SplFileInfo $fileMock */
-        $fileMock = $this->getFileMock();
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
@@ -63,10 +61,5 @@ class NewBasketItemConverterTest extends TestCase
     public function testThatHaveDescription()
     {
         $this->assertNotEmpty($this->converter->getDescription());
-    }
-
-    private function getFileMock()
-    {
-        return $this->getMockBuilder('\SplFileInfo')->disableOriginalConstructor()->getMock();
     }
 }

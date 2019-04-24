@@ -18,7 +18,7 @@ class VariableConverter extends ConverterAbstract
 {
 
     protected $name = 'variable';
-    protected $description = 'Convert smarty variable {$var.name} to twig {{ $var.name }}';
+    protected $description = 'Convert smarty variable {$var.name} to twig {{ var.name }}';
     protected $priority = 10;
 
     /**

@@ -106,17 +106,4 @@ class CounterConverterTest extends TestCase
     {
         $this->assertNotEmpty($this->converter->getDescription());
     }
-
-    /**
-     * @return \SplFileInfo
-     */
-    private function getFileMock()
-    {
-        /** @var \SplFileInfo $fileMock */
-        $fileMock = $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $fileMock;
-    }
 }

@@ -92,11 +92,4 @@ class IfConverterTest extends TestCase
     {
         $this->assertNotEmpty($this->converter->getDescription());
     }
-
-    private function getFileMock()
-    {
-        return $this->getMockBuilder('\SplFileInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
 }
