@@ -1,7 +1,7 @@
 {% capture append = "oxidBlock_content" %}
 
     {% block checkout_order_errors %}
-        {% if oView.isConfirmAGBError() == 1 %}
+        {% if oView.isConfirmAGBError() is same as(1) %}
             {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}
         {% endif %}
         {% set iError = oView.getAddressError() %}
