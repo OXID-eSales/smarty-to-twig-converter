@@ -195,7 +195,7 @@ abstract class ConverterAbstract
             case 'lt':
                 return '<';
 
-            case '===':
+            // '===' is converted separately by IdenticalComparisonConverter
             case 'eq':
                 return '==';
 
