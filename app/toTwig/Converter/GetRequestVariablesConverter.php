@@ -59,9 +59,9 @@ class GetRequestVariablesConverter extends ConverterAbstract
     }
 
     /**
-     * @param $content
-     * @param $pattern
-     * @param $getterName
+     * @param string $content
+     * @param string $pattern
+     * @param string $getterName
      *
      * @return string
      */

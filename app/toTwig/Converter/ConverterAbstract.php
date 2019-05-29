@@ -369,11 +369,11 @@ abstract class ConverterAbstract
     /**
      * Replace multiple spaces in string with single space
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
-    protected function removeMultipleSpaces($string): string
+    protected function removeMultipleSpaces(string $string): string
     {
         return preg_replace('!\s+!', ' ', $string);
     }
@@ -416,11 +416,11 @@ abstract class ConverterAbstract
     }
 
     /**
-     * @param $templateName
+     * @param string $templateName
      *
      * @return string
      */
-    protected function convertFileExtension($templateName): string
+    protected function convertFileExtension(string $templateName): string
     {
         return preg_replace('/\.tpl/', '.html.twig', $templateName);
     }

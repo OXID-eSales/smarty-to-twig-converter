@@ -147,8 +147,10 @@ class DatabaseConverter extends SourceConverter
 
     /**
      * @param string[] $columns
+     *
+     * @return mixed
      */
-    public function filterColumns(array $columns): void
+    public function filterColumns(array $columns): mixed
     {
         $columns = array_map('trim', $columns);
 
@@ -156,19 +158,22 @@ class DatabaseConverter extends SourceConverter
             $columns = array_map(
                 function ($column) {
                     return ltrim($column, '-');
-                }, $columns
+                },
+                $columns
             );
 
             $this->columns = array_filter(
-                $this->columns, function ($column) use ($columns) {
-                return !in_array($column, $columns);
-            }
+                $this->columns,
+                function ($column) use ($columns) {
+                    return !in_array($column, $columns);
+                }
             );
         } else {
             $this->columns = array_filter(
-                $this->columns, function ($column) use ($columns) {
-                return in_array($column, $columns);
-            }
+                $this->columns,
+                function ($column) use ($columns) {
+                    return in_array($column, $columns);
+                }
             );
         }
     }

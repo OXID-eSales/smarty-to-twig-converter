@@ -126,18 +126,19 @@ class CycleConverter extends ConverterAbstract
     /**
      * In twig we have to use different syntax, when we want to use assignment in cycle
      *
-     * @param $assignVar
-     * @param $argumentsString
+     * @param string $argumentsString
+     * @param mixed  $assignVar
      *
      * @return string
      */
-    private function getTag($argumentsString, $assignVar = false)
+    private function getTag($argumentsString, $assignVar = false): string
     {
         if ($assignVar) {
             $twigTag = "{% set $assignVar = smarty_cycle($argumentsString) %}";
         } else {
             $twigTag = "{{ smarty_cycle($argumentsString) }}";
         }
+
         return $twigTag;
     }
 }

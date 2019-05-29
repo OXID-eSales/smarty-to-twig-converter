@@ -66,9 +66,18 @@ interface ConfigInterface
      */
     public function setSourceConverter(SourceConverter $converter): self;
 
+    /**
+     * @return SourceConverter
+     */
     public function getSourceConverter(): SourceConverter;
 
+    /**
+     * @return bool
+     */
     public function isDryRun(): bool;
 
+    /**
+     * @return bool
+     */
     public function isDiff(): bool;
 }

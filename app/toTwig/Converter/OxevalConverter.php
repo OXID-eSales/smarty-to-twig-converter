@@ -2,6 +2,11 @@
 
 namespace toTwig\Converter;
 
+/**
+ * Class OxevalConverter
+ *
+ * @package toTwig\Converter
+ */
 class OxevalConverter extends ConverterAbstract
 {
 

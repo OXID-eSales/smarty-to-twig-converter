@@ -42,7 +42,7 @@ class DefunConverter extends ConverterAbstract
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      */
@@ -66,7 +66,12 @@ class DefunConverter extends ConverterAbstract
         );
     }
 
-    private function replaceCallToMacro($content)
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function replaceCallToMacro($content): string
     {
         $pattern = $this->getOpeningTagPattern('fun');
 
