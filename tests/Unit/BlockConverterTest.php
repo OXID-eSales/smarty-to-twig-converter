@@ -24,7 +24,7 @@ class BlockConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\BlockConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class BlockConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Basic usage

@@ -57,5 +57,4 @@ class DefunConverterTest extends TestCase
             ]
         ];
     }
-
 }

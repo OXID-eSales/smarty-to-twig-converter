@@ -18,7 +18,7 @@ class InsertConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\InsertConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -29,7 +29,7 @@ class InsertConverterTest extends TestCase
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

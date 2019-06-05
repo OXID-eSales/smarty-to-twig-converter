@@ -28,7 +28,7 @@ class OxgetseourlConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxgetseourlConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -45,7 +45,7 @@ class OxgetseourlConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Example from OXID

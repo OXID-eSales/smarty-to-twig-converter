@@ -23,7 +23,7 @@ class OxinputhelpConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\CaptureConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -33,7 +33,7 @@ class OxinputhelpConverterTest extends TestCase
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

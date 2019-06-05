@@ -24,7 +24,7 @@ class OxidIncludeWidgetConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxidIncludeWidgetConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class OxidIncludeWidgetConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Example from OXID

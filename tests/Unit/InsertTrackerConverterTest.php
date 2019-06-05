@@ -22,7 +22,7 @@ class InsertTrackerConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\InsertTrackerConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -32,7 +32,7 @@ class InsertTrackerConverterTest extends TestCase
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

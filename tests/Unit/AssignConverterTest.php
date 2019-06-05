@@ -30,7 +30,7 @@ class AssignConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\AssignConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatAssignIsConverted($smarty, $twig)
     {
@@ -41,7 +41,7 @@ class AssignConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

@@ -24,7 +24,7 @@ class OxscriptConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxscriptConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class OxscriptConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // OXID examples

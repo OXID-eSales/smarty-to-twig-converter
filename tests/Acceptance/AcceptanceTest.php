@@ -8,6 +8,7 @@ use toTwig\Console\Command\ConvertCommand;
 
 class AcceptanceTest extends TestCase
 {
+
     private $templateNames;
 
     public function setUp()
@@ -19,7 +20,7 @@ class AcceptanceTest extends TestCase
 
     public function testConvert()
     {
-        foreach($this->templateNames as $templateName) {
+        foreach ($this->templateNames as $templateName) {
             $this->convert($templateName);
         }
     }
@@ -35,7 +36,6 @@ class AcceptanceTest extends TestCase
         $expectedTemplate = file_get_contents($this->getExpectedTwigTemplatePath($templateName));
 
         $this->assertEquals($expectedTemplate, $actualTemplate);
-
     }
 
     private function getTwigTemplatePath($templateName)
@@ -55,9 +55,9 @@ class AcceptanceTest extends TestCase
 
     private function unlinkConvertedFiles()
     {
-        foreach($this->templateNames as $templateName) {
+        foreach ($this->templateNames as $templateName) {
             $twigTemplatePath = $this->getTwigTemplatePath($templateName);
-            if(file_exists($twigTemplatePath)) {
+            if (file_exists($twigTemplatePath)) {
                 unlink($twigTemplatePath);
             }
         }

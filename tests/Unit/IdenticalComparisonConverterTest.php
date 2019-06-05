@@ -22,7 +22,7 @@ class IdenticalComparisonConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\IdenticalComparison::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatIfIsConverted($smarty, $twig)
     {
@@ -33,7 +33,7 @@ class IdenticalComparisonConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

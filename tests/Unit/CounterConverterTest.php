@@ -18,7 +18,7 @@ class CounterConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\CounterConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatCounterIsConverted($smarty, $twig)
     {
@@ -29,7 +29,7 @@ class CounterConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

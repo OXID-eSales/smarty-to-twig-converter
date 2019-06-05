@@ -24,7 +24,7 @@ class OxhasrightsConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxhasrightsConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class OxhasrightsConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             //basic usage

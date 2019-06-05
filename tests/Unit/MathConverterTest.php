@@ -16,7 +16,7 @@ class MathConverterTest extends TestCase
         $this->converter = new MathConverter();
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [
@@ -140,7 +140,7 @@ class MathConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\MAthConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig

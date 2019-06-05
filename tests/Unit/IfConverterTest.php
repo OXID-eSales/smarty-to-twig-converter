@@ -30,7 +30,7 @@ class IfConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\IfConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatIfIsConverted($smarty, $twig)
     {
@@ -41,7 +41,7 @@ class IfConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

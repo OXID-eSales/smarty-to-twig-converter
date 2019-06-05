@@ -14,7 +14,7 @@ namespace toTwig;
 class FilterNameMap
 {
 
-    const nameMap = [
+    const NAME_MAP = [
         'smartwordwrap' => 'smart_wordwrap',
         'date_format' => 'date_format',
         'oxaddparams' => 'add_url_parameters',
@@ -41,6 +41,6 @@ class FilterNameMap
      */
     public static function getConvertedFilterName(string $filterName): string
     {
-        return isset(self::nameMap[$filterName]) ? self::nameMap[$filterName] : $filterName;
+        return isset(self::NAME_MAP[$filterName]) ? self::NAME_MAP[$filterName] : $filterName;
     }
 }

@@ -22,7 +22,7 @@ class NewBasketItemConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\NewBasketItemConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -33,7 +33,7 @@ class NewBasketItemConverterTest extends TestCase
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [
