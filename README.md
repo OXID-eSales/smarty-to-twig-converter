@@ -148,15 +148,29 @@ and directories that need to be analyzed:
 		->finder($finder)
 	;
 
-### Creating you own Converters
+Creating you own Converters
+-----
 
 A *converter * is a class that tries to convert one tag (a `Converter` class must
 extends `ConverterAbstract`). To create new converter simply create new YourConverter.php
 in app/toTwig/Converter/ directory. Converters are loaded automatically.
 
-### Configs
+Configs
+-----
 
 A *config * knows about the files and directories that must be
 scanned by the tool when run in the directory of your project. It is useful
 for projects that follow a well-known directory structures (like for Symfony
 projects for instance).
+
+Running database conversion tests
+-----
+
+To run database conversion tests, sqlite is required. You can do this by running following commands:
+
+    composer require doctrine/dbal ^2.9
+    composer require phpunit/dbunit 3.*
+    composer require ext-dom 
+    composer require --dev ext-pdo 
+    composer require --dev ext-sqlite3 
+    composer require --dev ext-pdo_sqlite 
