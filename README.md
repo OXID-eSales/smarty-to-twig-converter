@@ -168,9 +168,5 @@ Running database conversion tests
 
 To run database conversion tests, sqlite is required. You can do this by running following commands:
 
-    composer require doctrine/dbal ^2.9
-    composer require phpunit/dbunit 3.*
-    composer require ext-dom 
-    composer require --dev ext-pdo 
-    composer require --dev ext-sqlite3 
-    composer require --dev ext-pdo_sqlite 
+    $ sudo apt-get install sqlite3
+    $ sudo apt-get install php7.2-sqlite
