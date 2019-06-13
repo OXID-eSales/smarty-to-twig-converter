@@ -96,7 +96,7 @@ To run database conversion tests, sqlite is required. You can do this by running
 
 
 -   In Twig by default all variables are escaped. Some of variables
-    should be filtered with ``raw` filter to avoid this.
+    should be filtered with `|raw` filter to avoid this.
 -   Variable scope. In Twig variables declared in templates have scopes
     limited by block (`{% block %}`, `{% for %}` and so on). Some
     variables should be declared outside these blocks if they are used
@@ -172,7 +172,7 @@ Smarty:\
 `[{counter}]`
 
 Twig:\
-`{% set defaultCounter = ( defaultCounter ` default(0) ) + 1 %}`
+`{% set defaultCounter = ( defaultCounter|default(0) ) + 1 %}`
 
 #### cycle =\> smarty\_cycle
 
@@ -199,10 +199,10 @@ Twig:\
 Converter name: `if`
 
 Smarty:\
-`[{if !$foo or $foo->bar or $foo`bar:foo["hello"]}]foo[{/if}]`
+`[{if !$foo or $foo->bar or $foo|bar:foo["hello"]}]foo[{/if}]`
 
 Twig:\
-`{% if not foo or foo.bar or foo`bar(foo["hello"]) %}foo{% endif %}`
+`{% if not foo or foo.bar or foo|bar(foo["hello"]) %}foo{% endif %}`
 
 #### include =\> include
 
@@ -219,10 +219,10 @@ Twig:\
 Converter name: `insert`
 
 Smarty:\
-`[{insert name="oxid_tracker" title="PRODUCT_DETAILS"`oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath()}]`
+`[{insert name="oxid_tracker" title="PRODUCT_DETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath()}]`
 
 Twig:\
-`{% include "oxid_tracker" with {title: "PRODUCT_DETAILS"`oxmultilangassign, product: oDetailsProduct, cpath: oView.getCatTreePath()} %}`
+`{% include "oxid_tracker" with {title: "PRODUCT_DETAILS"|oxmultilangassign, product: oDetailsProduct, cpath: oView.getCatTreePath()} %}`
 
 #### mailto =\> mailto
 
@@ -305,10 +305,10 @@ Twig:\
 Converter name: `oxgetseourl`
 
 Smarty:\
-`[{oxgetseourl ident=$oViewConf->getSelfLink()`cat:"cl=basket"}]`
+`[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=basket"}]`
 
 Twig:\
-`{{ seo_url({ ident: oViewConf.getSelfLink()`cat("cl=basket") }) }}`
+`{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=basket") }) }}`
 
 #### oxhasrights =\> hasrights
 
