@@ -37,8 +37,8 @@ class OxinputhelpConverterTest extends TestCase
     {
         return [
             [
-                '[{oxinputhelp ident="foo"}]',
-                '{% include "inputhelp.html.twig" with {\'sHelpId\': help_id("foo"), \'sHelpText\': help_text("foo")} %}'
+                "[{oxinputhelp ident='foo'}]",
+                "{% include \"inputhelp.html.twig\" with {'sHelpId': help_id('foo'), 'sHelpText': help_text('foo')} %}"
             ]
         ];
     }

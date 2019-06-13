@@ -57,20 +57,7 @@ class ConvertCommand extends Command
     {
         $this
             ->setName('convert')
-            ->setDefinition(
-                [
-                    new InputOption('path', '', InputOption::VALUE_OPTIONAL, 'The path'),
-                    new InputOption('database', '', InputOption::VALUE_REQUIRED, 'Database parameters'),
-                    new InputOption('database-columns', '', InputOption::VALUE_REQUIRED, 'Database columns to convert'),
-                    new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The configuration name', null),
-                    new InputOption('config-path', '', InputOption::VALUE_REQUIRED, 'The configuration file path'),
-                    new InputOption('converters', '', InputOption::VALUE_REQUIRED, 'A list of converters to run'),
-                    new InputOption('ext', '', InputOption::VALUE_REQUIRED, 'To output files with other extension', '.html.twig'),
-                    new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file'),
-                    new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified'),
-                    new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats', 'txt')
-                ]
-            )
+            ->setDefinition($this->getDefinitions())
             ->setDescription('Convert a directory, file or database entities.')
             ->setHelp(
                 <<<EOF
@@ -134,6 +121,75 @@ EOF
             );
     }
 
+    private function getDefinitions()
+    {
+        return [
+            new InputOption(
+                'path',
+                '',
+                InputOption::VALUE_OPTIONAL,
+                'The path'
+            ),
+            new InputOption(
+                'database',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'Database parameters'
+            ),
+            new InputOption(
+                'database-columns',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'Database columns to convert'
+            ),
+            new InputOption(
+                'config',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'The configuration name',
+                null
+            ),
+            new InputOption(
+                'config-path',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'The configuration file path'
+            ),
+            new InputOption(
+                'converters',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'A list of converters to run'
+            ),
+            new InputOption(
+                'ext',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'To output files with other extension',
+                '.html.twig'
+            ),
+            new InputOption(
+                'diff',
+                '',
+                InputOption::VALUE_NONE,
+                'Also produce diff for each file'
+            ),
+            new InputOption(
+                'dry-run',
+                '',
+                InputOption::VALUE_NONE,
+                'Only shows which files would have been modified'
+            ),
+            new InputOption(
+                'format',
+                '',
+                InputOption::VALUE_REQUIRED,
+                'To output results in other formats',
+                'txt'
+            )
+        ];
+    }
+
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -171,7 +227,9 @@ EOF
                 $this->outputXml($input, $output, $changed);
                 break;
             default:
-                throw new InvalidArgumentException(sprintf('The format "%s" is not defined.', $input->getOption('format')));
+                throw new InvalidArgumentException(
+                    sprintf('The format "%s" is not defined.', $input->getOption('format'))
+                );
         }
 
         return empty($changed) ? 0 : 1;
@@ -183,7 +241,9 @@ EOF
     private function checkInputConstraints(InputInterface $input)
     {
         if ($input->getOption('path') && $input->getOption('database')) {
-            throw new InvalidOptionException("Only one of '--path' or '--database' options should be defined.");
+            throw new InvalidOptionException(
+                "Only one of '--path' or '--database' options should be defined."
+            );
         }
 
         if (
@@ -191,7 +251,9 @@ EOF
             $input->getOption('database') == null &&
             $input->getOption('config-path') == null
         ) {
-            throw new InvalidOptionException("One of '--path', '--database' or '--config-path' options should be defined.");
+            throw new InvalidOptionException(
+                "One of '--path', '--database' or '--config-path' options should be defined."
+            );
         }
     }
 
@@ -210,7 +272,9 @@ EOF
                 }
             }
 
-            throw new InvalidOptionException(sprintf('The configuration "%s" is not defined', $input->getOption('config')));
+            throw new InvalidOptionException(
+                sprintf('The configuration "%s" is not defined', $input->getOption('config'))
+            );
         } elseif ($configPath = $input->getOption('config-path')) {
             if (!file_exists($configPath)) {
                 throw new InvalidOptionException("The configuration filepath is incorrect. File doesn't exist.");
@@ -275,7 +339,12 @@ EOF
         foreach ($changed as $id => $conversionResult) {
             $output->write(sprintf('%4d) %s', $i++, $id));
             if ($input->hasOption('verbose')) {
-                $output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $conversionResult->getAppliedConverters())));
+                $output->write(
+                    sprintf(
+                        ' (<comment>%s</comment>)',
+                        implode(', ', $conversionResult->getAppliedConverters())
+                    )
+                );
                 if ($input->getOption('diff')) {
                     $output->writeln('');
                     $output->writeln('<comment>      ---------- begin diff ----------</comment>');
@@ -337,7 +406,12 @@ EOF
         $count = count($this->converter->getConverters()) - 1;
         foreach ($this->converter->getConverters() as $i => $converter) {
             $chunks = explode("\n", wordwrap(sprintf('%s', $converter->getDescription()), 72 - $maxName, "\n"));
-            $converters .= sprintf(" * <comment>%s</comment>%s %s\n", $converter->getName(), str_repeat(' ', $maxName - strlen($converter->getName())), array_shift($chunks));
+            $converters .= sprintf(
+                " * <comment>%s</comment>%s %s\n",
+                $converter->getName(),
+                str_repeat(' ', $maxName - strlen($converter->getName())),
+                array_shift($chunks)
+            );
             while ($c = array_shift($chunks)) {
                 $converters .= str_repeat(' ', $maxName + 4) . $c . "\n";
             }
@@ -366,7 +440,12 @@ EOF
         $count = count($this->converter->getConfigs()) - 1;
         foreach ($this->converter->getConfigs() as $i => $config) {
             $chunks = explode("\n", wordwrap($config->getDescription(), 72 - $maxName, "\n"));
-            $configs .= sprintf(" * <comment>%s</comment>%s %s\n", $config->getName(), str_repeat(' ', $maxName - strlen($config->getName())), array_shift($chunks));
+            $configs .= sprintf(
+                " * <comment>%s</comment>%s %s\n",
+                $config->getName(),
+                str_repeat(' ', $maxName - strlen($config->getName())),
+                array_shift($chunks)
+            );
             while ($c = array_shift($chunks)) {
                 $configs .= str_repeat(' ', $maxName + 4) . $c . "\n";
             }

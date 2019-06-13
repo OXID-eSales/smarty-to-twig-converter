@@ -90,11 +90,11 @@ class IdenticalComparisonConverterTest extends TestCase
             ],
             [
                 '{% block checkout_order_errors %}
-        {% if oView.isConfirmAGBError() === 1 %}
-            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}',
+                    {% if oView.isConfirmAGBError() === 1 %}
+                    {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}',
                 '{% block checkout_order_errors %}
-        {% if oView.isConfirmAGBError() is same as(1) %}
-            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}'
+                    {% if oView.isConfirmAGBError() is same as(1) %}
+                    {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}'
             ],
             [
                 '<li{%if $oContent->oxcontents__oxloadid->value === $oTopCont->oxcontents__oxloadid->value%} class="active"{%/if%}>',

@@ -45,44 +45,86 @@ class ForConverterTest extends TestCase
     {
         return [
             [
-                "[{foreach \$myColors as \$color}]\nfoo\n[{/foreach}]",
-                "{% for color in myColors %}\nfoo\n{% endfor %}"
+                "[{foreach \$myColors as \$color}]
+                    foo
+                [{/foreach}]",
+                "{% for color in myColors %}
+                    foo
+                {% endfor %}"
             ],
             [
-                "[{foreach \$contact as \$key => \$value}]\nfoo\n[{/foreach}]",
-                "{% for key, value in contact %}\nfoo\n{% endfor %}"
+                "[{foreach \$contact as \$key => \$value}]
+                    foo
+                [{/foreach}]",
+                "{% for key, value in contact %}
+                    foo
+                {% endfor %}"
             ],
             [
-                "[{foreach name=outer item=contact from=\$contacts}]\nfoo\n[{/foreach}]",
-                "{% for contact in contacts %}\nfoo\n{% endfor %}"
+                "[{foreach name=outer item=contact from=\$contacts}]
+                    foo
+                [{/foreach}]",
+                "{% for contact in contacts %}
+                    foo
+                {% endfor %}"
             ],
             [
-                "[{foreach key=key item=item from=\$contact}]\nfoo\n[{foreachelse}]\nbar\n[{/foreach}]",
-                "{% for key, item in contact %}\nfoo\n{% else %}\nbar\n{% endfor %}"
+                "[{foreach key=key item=item from=\$contact}]
+                    foo
+                [{foreachelse}]
+                    bar
+                [{/foreach}]",
+                "{% for key, item in contact %}
+                    foo
+                {% else %}
+                    bar
+                {% endfor %}"
             ],
             [
-                "[{foreach from=\$Errors.basket item=oEr key=key}]\n[{/foreach}]",
-                "{% for key, oEr in Errors.basket %}\n{% endfor %}"
+                "[{foreach from=\$Errors.basket item=oEr key=key}]
+                [{/foreach}]",
+                "{% for key, oEr in Errors.basket %}
+                {% endfor %}"
             ],
             [
-                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.first}]\n[{/foreach}]",
-                "{% for iProdNr, product in articleList %}\n[{\$loop.first}]\n{% endfor %}"
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]
+                    [{\$smarty.foreach.compareArticles.first}]
+                [{/foreach}]",
+                "{% for iProdNr, product in articleList %}
+                    [{\$loop.first}]
+                {% endfor %}"
             ],
             [
-                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.first}]\n[{/foreach}]",
-                "{% for iProdNr, product in articleList %}\n[{\$loop.first}]\n{% endfor %}"
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]
+                    [{\$smarty.foreach.compareArticles.first}]
+                [{/foreach}]",
+                "{% for iProdNr, product in articleList %}
+                    [{\$loop.first}]
+                {% endfor %}"
             ],
             [
-                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.last}]\n[{/foreach}]",
-                "{% for iProdNr, product in articleList %}\n[{\$loop.last}]\n{% endfor %}"
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]
+                    [{\$smarty.foreach.compareArticles.last}]
+                [{/foreach}]",
+                "{% for iProdNr, product in articleList %}
+                    [{\$loop.last}]
+                {% endfor %}"
             ],
             [
-                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.index}]\n[{/foreach}]",
-                "{% for iProdNr, product in articleList %}\n[{\$loop.index0}]\n{% endfor %}"
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]
+                    [{\$smarty.foreach.compareArticles.index}]
+                [{/foreach}]",
+                "{% for iProdNr, product in articleList %}
+                    [{\$loop.index0}]
+                {% endfor %}"
             ],
             [
-                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]\n[{\$smarty.foreach.compareArticles.iteration}]\n[{/foreach}]",
-                "{% for iProdNr, product in articleList %}\n[{\$loop.index}]\n{% endfor %}"
+                "[{foreach from=\$articleList key=iProdNr item='product' name='compareArticles'}]
+                    [{\$smarty.foreach.compareArticles.iteration}]
+                [{/foreach}]",
+                "{% for iProdNr, product in articleList %}
+                    [{\$loop.index}]
+                {% endfor %}"
             ],
         ];
     }

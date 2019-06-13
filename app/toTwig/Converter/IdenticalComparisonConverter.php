@@ -30,7 +30,11 @@ class IdenticalComparisonConverter extends ConverterAbstract
          * for {% if "foo"==="foo bar" %}
          *  $match[0] should contain left side of comparison with '===' sign i.e '=== "foo bar"'
          *  $match[1] should only contain value, without twig closing bracket or following spaces i.e. "foo bar"
-         * regex is designed to capture string between comparison '===' and twig logic operators (and, or, not) and twig closing tag %}
+         *
+         * regex is designed to capture string between:
+         *  comparison '===',
+         *  twig logic operators (and, or, not)
+         *  and twig closing tag '%}'
          */
         $pattern = '/\s*\=\=\=+\s*((?:(?!\%\}|\s\%\}|\sand|\sor|\snot).)+)?/';
 

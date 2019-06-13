@@ -72,7 +72,8 @@ class Compiler
      */
     protected function getStub()
     {
-        return "#!/usr/bin/env php\n<?php Phar::mapPhar('toTwig.phar'); require 'phar://toTwig.phar/toTwig'; __HALT_COMPILER();";
+        return "#!/usr/bin/env php
+        <?php Phar::mapPhar('toTwig.phar'); require 'phar://toTwig.phar/toTwig'; __HALT_COMPILER();";
     }
 
     /**

@@ -96,7 +96,8 @@ abstract class ConverterAbstract
      *
      * Matching this pattern will give these results:
      *   $matches[0] contains a string with full matched tag i.e.'[{tagName foo="bar" something="somevalue"}]'
-     *   $matches[1] should contain a string with all other configuration coming with a tag i.e.'foo = "bar" something="somevalue"'
+     *   $matches[1] should contain a string with all other configuration coming with a tag i.e.
+     *   'foo = "bar" something="somevalue"'
      *
      * @param string $tagName
      *

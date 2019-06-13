@@ -105,7 +105,13 @@ class DatabaseConverter extends SourceConverter
 
         if ($conversionResult->hasAppliedConverters()) {
             if (!$dryRun) {
-                $this->updateRow($table, $column, $primaryKey, $row[$primaryKey], $conversionResult->getConvertedTemplate());
+                $this->updateRow(
+                    $table,
+                    $column,
+                    $primaryKey,
+                    $row[$primaryKey],
+                    $conversionResult->getConvertedTemplate()
+                );
             }
 
             $id = sprintf("%s.%s(%s:%s)", $table, $column, $primaryKey, $row[$primaryKey]);

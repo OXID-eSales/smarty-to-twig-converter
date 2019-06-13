@@ -106,9 +106,11 @@ class CounterConverter extends ConverterAbstract
     private function getStartAttribute(array $attr, string $direction, int $skip): int
     {
         if (!isset($attr['start'])) {
-            $start = 0; //default initial number in Smarty is 1, but since we increment after 1st call, we want this to be 0
+            //default initial number in Smarty is 1, but since we increment after 1st call, we want this to be 0
+            $start = 0;
         } else {
-            if ($direction == '+') { //if counter is to be incremented we need to subtract incrementation size from start attribute.
+            //if counter is to be incremented we need to subtract incrementation size from start attribute.
+            if ($direction == '+') {
                 $start = (int) $attr['start'] - $skip;
             } else {
                 $start = (int) $attr['start'] + $skip;
