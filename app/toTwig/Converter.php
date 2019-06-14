@@ -99,7 +99,7 @@ class Converter
      *
      * @return mixed
      */
-    public function filterConverters(array $converters): mixed
+    public function filterConverters(array $converters)
     {
         $converters = array_map('trim', $converters);
 

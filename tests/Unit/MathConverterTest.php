@@ -3,9 +3,8 @@
 namespace sankar\ST\Tests\Unit;
 
 use toTwig\Converter\MathConverter;
-use PHPUnit\Framework\TestCase;
 
-class MathConverterTest extends TestCase
+class MathConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var MathConverter */
@@ -14,6 +13,8 @@ class MathConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new MathConverter();
+        $this->templateNames = ['math'];
+        parent::setUp();
     }
 
     public function provider()
@@ -118,22 +119,6 @@ class MathConverterTest extends TestCase
             [
                 "[{math equation=\"a + b - c * d / e\" a=1 b=2 c=3 d=4 e=5 format=\"%.2f\"}]",
                 "{{ 1 + 2 - 3 * 4 / 5 | format(\"%.2f\") }}"
-            ],
-            [
-                "[{math equation=\"abs(sin(a) + cos(b) + tan(c) + max([c,d]) + min([c,d]) + pi() + exp(e) + log(e,f) + log10(f) + sqrt(g) + pow(f,g) + rand(g,h))\" a=1 b=2 c=3 d=4 e=5 f=6 g=7 h=8 format=\"%.2f\"}]",
-                "{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | abs | format(\"%.2f\") }}"
-            ],
-            [
-                "[{math equation=\"round(sin(a) + cos(b) + tan(c) + max([c,d]) + min([c,d]) + pi() + exp(e) + log(e,f) + log10(f) + sqrt(g) + pow(f,g) + rand(g,h))\" a=1 b=2 c=3 d=4 e=5 f=6 g=7 h=8 format=\"%.2f\"}]",
-                "{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | round | format(\"%.2f\") }}"
-            ],
-            [
-                "[{math equation=\"ceil(sin(a) + cos(b) + tan(c) + max([c,d]) + min([c,d]) + pi() + exp(e) + log(e,f) + log10(f) + sqrt(g) + pow(f,g) + rand(g,h))\" a=1 b=2 c=3 d=4 e=5 f=6 g=7 h=8 format=\"%.2f\"}]",
-                "{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | round(0, 'ceil') | format(\"%.2f\") }}"
-            ],
-            [
-                "[{math equation=\"floor(sin(a) + cos(b) + tan(c) + max([c,d]) + min([c,d]) + pi() + exp(e) + log(e,f) + log10(f) + sqrt(g) + pow(f,g) + rand(g,h))\" a=1 b=2 c=3 d=4 e=5 f=6 g=7 h=8 format=\"%.2f\"}]",
-                "{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | round(0, 'floor') | format(\"%.2f\") }}"
             ]
         ];
     }

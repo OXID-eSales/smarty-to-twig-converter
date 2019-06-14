@@ -7,9 +7,8 @@
 namespace sankar\ST\Tests\Unit;
 
 use toTwig\Converter\InsertTrackerConverter;
-use PHPUnit\Framework\TestCase;
 
-class InsertTrackerConverterTest extends TestCase
+class InsertTrackerConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var InsertTrackerConverter */
@@ -18,32 +17,8 @@ class InsertTrackerConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new InsertTrackerConverter();
-    }
-
-    /**
-     * @covers       \toTwig\Converter\InsertTrackerConverter::convert
-     * @dataProvider provider
-     *
-     * @param $smarty
-     * @param $twig
-     */
-    public function testThatIncludeIsConverted($smarty, $twig)
-    {
-        $this->assertSame($twig, $this->converter->convert($smarty));
-    }
-
-    public function provider()
-    {
-        return [
-            [
-                '[{insert name="oxid_tracker" title="PRODUCT_DETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath()}]',
-                '{{ insert_tracker({title: "PRODUCT_DETAILS"|translate, product: oDetailsProduct, cpath: oView.getCatTreePath()}) }}'
-            ],
-            [
-                '[{ insert name="oxid_tracker" title="PRODUCT_DETAILS"|oxmultilangassign product=$oDetailsProduct cpath=$oView->getCatTreePath() }]',
-                '{{ insert_tracker({title: "PRODUCT_DETAILS"|translate, product: oDetailsProduct, cpath: oView.getCatTreePath()}) }}'
-            ]
-        ];
+        $this->templateNames = ['insert-tracker'];
+        parent::setUp();
     }
 
     /**
