@@ -30,6 +30,26 @@ class DatabaseConverterTest extends TestCase
     /** @var string */
     private $databasePath = __DIR__ . '/_datasets/init.db';
 
+    private $databasePathBackup = __DIR__ . '/_datasets/init.db.bak';
+
+    /**
+     * Performs operation returned by getSetUpOperation().
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (!file_exists($this->databasePathBackup)) {
+            copy($this->databasePath, $this->databasePathBackup);
+        }
+
+        $this->databaseTester = null;
+
+        $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
+        $this->getDatabaseTester()->setDataSet($this->getDataSet());
+        $this->getDatabaseTester()->onSetUp();
+    }
+
     /**
      * @covers \toTwig\SourceConverter\DatabaseConverter::convert
      */
@@ -219,5 +239,27 @@ class DatabaseConverterTest extends TestCase
     {
         $dataSet = $this->createXMLDataSet(__DIR__.'/_datasets/initial.xml');
         return $dataSet;
+    }
+    /**
+     * Performs operation returned by getTearDownOperation().
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        if(file_exists($this->databasePathBackup)) {
+            copy($this->databasePathBackup, $this->databasePath);
+            unlink($this->databasePathBackup);
+        }
+
+        $this->getDatabaseTester()->setTearDownOperation($this->getTearDownOperation());
+        $this->getDatabaseTester()->setDataSet($this->getDataSet());
+        $this->getDatabaseTester()->onTearDown();
+
+        /*
+         * Destroy the tester after the test is run to keep DB connections
+         * from piling up.
+         */
+        $this->databaseTester = null;
     }
 }
