@@ -55,11 +55,11 @@ class CycleConverter extends ConverterAbstract
     {
         $valuesArray = [];
         if (isset($attributes['values'])) {
-            $values = trim($attributes['values'], "\"");
-            $delimiter = isset($attributes['delimiter']) ? trim($attributes['delimiter'], "\"") : ",";
+            $values = trim($attributes['values'], "\"'");
+            $delimiter = isset($attributes['delimiter']) ? trim($attributes['delimiter'], "\"'") : ",";
 
             foreach (explode($delimiter, $values) as $value) {
-                $valuesArray[] = "\"$value\"";
+                $valuesArray[] = "\"" . $value . "\"";
             }
         }
 

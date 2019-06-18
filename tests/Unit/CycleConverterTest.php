@@ -75,6 +75,16 @@ class CycleConverterTest extends TestCase
                 "{{ smarty_cycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) }}"
             ],
             [
+                // Extra parameters single quote marks for array
+                "[{cycle values='val1:val2:val3' delimiter=':' print=false advance=false reset=true}]",
+                "{{ smarty_cycle([\"val1\", \"val2\", \"val3\"], { print: false, advance: false, reset: true }) }}"
+            ],
+            [
+                // Extra parameters unescaped double quote marks
+                '[{cycle values="val1:val2:val3" delimiter=":" print=false advance=false reset=true}]',
+                '{{ smarty_cycle(["val1", "val2", "val3"], { print: false, advance: false, reset: true }) }}'
+            ],
+            [
                 // Extra parameters with assign
                 "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true assign=\"var\"}]",
                 "{% set var = smarty_cycle([\"val1\", \"val2\", \"val3\"], { advance: false, reset: true }) %}"
