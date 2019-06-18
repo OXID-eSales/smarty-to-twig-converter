@@ -248,8 +248,9 @@ class DatabaseConverterTest extends TestCase
         parent::tearDown();
 
         if(file_exists($this->databasePathBackup)) {
-            copy($this->databasePathBackup, $this->databasePath);
-            unlink($this->databasePathBackup);
+            if (copy($this->databasePathBackup, $this->databasePath)) {
+                unlink($this->databasePathBackup);
+            }
         }
 
         $this->getDatabaseTester()->setTearDownOperation($this->getTearDownOperation());
