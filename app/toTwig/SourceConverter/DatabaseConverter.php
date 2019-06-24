@@ -153,10 +153,8 @@ class DatabaseConverter extends SourceConverter
 
     /**
      * @param string[] $columns
-     *
-     * @return mixed
      */
-    public function filterColumns(array $columns): mixed
+    public function filterColumns(array $columns)
     {
         $columns = array_map('trim', $columns);
 

@@ -168,10 +168,10 @@ class Converter
     }
 
     /**
-     * Fixes all files for the given finder.
+     * Fixes all files for the given finder.convert()
      *
-     * @param Boolean $dryRun Whether to simulate the changes or not
-     * @param Boolean $diff   Whether to provide diff
+     * @param bool $dryRun Whether to simulate the changes or not
+     * @param bool $diff   Whether to provide diff
      *
      * @return array
      */
