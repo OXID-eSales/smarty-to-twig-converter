@@ -13,9 +13,6 @@ namespace toTwig\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
 use toTwig\Console\Command\ConvertCommand;
-use toTwig\Console\Command\CompileCommand;
-use toTwig\Console\Command\ReadmeCommand;
-use toTwig\Console\Command\SelfUpdateCommand;
 use toTwig\Converter;
 
 /**
@@ -34,9 +31,6 @@ class Application extends BaseApplication
         parent::__construct('PHP Smarty to Twig Converter', Converter::VERSION);
 
         $this->add(new ConvertCommand());
-        $this->add(new CompileCommand());
-        $this->add(new ReadmeCommand());
-        $this->add(new SelfUpdateCommand());
     }
 
     /**

@@ -74,62 +74,56 @@ class ConvertCommand extends Command
             ->setDescription('Convert a directory, file or database entities.')
             ->setHelp(
                 <<<EOF
-The <info>%command.name%</info> command tries to fix as much coding standards
-problems as possible on a given file or directory:
+           
+The convert command tries to fix as much coding standards problems as possible on a given file, directory or database.
+Converter can work with files and directories:
 
-	<info>php %command.full_name% /path/to/dir</info>
-	<info>php %command.full_name% /path/to/file</info>
+	<info>php toTwig convert --path=/path/to/dir</info>
+	<info>php toTwig convert --path=/path/to/file</info>
+	
+<comment>--ext</comment>
+By default files with .html.twig extension will be created. To specify different extensions use --ext parameter:
 
-The <comment>--converters</comment> option lets you choose the exact converters to
-apply (the converter names must be separated by a comma):
+    <info>php toTwig convert --path=/path/to/dir --ext=.js.twig</info>
+    
+<comment>--database</comment>
+The --database parameter gets database doctrine-like URL to convert database entries.
 
-	<info>php %command.full_name% /path/to/dir --converters=for,if,misc</info>
+    <info>php toTwig convert --database="mysql://user:password@localhost/db"</info>
 
-You can also blacklist the converters you don't want if this is more convenient,
-using <comment>-name</comment>:
+<comment>--database-columns</comment>
+The --database-columns option lets you choose tables columns to be converted
+(the table column names has to be specified in table_a.column_b format and separated by comma):
 
-	<info>php %command.full_name% /path/to/dir --converters=-for,-if</info>
+    <info>php toTwig convert --database="..." --database-columns=oxactions.OXLONGDESC,oxcontents.OXCONTENT</info>
+    
+You can also blacklist the table columns you don't want using "-" before column name
 
-A combination of <comment>--dry-run</comment>, <comment>--verbose</comment> and <comment>--diff</comment> will
-display summary of proposed changes, leaving your files unchanged.
+    <info>php toTwig convert --database="..." --database-columns=-oxactions.OXLONGDESC_1,-oxcontents.OXCONTENT_1</info>
 
-All converters apply by default.
+<comment>--converters</comment>
+The --converters option lets you choose which converters to apply (the converter names must be separated by a comma):
 
-Choose from the list of available converters:
+    <info>php toTwig convert --path=/path/to/dir --ext=.html.twig --converters=for,if,misc</info>
 
-{$this->getConvertersHelp()}
+You can also blacklist the converters you don't want if this is more convenient, using "-" before converter name:
 
-The <comment>--config</comment> option customizes the files to analyse, based
-on some well-known directory structures:
+    <info>php toTwig convert --path=/path/to/dir --ext=.html.twig --converters=-for,-if</info>
 
-	<comment># For the Symfony 2.1 branch</comment>
-	<info>php %command.full_name% /path/to/sf21 --config=sf21</info>
+<comment>--dry-run</comment>
+The --dry-run option displays the files that need to be fixed but without actually modifying them:
 
-Choose from the list of available configurations:
+<comment>--diff</comment>
+Will create diff for all files
 
-{$this->getConfigsHelp()}
-The <comment>--dry-run</comment> option displays the files that need to be
-fixed but without actually modifying them:
+<comment>--config-path</comment>
+Instead of building long line commands it is possible to inject PHP configuration code. Two example files are included
+in main directory: config_file.php and config_database.php. To include config file use --config-path parameter:
 
-	<info>php %command.full_name% /path/to/code --dry-run</info>
+    <info>php toTwig convert --config-path=config_file.php</info>
 
-Instead of using command line options to customize the converter, you can save the
-configuration in a <comment>.php_st</comment> file in the root directory of
-your project. The file must return an instance of
-`toTwig\ConfigInterface`, which lets you configure the converters, the files,
-and directories that need to be analyzed:
+For more information check README.md in installation directory
 
-	<?php
-
-	\$finder = toTwig\Finder\DefaultFinder::create()
-		->exclude('somefile')
-		->in(__DIR__)
-	;
-
-	return toTwig\Config\Config::create()
-		->converters(array('if', 'for'))
-		->finder(\$finder)
-	;
 EOF
             );
     }
@@ -144,6 +138,9 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
+        var_dump($input->getOptions());
+
         try {
             $this->checkInputConstraints($input);
         } catch (InvalidArgumentException $exception) {
@@ -275,6 +272,7 @@ EOF
         foreach ($changed as $id => $conversionResult) {
             $output->write(sprintf('%4d) %s', $i++, $id));
             if ($input->hasOption('verbose')) {
+                //var_dump($input->hasOption('verbose'));
                 $output->write(sprintf(' (<comment>%s</comment>)', implode(', ', $conversionResult->getAppliedConverters())));
                 if ($input->getOption('diff')) {
                     $output->writeln('');
