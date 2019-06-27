@@ -47,22 +47,22 @@ class OxhasrightsConverterTest extends TestCase
             //basic usage
             [
                 '[{oxhasrights object=$edit readonly=$readonly}]',
-                '{% hasrights { "object": "edit", "readonly": "readonly", } %}'
+                '{% hasrights { object: edit, readonly: readonly } %}'
             ],
             //all arguments
             [
-                '[{oxhasrights type=$type field=field right=right object=object readonly=$readonly ident=ident}]',
-                '{% hasrights {"type": "type", "field": "field", "right": "right", "object": "object", "readonly": "readonly", "ident": "ident",} %}'
+                '[{oxhasrights type=$type field=$field right=$right object=$object readonly=$readonly ident=$ident}]',
+                '{% hasrights { type: type, field: field, right: right, object: object, readonly: readonly, ident: ident } %}'
             ],
             //spaces in tags
             [
                 '[{ oxhasrights type=$type }]',
-                '{% hasrights {"type": "type", } %}'
+                '{% hasrights { type: type } %}'
             ],
             //random order of arguments
             [
                 '[{oxhasrights ident=$ident readonly=$readonly object=$object right=$right field=$field type=$type }]',
-                '{% hasrights {"type": "type", "field": "field", "right": "right", "object": "object", "readonly": "readonly", "ident": "ident",} %}'
+                '{% hasrights { ident: ident, readonly: readonly, object: object, right: right, field: field, type: type } %}'
             ]
         ];
     }

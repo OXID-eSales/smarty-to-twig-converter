@@ -52,43 +52,15 @@ class OxhasrightsConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $string = "{% hasrights {:type :field :right :object :readonly :ident} %}";
-                $replace = [];
-                $attr = $this->getAttributes($matches);
+                $attributes = $this->getAttributes($matches);
 
-                $replace['type'] = $this->getArrayElementToReplace($attr, 'type');
-                $replace['field'] = $this->getArrayElementToReplace($attr, 'field');
-                $replace['right'] = $this->getArrayElementToReplace($attr, 'right');
-                $replace['object'] = $this->getArrayElementToReplace($attr, 'object');
-                $replace['readonly'] = $this->getArrayElementToReplace($attr, 'readonly');
-                $replace['ident'] = $this->getArrayElementToReplace($attr, 'ident');
+                $attributes = array_filter($attributes, function ($key) {
+                    return in_array($key, ['type', 'field', 'right', 'object', 'readonly', 'ident']);
+                }, ARRAY_FILTER_USE_KEY);
 
-                $string = $this->replaceNamedArguments($string, $replace);
-
-                return str_replace($matches[0], $string, $matches[0]);
+                return "{% hasrights " . $this->convertArrayToAssocTwigArray($attributes, []) . " %}";
             },
             $content
         );
-    }
-
-    /**
-     * Returns element of array to replace template string
-     *
-     * @param array  $attr
-     * @param string $attributeName
-     *
-     * @return string
-     */
-    private function getArrayElementToReplace(array $attr, string $attributeName): string
-    {
-        if (isset($attr[$attributeName])) {
-            $format = "\"%s\": \"%s\",";
-            $variable = $this->sanitizeVariableName($attr[$attributeName]);
-            $return = sprintf($format, $attributeName, $variable);
-        } else {
-            $return = '';
-        }
-
-        return $return;
     }
 }
