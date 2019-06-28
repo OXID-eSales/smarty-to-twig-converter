@@ -18,7 +18,7 @@ class CaptureConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\CaptureConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -28,7 +28,7 @@ class CaptureConverterTest extends TestCase
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

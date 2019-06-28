@@ -97,15 +97,28 @@ class DatabaseConverter extends SourceConverter
      *
      * @return array
      */
-    private function convertRow(string $table, string $column, string $primaryKey, array $row, bool $dryRun, bool $diff, array $converters): array
-    {
+    private function convertRow(
+        string $table,
+        string $column,
+        string $primaryKey,
+        array $row,
+        bool $dryRun,
+        bool $diff,
+        array $converters
+    ): array {
         $changed = [];
 
         $conversionResult = $this->convertTemplate($row[$column], $diff, $converters);
 
         if ($conversionResult->hasAppliedConverters()) {
             if (!$dryRun) {
-                $this->updateRow($table, $column, $primaryKey, $row[$primaryKey], $conversionResult->getConvertedTemplate());
+                $this->updateRow(
+                    $table,
+                    $column,
+                    $primaryKey,
+                    $row[$primaryKey],
+                    $conversionResult->getConvertedTemplate()
+                );
             }
 
             $id = sprintf("%s.%s(%s:%s)", $table, $column, $primaryKey, $row[$primaryKey]);
@@ -123,8 +136,13 @@ class DatabaseConverter extends SourceConverter
      * @param string $primaryKeyValue
      * @param string $newValue
      */
-    private function updateRow(string $table, string $column, string $primaryKey, string $primaryKeyValue, string $newValue): void
-    {
+    private function updateRow(
+        string $table,
+        string $column,
+        string $primaryKey,
+        string $primaryKeyValue,
+        string $newValue
+    ): void {
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder
@@ -148,7 +166,7 @@ class DatabaseConverter extends SourceConverter
     /**
      * @param string[] $columns
      */
-    public function filterColumns(array $columns): void
+    public function filterColumns(array $columns)
     {
         $columns = array_map('trim', $columns);
 
@@ -156,19 +174,22 @@ class DatabaseConverter extends SourceConverter
             $columns = array_map(
                 function ($column) {
                     return ltrim($column, '-');
-                }, $columns
+                },
+                $columns
             );
 
             $this->columns = array_filter(
-                $this->columns, function ($column) use ($columns) {
-                return !in_array($column, $columns);
-            }
+                $this->columns,
+                function ($column) use ($columns) {
+                    return !in_array($column, $columns);
+                }
             );
         } else {
             $this->columns = array_filter(
-                $this->columns, function ($column) use ($columns) {
-                return in_array($column, $columns);
-            }
+                $this->columns,
+                function ($column) use ($columns) {
+                    return in_array($column, $columns);
+                }
             );
         }
     }

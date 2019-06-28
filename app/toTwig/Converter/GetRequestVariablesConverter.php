@@ -16,7 +16,7 @@ class GetRequestVariablesConverter extends ConverterAbstract
 {
 
     protected $name = 'get_request_variables';
-    protected $description = 'Convert direct access to php request variables to using getters. Only $_COOKIE and $_GET are accessible';
+    protected $description = 'Access php request variables using getters. Only $_COOKIE and $_GET are accessible';
     protected $priority = 50;
 
     /**
@@ -59,9 +59,9 @@ class GetRequestVariablesConverter extends ConverterAbstract
     }
 
     /**
-     * @param $content
-     * @param $pattern
-     * @param $getterName
+     * @param string $content
+     * @param string $pattern
+     * @param string $getterName
      *
      * @return string
      */

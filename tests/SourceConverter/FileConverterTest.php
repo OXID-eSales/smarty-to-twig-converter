@@ -21,7 +21,7 @@ class FileConverterTest extends TestCase
     /**
      * @covers \toTwig\SourceConverter\FileConverter::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $fileConverter = new FileConverter();
 

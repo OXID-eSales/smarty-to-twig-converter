@@ -10,7 +10,7 @@ use toTwig\Converter\OxscriptConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxscriptConverterTest extends TestCase
+class OxscriptConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var OxscriptConverter */
@@ -19,12 +19,14 @@ class OxscriptConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new OxscriptConverter();
+        $this->templateNames = ['oxscript'];
+        parent::setUp();
     }
 
     /**
      * @covers       \toTwig\Converter\OxscriptConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,30 +43,9 @@ class OxscriptConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
-            // OXID examples
-            [
-                "[{oxscript include=\"js/pages/details.min.js\" priority=10}]",
-                "{{ script({ include: \"js/pages/details.min.js\", priority: 10, dynamic: __oxid_include_dynamic }) }}"
-            ],
-            [
-                "[{oxscript add=\"oxVariantSelections  = [`\$_sSelectionHashCollection`];\"}]",
-                "{{ script({ add: \"oxVariantSelections  = [`\$_sSelectionHashCollection`];\", dynamic: __oxid_include_dynamic }) }}"
-            ],
-            [
-                "[{oxscript add=\"\$( document ).ready( function() { Flow.initDetailsEvents(); });\"}]",
-                "{{ script({ add: \"$( document ).ready( function() { Flow.initDetailsEvents(); });\", dynamic: __oxid_include_dynamic }) }}"
-            ],
-            [
-                "[{oxscript widget=\$oView->getClassName()}]",
-                "{{ script({ widget: oView.getClassName(), dynamic: __oxid_include_dynamic }) }}"
-            ],
-            [
-                "[{oxscript}]",
-                "{{ script({ dynamic: __oxid_include_dynamic }) }}"
-            ],
             // With spaces
             [
                 "[{ oxscript include=\"js/pages/details.min.js\" priority=10 }]",

@@ -66,7 +66,7 @@ class DatabaseConverterTest extends TestCase
         $this->assertEquals($expected, $changed);
 
         $dataset = $this->connection->createDataSet(['table_a', 'table_b']);
-        $expectedDataset = $this->createXMLDataSet(__DIR__.'/_datasets/expectedConvert.xml');
+        $expectedDataset = $this->createXMLDataSet(__DIR__ . '/_datasets/expectedConvert.xml');
 
         // Compare database sets
         $this->assertDataSetsEqual($expectedDataset, $dataset);
@@ -135,24 +135,28 @@ class DatabaseConverterTest extends TestCase
         $columnAid2
             ->setOriginalTemplate('[{$varA}]')
             ->setConvertedTemplate('{{ varA }}')
-            ->setDiff('      <error>---</error> Original
+            ->setDiff(
+                '      <error>---</error> Original
       <info>+++</info> New
       @@ @@
       <error>-</error>[{$varA}]
       <info>+</info>{{ varA }}
-      ')
+      '
+            )
             ->addAppliedConverter('variable');
 
         $columnAid3 = new ConversionResult();
         $columnAid3
             ->setOriginalTemplate('[{$varA}]')
             ->setConvertedTemplate('{{ varA }}')
-            ->setDiff('      <error>---</error> Original
+            ->setDiff(
+                '      <error>---</error> Original
       <info>+++</info> New
       @@ @@
       <error>-</error>[{$varA}]
       <info>+</info>{{ varA }}
-      ')
+      '
+            )
             ->addAppliedConverter('variable');
 
 
@@ -180,7 +184,7 @@ class DatabaseConverterTest extends TestCase
         $this->assertEquals($expected, $changed);
 
         $dataset = $this->connection->createDataSet(['table_a', 'table_b']);
-        $expectedDataset = $this->createXMLDataSet(__DIR__.'/_datasets/initial.xml');
+        $expectedDataset = $this->createXMLDataSet(__DIR__ . '/_datasets/initial.xml');
 
         // Compare database sets
         $this->assertDataSetsEqual($expectedDataset, $dataset);
@@ -237,9 +241,11 @@ class DatabaseConverterTest extends TestCase
      */
     protected function getDataSet()
     {
-        $dataSet = $this->createXMLDataSet(__DIR__.'/_datasets/initial.xml');
+        $dataSet = $this->createXMLDataSet(__DIR__ . '/_datasets/initial.xml');
+
         return $dataSet;
     }
+
     /**
      * Performs operation returned by getTearDownOperation().
      */
@@ -247,7 +253,7 @@ class DatabaseConverterTest extends TestCase
     {
         parent::tearDown();
 
-        if(file_exists($this->databasePathBackup)) {
+        if (file_exists($this->databasePathBackup)) {
             if (copy($this->databasePathBackup, $this->databasePath)) {
                 unlink($this->databasePathBackup);
             }

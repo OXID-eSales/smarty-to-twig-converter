@@ -6,7 +6,6 @@
 
 namespace sankar\ST\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxgetseourlConverter;
 
 /**
@@ -14,7 +13,7 @@ use toTwig\Converter\OxgetseourlConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxgetseourlConverterTest extends TestCase
+class OxgetseourlConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var OxgetseourlConverter */
@@ -23,12 +22,14 @@ class OxgetseourlConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new OxgetseourlConverter();
+        $this->templateNames = ['oxgetseourl'];
+        parent::setUp();
     }
 
     /**
      * @covers       \toTwig\Converter\OxgetseourlConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -45,7 +46,7 @@ class OxgetseourlConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Example from OXID
@@ -53,16 +54,11 @@ class OxgetseourlConverterTest extends TestCase
                 "[{oxgetseourl ident=\$oViewConf->getSelfLink()|cat:\"cl=basket\"}]",
                 "{{ seo_url({ ident: oViewConf.getSelfLink()|cat(\"cl=basket\") }) }}"
             ],
-            // Example from OXID
-            [
-                "[{oxgetseourl ident=\$oViewConf->getSelfLink()|cat:\"cl=account\" params=\"anid=`\$oDetailsProduct->oxarticles__oxnid->value`\"|cat:\"&amp;sourcecl=\"|cat:\$oViewConf->getTopActiveClassName()|cat:\$oViewConf->getNavUrlParams()}]",
-                "{{ seo_url({ ident: oViewConf.getSelfLink()|cat(\"cl=account\"), params: \"anid=`\$oDetailsProduct.oxarticles__oxnid.value`\"|cat(\"&amp;sourcecl=\")|cat(oViewConf.getTopActiveClassName())|cat(oViewConf.getNavUrlParams()) }) }}"
-            ],
             // With spaces
             [
                 "[{ oxgetseourl ident=\"basket\"}]",
                 "{{ seo_url({ ident: \"basket\" }) }}"
-            ],
+            ]
         ];
     }
 

@@ -23,7 +23,7 @@ class GetRequestVariablesConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\AssignConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -40,7 +40,7 @@ class GetRequestVariablesConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             [

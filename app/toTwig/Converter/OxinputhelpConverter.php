@@ -31,7 +31,9 @@ class OxinputhelpConverter extends ConverterAbstract
                     $attr['ident'] = $this->sanitizeValue($attr['ident']);
                 }
 
-                $pattern = '{% include "inputhelp.html.twig" with {\'sHelpId\': help_id(:ident), \'sHelpText\': help_text(:ident)} %}';
+                $pattern = '{% include "inputhelp.html.twig" with '
+                           . '{\'sHelpId\': help_id(:ident), \'sHelpText\': help_text(:ident)} '
+                           . '%}';
                 $string = $this->replaceNamedArguments($pattern, $attr);
 
                 return str_replace($matches[0], $string, $matches[0]);

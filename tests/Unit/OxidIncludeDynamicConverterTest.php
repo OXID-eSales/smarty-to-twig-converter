@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxidIncludeDynamicConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxidIncludeDynamicConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxidIncludeDynamicConverterTest extends TestCase
+class OxidIncludeDynamicConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var OxidIncludeDynamicConverter */
@@ -19,12 +18,22 @@ class OxidIncludeDynamicConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new OxidIncludeDynamicConverter();
+        $this->templateNames = ['oxid-include-dynamic'];
+        parent::setUp();
+    }
+
+    /**
+     * @covers \toTwig\Converter\InsertTrackerConverter::convert
+     */
+    public function testConvert()
+    {
+        parent::testConvert();
     }
 
     /**
      * @covers       \toTwig\Converter\OxidIncludeDynamicConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +50,7 @@ class OxidIncludeDynamicConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Basic usage
@@ -49,16 +58,11 @@ class OxidIncludeDynamicConverterTest extends TestCase
                 "[{oxid_include_dynamic file=\"form/formparams.tpl\"}]",
                 "{% include_dynamic \"form/formparams.html.twig\" %}"
             ],
-            // Example from OXID
-            [
-                "[{oxid_include_dynamic file=\"widget/product/compare_links.tpl\" testid=\"_`\$iIndex`\" type=\"compare\" aid=\$product->oxarticles__oxid->value anid=\$altproduct in_list=\$product->isOnComparisonList() page=\$oView->getActPage()}]",
-                "{% include_dynamic \"widget/product/compare_links.html.twig\" with {testid: \"_`\$iIndex`\", type: \"compare\", aid: product.oxarticles__oxid.value, anid: altproduct, in_list: product.isOnComparisonList(), page: oView.getActPage()} %}"
-            ],
             // With spaces
             [
                 "[{ oxid_include_dynamic file=\"form/formparams.tpl\" }]",
                 "{% include_dynamic \"form/formparams.html.twig\" %}"
-            ],
+            ]
         ];
     }
 

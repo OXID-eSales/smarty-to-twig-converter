@@ -24,7 +24,7 @@ class CycleConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\AssignConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class CycleConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             [
@@ -86,7 +86,7 @@ class CycleConverterTest extends TestCase
             ],
             [
                 // Extra parameters with assign
-                "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true assign=\"var\"}]",
+                "[{cycle values=\"val1:val2:val3\" delimiter=\":\" print=false advance=false reset=true assign='var'}]",
                 "{% set var = smarty_cycle([\"val1\", \"val2\", \"val3\"], { advance: false, reset: true }) %}"
             ]
         ];

@@ -7,9 +7,8 @@
 namespace sankar\ST\Tests\Unit;
 
 use toTwig\Converter\IdenticalComparisonConverter;
-use PHPUnit\Framework\TestCase;
 
-class IdenticalComparisonConverterTest extends TestCase
+class IdenticalComparisonConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var IdenticalComparisonConverter */
@@ -18,11 +17,13 @@ class IdenticalComparisonConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new IdenticalComparisonConverter();
+        $this->templateNames = ['identical-comparison'];
+        parent::setUp();
     }
 
     /**
      * @covers       \toTwig\Converter\IdenticalComparison::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatIfIsConverted($smarty, $twig)
     {
@@ -33,7 +34,7 @@ class IdenticalComparisonConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [
@@ -90,19 +91,13 @@ class IdenticalComparisonConverterTest extends TestCase
             ],
             [
                 '{% block checkout_order_errors %}
-        {% if oView.isConfirmAGBError() === 1 %}
-            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}',
+                    {% if oView.isConfirmAGBError() === 1 %}
+                    {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}
+                {% endblock %}',
                 '{% block checkout_order_errors %}
-        {% if oView.isConfirmAGBError() is same as(1) %}
-            {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}'
-            ],
-            [
-                '<li{%if $oContent->oxcontents__oxloadid->value === $oTopCont->oxcontents__oxloadid->value%} class="active"{%/if%}>',
-                '<li{%if $oContent->oxcontents__oxloadid->value is same as($oTopCont->oxcontents__oxloadid->value)%} class="active"{%/if%}>'
-            ],
-            [
-                '{%if (foo === false and bar === false) or foobar === "foobar" not foo === true %}',
-                '{%if (foo is same as(false) and bar is same as(false)) or foobar is same as("foobar") not foo is same as(true) %}'
+                    {% if oView.isConfirmAGBError() is same as(1) %}
+                    {% include "message/error.html.twig" with {statusMessage: "READ_AND_CONFIRM_TERMS"|translate} %}
+                {% endblock %}'
             ]
         ];
     }

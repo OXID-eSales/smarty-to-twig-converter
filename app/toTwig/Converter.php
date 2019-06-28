@@ -52,14 +52,19 @@ class Converter
     {
         foreach (Finder::create()->files()->in(__DIR__ . '/Converter') as $file) {
             $class = 'toTwig\\Converter\\' . basename($file, '.php');
-            if(!$this->isInstantiable($class)) {
+            if (!$this->isInstantiable($class)) {
                 continue;
             }
             $this->addConverter(new $class());
         }
     }
 
-    private function isInstantiable($class)
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    private function isInstantiable($class): bool
     {
         try {
             $reflectionClass = new \ReflectionClass($class);
@@ -67,6 +72,7 @@ class Converter
         } catch (\ReflectionException $exception) {
             $isInstantiable = false;
         }
+
         return $isInstantiable;
     }
 
@@ -90,23 +96,34 @@ class Converter
 
     /**
      * @param string[] $converters
+     *
+     * @return mixed
      */
     public function filterConverters(array $converters)
     {
         $converters = array_map('trim', $converters);
 
         if (empty($converters) || $converters[0][0] == '-') {
-            $converters = array_map(function ($converter) {
-                return ltrim($converter, '-');
-            }, $converters);
+            $converters = array_map(
+                function ($converter) {
+                    return ltrim($converter, '-');
+                },
+                $converters
+            );
 
-            $this->converters = array_filter($this->converters, function (ConverterAbstract $converter) use ($converters) {
-                return !in_array($converter->getName(), $converters);
-            });
+            $this->converters = array_filter(
+                $this->converters,
+                function (ConverterAbstract $converter) use ($converters) {
+                    return !in_array($converter->getName(), $converters);
+                }
+            );
         } else {
-            $this->converters = array_filter($this->converters, function (ConverterAbstract $converter) use ($converters) {
-                return in_array($converter->getName(), $converters);
-            });
+            $this->converters = array_filter(
+                $this->converters,
+                function (ConverterAbstract $converter) use ($converters) {
+                    return in_array($converter->getName(), $converters);
+                }
+            );
         }
     }
 
@@ -151,10 +168,10 @@ class Converter
     }
 
     /**
-     * Fixes all files for the given finder.
+     * Fixes all files for the given finder.convert()
      *
-     * @param Boolean         $dryRun    Whether to simulate the changes or not
-     * @param Boolean         $diff      Whether to provide diff
+     * @param bool $dryRun Whether to simulate the changes or not
+     * @param bool $diff   Whether to provide diff
      *
      * @return array
      */

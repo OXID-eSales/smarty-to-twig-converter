@@ -1,0 +1,7 @@
+{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | abs | format("%.2f") }}
+
+{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | round | format("%.2f") }}
+
+{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | round(0, 'ceil') | format("%.2f") }}
+
+{{ (sin(1) + cos(2) + tan(3) + max([3,4]) + min([3,4]) + pi() + exp(5) + log(5,6) + log10(6) + sqrt(7) + pow(6,7) + random([7,8])) | round(0, 'floor') | format("%.2f") }}

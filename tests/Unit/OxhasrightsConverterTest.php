@@ -2,7 +2,6 @@
 
 namespace sankar\ST\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\OxhasrightsConverter;
 
 /**
@@ -10,7 +9,7 @@ use toTwig\Converter\OxhasrightsConverter;
  *
  * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
-class OxhasrightsConverterTest extends TestCase
+class OxhasrightsConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var OxhasrightsConverter */
@@ -19,12 +18,14 @@ class OxhasrightsConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new OxhasrightsConverter();
+        $this->templateNames = ['oxhasrights'];
+        parent::setUp();
     }
 
     /**
      * @covers       \toTwig\Converter\OxhasrightsConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +42,7 @@ class OxhasrightsConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             //basic usage
@@ -49,20 +50,10 @@ class OxhasrightsConverterTest extends TestCase
                 '[{oxhasrights object=$edit readonly=$readonly}]',
                 '{% hasrights { object: edit, readonly: readonly } %}'
             ],
-            //all arguments
-            [
-                '[{oxhasrights type=$type field=$field right=$right object=$object readonly=$readonly ident=$ident}]',
-                '{% hasrights { type: type, field: field, right: right, object: object, readonly: readonly, ident: ident } %}'
-            ],
             //spaces in tags
             [
                 '[{ oxhasrights type=$type }]',
                 '{% hasrights { type: type } %}'
-            ],
-            //random order of arguments
-            [
-                '[{oxhasrights ident=$ident readonly=$readonly object=$object right=$right field=$field type=$type }]',
-                '{% hasrights { ident: ident, readonly: readonly, object: object, right: right, field: field, type: type } %}'
             ]
         ];
     }

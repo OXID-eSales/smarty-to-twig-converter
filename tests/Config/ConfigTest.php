@@ -102,7 +102,7 @@ class ConfigTest extends TestCase
     /**
      * @covers \toTwig\Config\Config::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $config = new Config();
 
@@ -133,7 +133,7 @@ class ConfigTest extends TestCase
      */
     public function testGetName()
     {
-        $config = new Config('custom' );
+        $config = new Config('custom');
 
         $this->assertEquals('custom', $config->getName());
     }

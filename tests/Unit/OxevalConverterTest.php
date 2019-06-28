@@ -24,7 +24,7 @@ class OxevalConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxevalConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -38,7 +38,7 @@ class OxevalConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Base usage

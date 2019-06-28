@@ -30,7 +30,7 @@ class VariableConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\VariableConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatVariableIsConverted($smarty, $twig)
     {
@@ -40,7 +40,7 @@ class VariableConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

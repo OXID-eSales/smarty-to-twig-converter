@@ -96,7 +96,8 @@ abstract class ConverterAbstract
      *
      * Matching this pattern will give these results:
      *   $matches[0] contains a string with full matched tag i.e.'[{tagName foo="bar" something="somevalue"}]'
-     *   $matches[1] should contain a string with all other configuration coming with a tag i.e.'foo = "bar" something="somevalue"'
+     *   $matches[1] should contain a string with all other configuration coming with a tag i.e.
+     *   'foo = "bar" something="somevalue"'
      *
      * @param string $tagName
      *
@@ -130,7 +131,8 @@ abstract class ConverterAbstract
     {
         //Initialize variables
         $attr = $pairs = [];
-        $pattern = '/(?:([\w:-]+)\s*=\s*)?((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}]|(}(?!])))*))/';
+        $pattern = '/(?:([\w:-]+)\s*=\s*)?'
+                   . '((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}]|(}(?!])))*))/';
 
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
@@ -369,11 +371,11 @@ abstract class ConverterAbstract
     /**
      * Replace multiple spaces in string with single space
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
-    protected function removeMultipleSpaces($string): string
+    protected function removeMultipleSpaces(string $string): string
     {
         return preg_replace('!\s+!', ' ', $string);
     }
@@ -416,11 +418,11 @@ abstract class ConverterAbstract
     }
 
     /**
-     * @param $templateName
+     * @param string $templateName
      *
      * @return string
      */
-    protected function convertFileExtension($templateName): string
+    protected function convertFileExtension(string $templateName): string
     {
         return preg_replace('/\.tpl/', '.html.twig', $templateName);
     }

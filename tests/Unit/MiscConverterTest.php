@@ -30,7 +30,7 @@ class MiscConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\MiscConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatMiscIsConverted($smarty, $twig)
     {
@@ -40,7 +40,7 @@ class MiscConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [

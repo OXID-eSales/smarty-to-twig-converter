@@ -48,14 +48,21 @@ class DefunConverterTest extends TestCase
                 '{% macro foo(var) %}hello{% endmacro %}{% import _self as self %}{{ self.foo(bar) }}'
             ],
             [
-                '[{defun name="foo" var=bar otherVar=otherBar}]hello[{/defun}]',
-                '{% macro foo(var, otherVar) %}hello{% endmacro %}{% import _self as self %}{{ self.foo(bar, otherBar) }}'
+                '[{defun name="foo" var=bar otherVar=otherBar}]
+                    hello
+                [{/defun}]',
+                '{% macro foo(var, otherVar) %}
+                    hello
+                {% endmacro %}{% import _self as self %}{{ self.foo(bar, otherBar) }}'
             ],
             [
-                '[{defun name="foo" var=bar otherVar=otherBar}][{fun name="nestedMacro" var=bar otherVar=otherBar}][{/defun}]',
-                '{% macro foo(var, otherVar) %}{% import _self as self %}{{ self.nestedMacro(var, otherVar) }}{% endmacro %}{% import _self as self %}{{ self.foo(bar, otherBar) }}'
+                '[{defun name="foo" var=bar otherVar=otherBar}]
+                    [{fun name="nestedMacro" var=bar otherVar=otherBar}]
+                [{/defun}]',
+                '{% macro foo(var, otherVar) %}
+                    {% import _self as self %}{{ self.nestedMacro(var, otherVar) }}
+                {% endmacro %}{% import _self as self %}{{ self.foo(bar, otherBar) }}'
             ]
         ];
     }
-
 }

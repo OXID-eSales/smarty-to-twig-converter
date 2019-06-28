@@ -16,7 +16,7 @@ class ConversionResultTest extends TestCase
     /**
      * @covers \toTwig\ConversionResult::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $conversionResult = new ConversionResult();
 

@@ -24,7 +24,7 @@ class OxmultilangConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxmultilangConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class OxmultilangConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Basic usage
@@ -51,8 +51,8 @@ class OxmultilangConverterTest extends TestCase
             ],
             // Example from OXID
             [
-                "[{oxmultilang noerror=true ident=\$menuitem->getAttribute('name')|default:\$menuitem->getAttribute('id')}]",
-                "{{ translate({ noerror: true, ident: menuitem.getAttribute('name')|default(menuitem.getAttribute('id')) }) }}"
+                "[{oxmultilang noerror=true ident=\$item->getAttribute('name')|default:\$item->getAttribute('id')}]",
+                "{{ translate({ noerror: true, ident: item.getAttribute('name')|default(item.getAttribute('id')) }) }}"
             ],
             // With spaces
             [

@@ -24,7 +24,7 @@ class AssignAdvConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\AssignAdvConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class AssignAdvConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Few examples from assign (compatibility)

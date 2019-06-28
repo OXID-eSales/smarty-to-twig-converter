@@ -24,7 +24,7 @@ class BlockConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\BlockConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class BlockConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Basic usage
@@ -71,8 +71,14 @@ class BlockConverterTest extends TestCase
             ],
             // Extends with parent call
             [
-                "[{extends file=\"parent.tpl\"}]\n[{block name=\"title\"}]\nYou will see now - [{\$smarty.block.parent}] - here\n[{/block}]",
-                "{% extends \"parent.html.twig\" %}\n{% block title %}\nYou will see now - {{ parent() }} - here\n{% endblock %}"
+                "[{extends file=\"parent.tpl\"}]
+                [{block name=\"title\"}]
+                    You will see now - [{\$smarty.block.parent}] - here
+                [{/block}]",
+                "{% extends \"parent.html.twig\" %}
+                {% block title %}
+                    You will see now - {{ parent() }} - here
+                {% endblock %}"
             ],
         ];
     }

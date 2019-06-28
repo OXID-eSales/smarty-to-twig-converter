@@ -11,13 +11,12 @@
 
 namespace sankar\ST\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use toTwig\Converter\CommentConverter;
 
 /**
  * @author sankara <sankar.suda@gmail.com>
  */
-class CommentConverterTest extends TestCase
+class CommentConverterTest extends FileConversionUnitTestCase
 {
 
     /** @var CommentConverter */
@@ -26,11 +25,18 @@ class CommentConverterTest extends TestCase
     public function setUp()
     {
         $this->converter = new CommentConverter();
+        $this->templateNames = ['comment'];
+        parent::setUp();
+    }
+
+    protected function getCommandParameters(string $templateName): array
+    {
+        return ['--path' => $this->getSmartyTemplatePath($templateName), '--converters' => 'comment'];
     }
 
     /**
      * @covers       \toTwig\Converter\CommentConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatIfIsConverted($smarty, $twig)
     {
@@ -41,7 +47,7 @@ class CommentConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [
@@ -51,16 +57,6 @@ class CommentConverterTest extends TestCase
             [
                 '[{*foo*}]',
                 '{# foo #}'
-            ],
-            [
-                '[{block name="dd_layout_page_header_icon_menu_languages"}]
-                                    [{* Language Dropdown*}]
-                                    [{oxid_include_widget cl="oxwLanguageList" lang=$oViewConf->getActLanguageId() _parent=$oView->getClassName() nocookie=1 _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()}]
-                                [{/block}]',
-                '[{block name="dd_layout_page_header_icon_menu_languages"}]
-                                    {# Language Dropdown #}
-                                    [{oxid_include_widget cl="oxwLanguageList" lang=$oViewConf->getActLanguageId() _parent=$oView->getClassName() nocookie=1 _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()}]
-                                [{/block}]'
             ]
         ];
     }

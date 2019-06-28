@@ -42,7 +42,7 @@ class DefunConverter extends ConverterAbstract
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      */
@@ -58,7 +58,10 @@ class DefunConverter extends ConverterAbstract
                 $this->macroName = $this->sanitizeVariableName($attr['name']);
                 $parameters = $this->getParameters($attr);
                 $this->setArguments($attr);
-                $string = $this->replaceNamedArguments($string, ['macroName' => $this->macroName, 'parameters' => $parameters]);
+                $string = $this->replaceNamedArguments(
+                    $string,
+                    ['macroName' => $this->macroName, 'parameters' => $parameters]
+                );
 
                 return str_replace($matches[0], $string, $matches[0]);
             },
@@ -66,7 +69,12 @@ class DefunConverter extends ConverterAbstract
         );
     }
 
-    private function replaceCallToMacro($content)
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function replaceCallToMacro($content): string
     {
         $pattern = $this->getOpeningTagPattern('fun');
 
@@ -78,7 +86,10 @@ class DefunConverter extends ConverterAbstract
 
                 // we have to use local macro variables as arguments passed to the nested macro
                 $parameters = $this->getParameters($attr);
-                $string = $this->replaceNamedArguments($this->twigCallToMacro, ['macroName' => $macroName, 'arguments' => $parameters]);
+                $string = $this->replaceNamedArguments(
+                    $this->twigCallToMacro,
+                    ['macroName' => $macroName, 'arguments' => $parameters]
+                );
 
                 return str_replace($matches[0], $string, $matches[0]);
             },
@@ -100,7 +111,10 @@ class DefunConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                $string = $this->replaceNamedArguments($string, ['macroName' => $this->macroName, 'arguments' => $this->arguments]);
+                $string = $this->replaceNamedArguments(
+                    $string,
+                    ['macroName' => $this->macroName, 'arguments' => $this->arguments]
+                );
 
                 return str_replace($matches[0], $string, $matches[0]);
             },

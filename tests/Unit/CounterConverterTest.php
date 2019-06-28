@@ -18,7 +18,7 @@ class CounterConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\CounterConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testThatCounterIsConverted($smarty, $twig)
     {
@@ -29,7 +29,7 @@ class CounterConverterTest extends TestCase
         );
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [
@@ -81,8 +81,8 @@ class CounterConverterTest extends TestCase
                 '{% set defaultCounter = ( defaultCounter | default(0) ) + 1 %} {% set foo = defaultCounter %}'
             ],
             [
-                '[{counter name="mini_basket_countdown_nr" assign="countdown_nr"}]',
-                '{% set mini_basket_countdown_nr = ( mini_basket_countdown_nr | default(0) ) + 1 %} {% set countdown_nr = mini_basket_countdown_nr %}'
+                '[{counter name="counter" assign="countdown_nr"}]',
+                '{% set counter = ( counter | default(0) ) + 1 %} {% set countdown_nr = counter %}'
             ],
             [
                 '[{counter name="foo" start=3 skip=4 direction=down print=true assign="bar"}]',

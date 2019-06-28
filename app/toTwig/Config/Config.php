@@ -123,6 +123,11 @@ class Config implements ConfigInterface
         return $this->customConverters;
     }
 
+    /**
+     * @param SourceConverter $converter
+     *
+     * @return ConfigInterface
+     */
     public function setSourceConverter(SourceConverter $converter): ConfigInterface
     {
         $this->sourceConverter = $converter;
@@ -130,16 +135,27 @@ class Config implements ConfigInterface
         return $this;
     }
 
+    /**
+     * @return SourceConverter
+     */
     public function getSourceConverter(): SourceConverter
     {
         return $this->sourceConverter;
     }
 
+    /**
+     * @return bool
+     */
     public function isDiff(): bool
     {
         return $this->diff;
     }
 
+    /**
+     * @param bool $diff
+     *
+     * @return Config
+     */
     public function diff($diff = true): self
     {
         $this->diff = $diff;
@@ -147,11 +163,19 @@ class Config implements ConfigInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isDryRun(): bool
     {
         return $this->dryRun;
     }
 
+    /**
+     * @param bool $dryRun
+     *
+     * @return Config
+     */
     public function dryRun($dryRun = true): self
     {
         $this->dryRun = $dryRun;

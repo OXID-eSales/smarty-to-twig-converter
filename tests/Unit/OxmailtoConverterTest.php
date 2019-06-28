@@ -24,7 +24,7 @@ class OxmailtoConverterTest extends TestCase
     /**
      * @covers       \toTwig\Converter\OxmailtoConverter::convert
      *
-     * @dataProvider Provider
+     * @dataProvider provider
      *
      * @param $smarty
      * @param $twig
@@ -41,7 +41,7 @@ class OxmailtoConverterTest extends TestCase
     /**
      * @return array
      */
-    public function Provider()
+    public function provider()
     {
         return [
             // Basic usage

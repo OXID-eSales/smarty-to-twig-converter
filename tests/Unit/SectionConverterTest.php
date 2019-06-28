@@ -18,14 +18,14 @@ class SectionConverterTest extends TestCase
 
     /**
      * @covers       \toTwig\Converter\SectionConverter::convert
-     * @dataProvider Provider
+     * @dataProvider provider
      */
     public function testConvert($smarty, $twig)
     {
         $this->assertSame($twig, $this->converter->convert($smarty));
     }
 
-    public function Provider()
+    public function provider()
     {
         return [
             [
