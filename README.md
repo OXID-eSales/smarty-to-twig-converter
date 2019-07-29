@@ -96,24 +96,63 @@ To run database conversion tests, sqlite is required. You can do this by running
 
 
 -   In Twig by default all variables are escaped. Some of variables
-    should be filtered with `|raw` filter to avoid this.
+    should be filtered with `|raw` filter to avoid this. This means all
+    templates, html code and strings containing unsafe characters like `< > $ &`
+    should be filtered with `|raw` before echoing. You can check if all necessary 
+    variables are escaped using web browser's inspector tool.
+    Instead of using `raw` filter to echo variable holding a template, you 
+    can use `template_from_string` function.  More on it in the [documentation](https://twig.symfony.com/doc/1.x/functions/template_from_string.html)
 -   Variable scope. In Twig variables declared in templates have scopes
     limited by block (`{% block %}`, `{% for %}` and so on). Some
     variables should be declared outside these blocks if they are used
     outside.
--   Redeclaring blocks - it’s forbidden in Twig.
+-   Redeclaring blocks - it’s forbidden in Twig. You must use a unique
+    name for each block in given template.
 -   Access to array item `$myArray.$itemIndex` should be manually
     translated to `myArray[itemIndex]`
--   Problem with checking non existing (null) properties. E.g. we want
-    to check the value of non-existing property
-    `oxarticles__oxunitname`. Twig checks with `isset` if this property
-    exists and it’s not, so Twig assumes that property name is function
-    name and tries to call it.
 -   Uses of regex string in templates - the tool can break or work
     incorrectly on so complex cases - it’s safer to manually copy&paste
     regular expression.
--   `[{section}]` - `loop` is array or integer - different behaviors.
-    The tool is not able to detect variable type.
+-   `[{section}]` - `loop` is array or integer which triggers different
+    behaviours. The tool is not able to detect variable type, so you need to check
+    what is used in each `loop`.
+-   String concatenation - the tool has issues with opening and closing strings.
+    Usage of smarty variables inside the string might cause the converter to fail.
+	Twig does not support this kind of concatenation. You should check places
+	where you concat strings held inside variables and use twig `~` instead of 
+	variables inside the string. In converted template you should look for
+	patterns like \`$var_name\`
+-   `$` signs are not always removed from variables. Sometimes when expression
+    is too complex, the converter will not remove `$` sign from variable name.
+	After conversion you should check your templates for `$` signs.
+-   Due to technical differences between smarty and twig loops work differently.
+    `if, else, for and foreach` might need to be manually adjusted. For more
+	information please check [documentation](https://twig.symfony.com/doc/2.x/)
+-   Twig offers easy access to fist element of loop. Instead of using indexed
+    element of variable you can use `loop.index0` or for current iteration
+	`loop.index.` Converter does not handle constructions like `$smarty.section.arg`.
+	More can be read in the [documentation](https://twig.symfony.com/doc/2.x/tags/for.html)
+-   In some places access to global variables has to be adjusted. In converted code
+    look for word `smarty` and replace it with `twig`
+-   Arrays which use `[]` brackets must be fixed manually to twig's notation.
+    `[]` should be replaced with dots `.`. You should check if there are `[]`
+	square brackets in converter templates.
+-   The converter does not convert logic operators like `||` and `&&` to not damage
+    logic used by js/jquery/php inside templates. `||` has to be manually changed to `OR`
+	and `&&` to `AND`.
+-   If you access request variables from template, please consider refactoring
+    any templates that do this. If it is not possible, please use functions
+	`get_global_cookie` or `get_global_get` provided with twig engine.
+	In case you need access to other request variables, you will have to
+	extend one of these functions on your own.
+-   You might need to manually check logic in template files. Some places will
+    require usage of `is same as` comparison, which uses PHP's `===` instead of `==`. 
+	This might be necessary when checking if variable was set, contains information,
+	if it is a `0` or if it is a `null`. There is a problem with checking
+	non existing (null) properties. E.g. we want to check the value of
+	non-existing property `oxarticles__oxunitname`. Twig checks with `isset`
+	if this property exists and it’s not, so Twig assumes that
+	property name is function name and tries to call it.
 
 ### Converted plugins and syntax pieces
 
