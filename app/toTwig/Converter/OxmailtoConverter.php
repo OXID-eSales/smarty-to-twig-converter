@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxmailtoConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxmailtoConverter extends AbstractSingleTagConverter
 {

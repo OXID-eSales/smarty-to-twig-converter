@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxifcontentConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxifcontentConverter extends ConverterAbstract
 {

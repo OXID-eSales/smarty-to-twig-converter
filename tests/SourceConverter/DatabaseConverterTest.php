@@ -13,8 +13,6 @@ use toTwig\SourceConverter\DatabaseConverter;
 
 /**
  * Class DatabaseConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class DatabaseConverterTest extends TestCase
 {

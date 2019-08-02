@@ -8,8 +8,6 @@ namespace toTwig\Converter;
 
 /**
  * Class AbstractSingleTagConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 abstract class AbstractSingleTagConverter extends ConverterAbstract
 {

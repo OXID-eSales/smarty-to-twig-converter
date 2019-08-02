@@ -7,8 +7,6 @@ use toTwig\Converter\AssignAdvConverter;
 
 /**
  * Class AssignAdvConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class AssignAdvConverterTest extends TestCase
 {

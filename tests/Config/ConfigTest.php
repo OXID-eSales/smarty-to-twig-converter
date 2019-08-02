@@ -11,8 +11,6 @@ use toTwig\SourceConverter\SourceConverter;
 
 /**
  * Class ConfigTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class ConfigTest extends TestCase
 {

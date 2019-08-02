@@ -7,8 +7,6 @@ use toTwig\Converter\OxscriptConverter;
 
 /**
  * Class OxscriptConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxscriptConverterTest extends FileConversionUnitTestCase
 {

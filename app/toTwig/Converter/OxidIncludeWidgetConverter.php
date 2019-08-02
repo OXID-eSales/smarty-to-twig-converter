@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxidIncludeWidgetConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxidIncludeWidgetConverter extends AbstractSingleTagConverter
 {

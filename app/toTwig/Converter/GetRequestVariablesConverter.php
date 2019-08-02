@@ -10,7 +10,6 @@ namespace toTwig\Converter;
  * Class GetRequestVariablesConverter
  *
  * @package toTwig\Converter
- * @author  Jędrzej Skoczek
  */
 class GetRequestVariablesConverter extends ConverterAbstract
 {

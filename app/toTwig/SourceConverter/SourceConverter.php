@@ -18,8 +18,6 @@ use toTwig\Converter\ConverterAbstract;
 
 /**
  * Class SourceConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 abstract class SourceConverter
 {

@@ -6,8 +6,6 @@ use toTwig\Converter\OxhasrightsConverter;
 
 /**
  * Class OxhasrightsConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxhasrightsConverterTest extends FileConversionUnitTestCase
 {

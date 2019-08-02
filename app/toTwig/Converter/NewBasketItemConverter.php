@@ -15,7 +15,6 @@ namespace toTwig\Converter;
  * Class InsertTrackerConverter
  *
  * @package toTwig\Converter
- * @author  Jędrzej Skoczek
  */
 class NewBasketItemConverter extends ConverterAbstract
 {

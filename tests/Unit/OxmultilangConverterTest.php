@@ -7,8 +7,6 @@ use toTwig\Converter\OxmultilangConverter;
 
 /**
  * Class OxmultilangConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxmultilangConverterTest extends TestCase
 {

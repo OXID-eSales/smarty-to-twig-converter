@@ -10,7 +10,6 @@ namespace toTwig\Converter;
  * Class DefunConverter
  *
  * @package toTwig\Converter
- * @author  Jędrzej Skoczek
  */
 class DefunConverter extends ConverterAbstract
 {

@@ -22,8 +22,6 @@ use toTwig\Finder\FinderInterface;
 
 /**
  * Class FileConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class FileConverter extends SourceConverter
 {

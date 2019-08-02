@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxhasrightsConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxhasrightsConverter extends ConverterAbstract
 {

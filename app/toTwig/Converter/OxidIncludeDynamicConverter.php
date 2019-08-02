@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxidIncludeDynamicConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxidIncludeDynamicConverter extends IncludeConverter
 {

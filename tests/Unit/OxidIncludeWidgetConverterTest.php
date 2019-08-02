@@ -6,8 +6,6 @@ use toTwig\Converter\OxidIncludeWidgetConverter;
 
 /**
  * Class OxidIncludeWidgetConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxidIncludeWidgetConverterTest extends FileConversionUnitTestCase
 {

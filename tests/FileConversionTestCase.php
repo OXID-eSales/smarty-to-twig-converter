@@ -14,7 +14,6 @@ use toTwig\Console\Command\ConvertCommand;
  * Class FileConversionTestCase
  *
  * @package sankar\ST\Tests
- * @author  Jędrzej Skoczek
  */
 abstract class FileConversionTestCase extends TestCase
 {

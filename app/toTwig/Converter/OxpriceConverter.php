@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxpriceConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxpriceConverter extends AbstractSingleTagConverter
 {

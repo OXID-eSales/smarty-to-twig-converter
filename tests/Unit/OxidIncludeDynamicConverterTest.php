@@ -6,8 +6,6 @@ use toTwig\Converter\OxidIncludeDynamicConverter;
 
 /**
  * Class OxidIncludeDynamicConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxidIncludeDynamicConverterTest extends FileConversionUnitTestCase
 {

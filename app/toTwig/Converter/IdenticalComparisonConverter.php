@@ -10,7 +10,6 @@ namespace toTwig\Converter;
  * Class IdenticalComparisonConverter
  *
  * @package toTwig\Converter
- * @author  Jędrzej Skoczek
  */
 class IdenticalComparisonConverter extends ConverterAbstract
 {

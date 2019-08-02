@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxcontentConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxcontentConverter extends ConverterAbstract
 {

@@ -7,8 +7,6 @@ use toTwig\Converter\OxinputhelpConverter;
 
 /**
  * Class OxinputhelpConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxinputhelpConverterTest extends TestCase
 {

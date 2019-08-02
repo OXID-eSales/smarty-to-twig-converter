@@ -7,8 +7,6 @@ use toTwig\Converter\OxpriceConverter;
 
 /**
  * Class OxpriceConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxpriceConverterTest extends TestCase
 {

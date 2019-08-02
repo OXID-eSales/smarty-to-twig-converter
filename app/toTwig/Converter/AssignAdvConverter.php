@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class AssignAdvConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class AssignAdvConverter extends ConverterAbstract
 {

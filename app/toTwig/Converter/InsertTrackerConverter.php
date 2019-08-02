@@ -10,7 +10,6 @@ namespace toTwig\Converter;
  * Class InsertTrackerConverter
  *
  * @package toTwig\Converter
- * @author  Jędrzej Skoczek
  */
 class InsertTrackerConverter extends ConverterAbstract
 {

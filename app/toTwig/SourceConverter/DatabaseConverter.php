@@ -8,8 +8,6 @@ use toTwig\Converter\ConverterAbstract;
 
 /**
  * Class DatabaseConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class DatabaseConverter extends SourceConverter
 {

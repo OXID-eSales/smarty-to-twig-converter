@@ -10,8 +10,6 @@ use toTwig\Converter\OxgetseourlConverter;
 
 /**
  * Class OxgetseourlConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxgetseourlConverterTest extends FileConversionUnitTestCase
 {

@@ -7,8 +7,6 @@ use toTwig\Converter\OxifcontentConverter;
 
 /**
  * Class OxifcontentConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxifcontentConverterTest extends TestCase
 {

@@ -7,8 +7,6 @@ use toTwig\Converter\OxevalConverter;
 
 /**
  * Class OxevalConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxevalConverterTest extends TestCase
 {

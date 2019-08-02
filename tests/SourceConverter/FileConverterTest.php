@@ -12,8 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class FileConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class FileConverterTest extends TestCase
 {

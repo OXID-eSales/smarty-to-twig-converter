@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class BlockConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class BlockConverter extends ConverterAbstract
 {

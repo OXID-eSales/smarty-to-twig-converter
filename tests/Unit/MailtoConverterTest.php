@@ -7,8 +7,6 @@ use toTwig\Converter\MailtoConverter;
 
 /**
  * Class MailtoConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class MailtoConverterTest extends TestCase
 {

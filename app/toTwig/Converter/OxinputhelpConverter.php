@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class OxinputhelpConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxinputhelpConverter extends ConverterAbstract
 {

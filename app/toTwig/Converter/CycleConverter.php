@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class CycleConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class CycleConverter extends ConverterAbstract
 {

@@ -4,8 +4,6 @@ namespace toTwig;
 
 /**
  * Class ConversionResult
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class ConversionResult
 {

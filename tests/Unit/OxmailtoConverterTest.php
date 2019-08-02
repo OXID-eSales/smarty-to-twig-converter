@@ -7,8 +7,6 @@ use toTwig\Converter\OxmailtoConverter;
 
 /**
  * Class OxmailtoConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class OxmailtoConverterTest extends TestCase
 {

@@ -4,8 +4,6 @@ namespace toTwig\Converter;
 
 /**
  * Class MailtoConverter
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class MailtoConverter extends AbstractSingleTagConverter
 {

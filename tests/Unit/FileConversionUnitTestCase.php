@@ -12,7 +12,6 @@ use sankar\ST\Tests\FileConversionTestCase;
  * Class FileConversionUnitTestCase
  *
  * @package sankar\ST\Tests\Unit
- * @author  Jędrzej Skoczek
  */
 class FileConversionUnitTestCase extends FileConversionTestCase
 {

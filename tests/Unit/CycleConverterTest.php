@@ -7,8 +7,6 @@ use toTwig\Converter\CycleConverter;
 
 /**
  * Class CycleConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class CycleConverterTest extends TestCase
 {

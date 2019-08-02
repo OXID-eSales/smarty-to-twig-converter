@@ -7,8 +7,6 @@ use toTwig\Converter\BlockConverter;
 
 /**
  * Class BlockConverterTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class BlockConverterTest extends TestCase
 {

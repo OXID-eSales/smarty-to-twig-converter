@@ -7,8 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConversionResultTest
- *
- * @author Tomasz Kowalewski (t.kowalewski@createit.pl)
  */
 class ConversionResultTest extends TestCase
 {
