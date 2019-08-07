@@ -96,24 +96,305 @@ To run database conversion tests, sqlite is required. You can do this by running
 
 
 -   In Twig by default all variables are escaped. Some of variables
-    should be filtered with `|raw` filter to avoid this.
+    should be filtered with `|raw` filter to avoid this. This means all
+    templates, html code and strings containing unsafe characters like `< > $ &`
+    should be filtered with `|raw` before echoing. You can check if all necessary 
+    variables are escaped using web browser's inspector tool.
+    Instead of using `raw` filter to echo variable holding a template, you 
+    can use `template_from_string` function.  More on it in the [documentation](https://twig.symfony.com/doc/1.x/functions/template_from_string.html).
+    
+    Smarty:
+    ```smarty
+    [{$product->oxarticles__oxtitle->value}]
+    ```
+    Twig after converting:
+    ```twig
+    {{ product.oxarticles__oxtitle.value }}
+    ```
+    Twig after fixing:
+    ```twig
+    {{ product.oxarticles__oxtitle.value|raw }}
+    ```
+
 -   Variable scope. In Twig variables declared in templates have scopes
     limited by block (`{% block %}`, `{% for %}` and so on). Some
     variables should be declared outside these blocks if they are used
     outside.
--   Redeclaring blocks - it’s forbidden in Twig.
+    
+    Smarty:
+    ```smarty
+    [{foreach $myColors as $color}]
+        <li>[{$color}]</li>
+    [{/foreach}]
+    [{$color}]
+    ```
+    Twig after converting:
+    ```twig
+    {% for color in myColors %}
+        <li>{{ color }}</li>
+    {% endfor %}
+    {{ color }}
+    ```
+    Twig after fixing:
+    ```twig
+    {% for color in myColors %}
+        <li>{{ color }}</li>
+    {% endfor %}
+    {{ myColors|last }}
+    ```
+
+-   Redeclaring blocks - it’s forbidden in Twig. You must use a unique
+    name for each block in given template.
+    
+    Smarty:
+    ```smarty
+    [{block name="foo"}]
+        ...
+    [{/block}]
+    [{block name="foo"}]
+        ...
+    [{/block}]
+    ```
+    Twig after converting:
+    ```twig
+    {% block foo %}
+        ...
+    {% endblock %}
+    {% block foo %}
+        ...
+    {% endblock %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% block foo_A %}
+        ...
+    {% endblock %}
+    {% block foo_B %}
+        ...
+    {% endblock %}
+    ```
+
 -   Access to array item `$myArray.$itemIndex` should be manually
     translated to `myArray[itemIndex]`
--   Problem with checking non existing (null) properties. E.g. we want
-    to check the value of non-existing property
-    `oxarticles__oxunitname`. Twig checks with `isset` if this property
-    exists and it’s not, so Twig assumes that property name is function
-    name and tries to call it.
+    
+    Smarty:
+    ```smarty
+    [{$myArray.$itemIndex}]
+    ```
+    Twig after converting:
+    ```twig
+    {{ myArray.$itemIndex }}
+    ```
+    Twig after fixing:
+    ```twig
+    {{ myArray[itemIndex] }}
+    ```
+
 -   Uses of regex string in templates - the tool can break or work
     incorrectly on so complex cases - it’s safer to manually copy&paste
     regular expression.
--   `[{section}]` - `loop` is array or integer - different behaviors.
-    The tool is not able to detect variable type.
+    
+    Smarty:
+    ```smarty
+    [{birthDate|regex_replace:"/^([0-9]{4})[-]/":""|regex_replace:"/[-]([0-9]{1,2})$/":""}]
+    ```
+    Twig after converting:
+    ```twig
+    {{ birthDate|regex_replace("/^([0-9]{4)})[-]/":""|regex_replace("/[-]([0-9]{1,) 2})$/":"" }}
+    ```
+    Twig after fixing:
+    ```twig
+    {{ birthDate|regex_replace("/^([0-9]{4})[-]/","")|regex_replace("/[-]([0-9]{1,2})$/","") }}
+    ```
+
+-   `[{section}]` - `loop` is array or integer which triggers different
+    behaviours. The tool is not able to detect variable type, so you need to check
+    what is used in each `loop`.
+    
+    Smarty:
+    ```smarty
+    [{section name="month" start=1 loop=13}]
+        [{$smarty.section.month.index}]
+    [{/section}]
+    [{section name=customer loop=$custid}]
+        id: [{$custid[customer]}]<br />
+    [{/section}]
+    ```
+    Twig after converting:
+    ```twig
+    {% for month in 1..13 %}
+        {{ loop.index0 }}
+    {% endfor %}
+    {% for customer in 0..$custid %}
+        id: {{ custid[customer] }}<br />
+    {% endfor %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% for month in 1..12 %}
+        {{ loop.index0 }}
+    {% endfor %}
+    {% for customer in custid %}
+        id: {{ customer }}<br />
+    {% endfor %}
+    ```
+
+-   String concatenation - the tool has issues with opening and closing strings.
+    Usage of Smarty variables inside the string might cause the converter to fail.
+	Twig does not support this kind of concatenation. You should check places
+	where you concat strings held inside variables and use Twig `~` instead of 
+	variables inside the string. In converted template you should look for
+	patterns like \`$var_name\`
+    
+    Smarty:
+    ```smarty
+    [{assign var="sUrl" value="http://www.example.com?aid=`$sAccountId`&wid=`$sWidgetId`&csize=20&start=0"}]
+    [{assign var="divId" value=oxStateDiv_$stateSelectName}]
+    ```
+    Twig after converting:
+    ```twig
+    {% set sUrl = "http://www.example.com?aid=`$sAccountId`&wid=`$sWidgetId`&csize=20&start=0" %}
+    {% set divId = oxStateDiv_$stateSelectName %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% set sUrl = "http://www.example.com?aid=" ~ sAccountId ~ "&wid=" ~ sWidgetId ~ "&csize=20&start=0" %}
+    {% set divId = "oxStateDiv_" ~ stateSelectName %}
+    ```
+
+-   `$` signs are not always removed from variables. Sometimes when expression
+    is too complex, the converter will not remove `$` sign from variable name.
+	After conversion you should check your templates for `$` signs.
+    
+    Smarty:
+    ```smarty
+    [{$oViewConf->getImageUrl($sEmailLogo, false)}]
+    ```
+    Twig after converting:
+    ```twig
+    {{ oViewConf.getImageUrl($sEmailLogo, false) }}
+    ```
+    Twig after fixing:
+    ```twig
+    {{ oViewConf.getImageUrl(sEmailLogo, false) }}
+    ```
+
+-   Twig offers easy access to fist element of loop. Instead of using indexed
+    element of variable you can use `loop.index0` or for current iteration
+	`loop.index`. Converter does not handle constructions like `$smarty.section.arg`.
+	More can be read in the [Twig 'for' documentation](https://twig.symfony.com/doc/2.x/tags/for.html).
+    
+    Smarty:
+    ```smarty
+    [{if $review->getRating() >= $smarty.section.starRatings.iteration}]
+    ```
+    Twig after converting:
+    ```twig
+    {% if review.getRating() >= smarty.section.starRatings.iteration %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% if review.getRating() >= loop.index %}
+    ```
+
+-   In some places access to global variables has to be adjusted. In converted code
+    look for word `smarty` and replace it with `twig`.
+    
+    Smarty:
+    ```smarty
+    [{$smarty.capture.loginErrors}]
+    ```
+    Twig after converting:
+    ```twig
+    {{ smarty.capture.loginErrors }}
+    ```
+    Twig after fixing:
+    ```twig
+    {{ twig.capture.loginErrors }}
+    ```
+
+-   Properties accessing differs in Smarty and Twig and sometimes it has to be fixed manually. You have to explicitly
+    call magic getter if there is no magic isset defined. Also if you want to access class property without calling
+    a getter you have to use array-like syntax.
+    
+    Smarty:
+    ```smarty
+    [{foreach from=$cattree->aList item=pcat}]
+        [{pcat.val}]
+    ```
+    Twig after converting:
+    ```twig
+    {% for pcat in cattree.aList %}
+        {{ pcat.val }}
+    ```
+    Twig after fixing:
+    ```twig
+    {% for pcat in cattree.__get('aList') %}
+        {{ pcat['val'] }}
+    ```
+
+-   The converter does not always convert logic operators like `||` and `&&` if they
+    are not separated by space. `||` has to be manually changed to `or` and `&&` to `and`.
+    
+    Smarty:
+    ```smarty
+    [{if $product->isNotBuyable()||($aVariantSelections&&$aVariantSelections.selections)||$product->hasMdVariants()}]
+    ```
+    Twig after converting:
+    ```twig
+    {% if product.isNotBuyable()||(aVariantSelections&&$aVariantSelections.selections) or product.hasMdVariants() %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% if product.isNotBuyable() or (aVariantSelections and aVariantSelections.selections) or product.hasMdVariants() %}
+    ```
+
+-   If you access request variables from template, please consider refactoring
+    any templates that do this. If it is not possible, please use functions
+	`get_global_cookie` or `get_global_get` provided with Twig engine.
+	In case you need access to other request variables, you will have to
+	extend one of these functions on your own.
+    
+    Smarty:
+    ```smarty
+    [{if $smarty.get.plain == '1'}] popup[{/if}]
+    ```
+    Twig after converting:
+    ```twig
+    {% if smarty.get.plain == '1' %} popup{% endif %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% if get_global_get('plain') == '1' %} popup{% endif %}
+    ```
+
+-   You might need to manually check logic in template files. Some places will
+    require usage of `is same as` comparison, which uses PHP's `===` instead of `==`. 
+	This might be necessary when checking if variable was set, contains information,
+	if it is a `0` or if it is a `null`. There is a problem with checking
+	non existing (null) properties. E.g. we want to check the value of
+	non-existing property `oxarticles__oxunitname`. Twig checks with `isset`
+	if this property exists and it’s not, so Twig assumes that
+	property name is function name and tries to call it.
+    
+    Smarty:
+    ```smarty
+    [{if $_sSelectionHashCollection}]
+        [{assign var="_sSelectionHashCollection" value=$_sSelectionHashCollection|cat:","}]
+    [{/if}]
+    ```
+    Twig after converting:
+    ```twig
+    {% if _sSelectionHashCollection %}
+        {% set _sSelectionHashCollection = _sSelectionHashCollection|cat(",") %}
+    {% endif %}
+    ```
+    Twig after fixing:
+    ```twig
+    {% if _sSelectionHashCollection is not same as("") %}
+        {% set _sSelectionHashCollection = _sSelectionHashCollection|cat(",") %}
+    {% endif %}
+    ```
 
 ### Converted plugins and syntax pieces
 
