@@ -84,14 +84,6 @@ Config script should return instance of `toTwig\Config\ConfigInterface`.
 It can be created using `toTwig\Config\Config::create()` static method.
 
 
-### Running database conversion tests
-
-
-To run database conversion tests, sqlite is required. You can do this by running following commands:
-
-    $ sudo apt-get install sqlite3
-    $ sudo apt-get install php7.2-sqlite
-
 ### Known issues
 
 
@@ -718,4 +710,11 @@ Twig:\
   |oxnubmerformat         |format_currency|
   |oxtruncate             |truncate|
   |oxwordwrap             |wordwrap|
+
+### Running database conversion PHPUnit tests
+
+Note for CI: To run database conversion PHPUnit tests, sqlite is required. You can install it by running following commands:
+
+    $ sudo apt-get install sqlite3
+    $ sudo apt-get install php7.2-sqlite
 
