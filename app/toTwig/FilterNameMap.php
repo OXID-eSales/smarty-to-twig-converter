@@ -31,7 +31,8 @@ class FilterNameMap
         'count' => 'length',
         'strip_tags' => 'striptags',
         'oxupper' => 'upper',
-        'oxlower' => 'lower'
+        'oxlower' => 'lower',
+        'oxescape' => 'escape'
     ];
 
     /**
