@@ -4,7 +4,7 @@
  * See LICENSE file for license details.
  */
 
-namespace sankar\ST\Tests\Unit;
+namespace toTwig\Tests\Unit;
 
 use toTwig\Converter\OxgetseourlConverter;
 

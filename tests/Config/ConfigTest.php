@@ -4,7 +4,7 @@
  * See LICENSE file for license details.
  */
 
-namespace sankar\ST\Tests\Config;
+namespace toTwig\Tests\Config;
 
 use toTwig\Config\Config;
 use PHPUnit\Framework\TestCase;

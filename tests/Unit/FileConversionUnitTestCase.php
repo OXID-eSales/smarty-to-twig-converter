@@ -4,14 +4,14 @@
  * See LICENSE file for license details.
  */
 
-namespace sankar\ST\Tests\Unit;
+namespace toTwig\Tests\Unit;
 
-use sankar\ST\Tests\FileConversionTestCase;
+use toTwig\Tests\FileConversionTestCase;
 
 /**
  * Class FileConversionUnitTestCase
  *
- * @package sankar\ST\Tests\Unit
+ * @package toTwig\Tests\Unit
  */
 class FileConversionUnitTestCase extends FileConversionTestCase
 {

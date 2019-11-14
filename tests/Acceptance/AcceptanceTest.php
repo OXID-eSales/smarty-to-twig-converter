@@ -4,7 +4,9 @@
  * See LICENSE file for license details.
  */
 
-namespace sankar\ST\Tests;
+namespace toTwig\Tests\Acceptance;
+
+use toTwig\Tests\FileConversionTestCase;
 
 class AcceptanceTest extends FileConversionTestCase
 {

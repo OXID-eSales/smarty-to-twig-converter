@@ -1,6 +1,6 @@
 <?php
 
-namespace sankar\ST\Tests\Unit;
+namespace toTwig\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use toTwig\Converter\InsertConverter;

@@ -4,7 +4,7 @@
  * See LICENSE file for license details.
  */
 
-namespace sankar\ST\Tests\SourceConverter;
+namespace toTwig\Tests\SourceConverter;
 
 use PDO;
 use PHPUnit\DbUnit\Database\Connection;

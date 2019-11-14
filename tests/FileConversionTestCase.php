@@ -4,7 +4,7 @@
  * See LICENSE file for license details.
  */
 
-namespace sankar\ST\Tests;
+namespace toTwig\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -13,7 +13,7 @@ use toTwig\Console\Command\ConvertCommand;
 /**
  * Class FileConversionTestCase
  *
- * @package sankar\ST\Tests
+ * @package toTwig\Tests
  */
 abstract class FileConversionTestCase extends TestCase
 {

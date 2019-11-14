@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace sankar\ST\Tests\Unit;
+namespace toTwig\Tests\Unit;
 
 use toTwig\Converter\CommentConverter;
 
