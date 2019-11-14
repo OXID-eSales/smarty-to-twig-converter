@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: jskoczek
- * Date: 29/08/18
- * Time: 12:34
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
 
 namespace toTwig\Converter;
