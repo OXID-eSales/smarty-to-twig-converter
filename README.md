@@ -718,3 +718,6 @@ Note for CI: To run database conversion PHPUnit tests, sqlite is required. You c
     $ sudo apt-get install sqlite3
     $ sudo apt-get install php7.2-sqlite
 
+## Bugs and Issues
+
+If you experience any bugs or issues, please report them in the section **OXID eShop (all versions)** under category **Twig engine** of https://bugs.oxid-esales.com
