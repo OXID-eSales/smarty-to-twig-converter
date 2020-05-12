@@ -131,8 +131,8 @@ abstract class ConverterAbstract
     {
         //Initialize variables
         $attr = $pairs = [];
-        $pattern = '/(?:([\w:-]+)\s*=\s*)?'
-                   . '((?:".*?"|\'.*?\'|(?:[$\w->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}]|(}(?!])))*))/';
+        $pattern = '/(?:([\w:\-]+)\s*=\s*)?'
+                   . '((?:".*?"|\'.*?\'|(?:[$\w\->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}]|(}(?!])))*))/';
 
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);

@@ -7,6 +7,18 @@ allows to convert existing Smarty template files to Twig syntax. The
 tool besides standard Smarty syntax is adjusted to handle custom OXID
 modifications and extensions.
 
+### Installation
+
+Clone the repository:
+
+`git clone https://github.com/OXID-eSales/smarty-to-twig-converter.git`
+
+Install dependencies:
+
+`cd smarty-to-twig-converter`
+
+`composer install`
+
 ### Usage
 
 The convert command tries to fix as much coding standards problems as
