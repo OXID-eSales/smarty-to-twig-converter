@@ -377,7 +377,7 @@ abstract class ConverterAbstract
      */
     protected function removeMultipleSpaces(string $string): string
     {
-        return preg_replace('!\s+!', ' ', $string);
+        return preg_replace('! +!', ' ', $string);
     }
 
     /**

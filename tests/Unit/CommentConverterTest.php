@@ -18,7 +18,6 @@ use toTwig\Converter\CommentConverter;
  */
 class CommentConverterTest extends FileConversionUnitTestCase
 {
-
     /** @var CommentConverter */
     protected $converter;
 
@@ -57,6 +56,14 @@ class CommentConverterTest extends FileConversionUnitTestCase
             [
                 '[{*foo*}]',
                 '{# foo #}'
+            ],
+            [
+                "[{*foo\nbar*}]",
+                "{# foo\nbar #}"
+            ],
+            [
+                '[{* foo *}] bar [{* baz *}]',
+                '{# foo #} bar {# baz #}'
             ]
         ];
     }

@@ -1,0 +1,3 @@
+[{*oxscript include="js/widgets/oxequalizer.min.js" priority=10}]
+[{oxscript add="$(window).on('load', function(){ if( !isMobileDevice() ) { oxEqualizer.equalHeight( $( '.subcatList .row .panel' ) ); } });"*}]
+[{* TOP categories *}]

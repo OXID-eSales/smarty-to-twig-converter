@@ -16,10 +16,9 @@ namespace toTwig\Converter;
  */
 class CommentConverter extends ConverterAbstract
 {
-
     protected $name = 'comment';
-    protected $description = 'Convert smarty comments {* *} to twig {# #}';
-    protected $priority = 52;
+    protected $description = 'Convert smarty comments [{* *}] to twig {# #}';
+    protected $priority = 2000;
 
     /**
      * @param string $content
@@ -28,7 +27,7 @@ class CommentConverter extends ConverterAbstract
      */
     public function convert(string $content): string
     {
-        $pattern = '#\[\{\*((?:(?!\[\{|\}\]).(?<!\[\{)(?<!\}\]))+)?\*\}\]#is';
+        $pattern = '#\[{\*(.*)\*}]#isU';
 
         return preg_replace_callback(
             $pattern,
