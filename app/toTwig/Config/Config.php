@@ -21,39 +21,22 @@ use toTwig\SourceConverter\SourceConverter;
  */
 class Config implements ConfigInterface
 {
-
-    /** @var string */
-    protected $name;
-
-    /** @var string */
-    protected $description;
-
-    /** @var FinderInterface */
-    protected $finder;
+    protected string $name;
+    protected string $description;
+    protected FinderInterface $finder;
+    protected string $dir;
+    protected bool $dryRun = false;
+    protected bool $diff = false;
+    private SourceConverter $sourceConverter;
 
     /** @var string[] */
-    protected $converters = [];
-
-    /** @var string */
-    protected $dir;
+    protected array $converters = [];
 
     /** @var ConverterAbstract[] */
-    protected $customConverters;
-
-    /** @var bool */
-    protected $dryRun = false;
-
-    /** @var bool */
-    protected $diff = false;
-
-    /** @var SourceConverter */
-    private $sourceConverter;
+    protected array $customConverters;
 
     /**
      * Config constructor.
-     *
-     * @param string $name
-     * @param string $description
      */
     public function __construct(string $name = 'default', string $description = 'A default configuration')
     {
@@ -63,9 +46,6 @@ class Config implements ConfigInterface
         $this->sourceConverter = new FileConverter();
     }
 
-    /**
-     * @return Config
-     */
     public static function create(): self
     {
         return new static();
@@ -91,25 +71,16 @@ class Config implements ConfigInterface
         return $this->converters;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param ConverterAbstract $converter
-     */
     public function addCustomConverter(ConverterAbstract $converter): void
     {
         $this->customConverters[] = $converter;
@@ -123,11 +94,6 @@ class Config implements ConfigInterface
         return $this->customConverters;
     }
 
-    /**
-     * @param SourceConverter $converter
-     *
-     * @return ConfigInterface
-     */
     public function setSourceConverter(SourceConverter $converter): ConfigInterface
     {
         $this->sourceConverter = $converter;
@@ -135,48 +101,29 @@ class Config implements ConfigInterface
         return $this;
     }
 
-    /**
-     * @return SourceConverter
-     */
     public function getSourceConverter(): SourceConverter
     {
         return $this->sourceConverter;
     }
 
-    /**
-     * @return bool
-     */
     public function isDiff(): bool
     {
         return $this->diff;
     }
 
-    /**
-     * @param bool $diff
-     *
-     * @return Config
-     */
-    public function diff($diff = true): self
+    public function diff(bool $diff = true): self
     {
         $this->diff = $diff;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDryRun(): bool
     {
         return $this->dryRun;
     }
 
-    /**
-     * @param bool $dryRun
-     *
-     * @return Config
-     */
-    public function dryRun($dryRun = true): self
+    public function dryRun(bool $dryRun = true): self
     {
         $this->dryRun = $dryRun;
 

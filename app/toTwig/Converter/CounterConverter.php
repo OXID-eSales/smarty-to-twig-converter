@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class CounterConverter extends ConverterAbstract
 {
+    protected string $name = 'counter';
+    protected string $description = 'Convert smarty Counter to twig';
+    protected int $priority = 1000;
 
-    protected $name = 'counter';
-    protected $description = 'Convert smarty Counter to twig';
-    protected $priority = 1000;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('counter');
@@ -46,11 +40,6 @@ class CounterConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param array $attr
-     *
-     * @return string
-     */
     private function getNameAttribute(array $attr): string
     {
         if (!isset($attr['name'])) {
@@ -62,11 +51,6 @@ class CounterConverter extends ConverterAbstract
         return $name;
     }
 
-    /**
-     * @param array $attr
-     *
-     * @return string
-     */
     private function getDirectionAttribute(array $attr): string
     {
         if (isset($attr['direction']) && ($attr['direction'] == 'down' || $attr['direction'] == '"down"')) {
@@ -78,11 +62,6 @@ class CounterConverter extends ConverterAbstract
         return $direction;
     }
 
-    /**
-     * @param array $attr
-     *
-     * @return int
-     */
     private function getSkipAttribute(array $attr): int
     {
         if (!isset($attr['skip'])) {
@@ -94,13 +73,6 @@ class CounterConverter extends ConverterAbstract
         return $skip;
     }
 
-    /**
-     * @param array  $attr
-     * @param string $direction
-     * @param int    $skip
-     *
-     * @return int
-     */
     private function getStartAttribute(array $attr, string $direction, int $skip): int
     {
         if (!isset($attr['start'])) {
@@ -118,12 +90,6 @@ class CounterConverter extends ConverterAbstract
         return $start;
     }
 
-    /**
-     * @param array  $attr
-     * @param string $name
-     *
-     * @return string
-     */
     private function getPrintAttribute(array $attr, string $name): string
     {
         if (isset($attr['print']) && $attr['print'] == 'true') {
@@ -135,12 +101,6 @@ class CounterConverter extends ConverterAbstract
         return $print;
     }
 
-    /**
-     * @param array  $attr
-     * @param string $name
-     *
-     * @return string
-     */
     private function getAssignAttribute(array $attr, string $name): string
     {
         $assign = '';

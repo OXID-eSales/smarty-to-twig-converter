@@ -16,16 +16,10 @@ namespace toTwig\Converter;
  */
 class IfConverter extends ConverterAbstract
 {
+    protected string $name = 'if';
+    protected string $description = 'Convert smarty if/else/elseif to twig';
+    protected int $priority = 50;
 
-    protected $name = 'if';
-    protected $description = 'Convert smarty if/else/elseif to twig';
-    protected $priority = 50;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $content = $this->replaceIf($content);
@@ -40,10 +34,6 @@ class IfConverter extends ConverterAbstract
 
     /**
      * Replace smarty "if" tag to its twig analogue
-     *
-     * @param string $content
-     *
-     * @return string
      */
     private function replaceIf(string $content): string
     {
@@ -55,10 +45,6 @@ class IfConverter extends ConverterAbstract
 
     /**
      * Replace smarty "elseif" tag to its twig analogue
-     *
-     * @param string $content
-     *
-     * @return string
      */
     private function replaceElseIf(string $content): string
     {
@@ -71,19 +57,13 @@ class IfConverter extends ConverterAbstract
     /**
      * Helper for replacing starting tag patterns with additional checks and
      * converting of the arguments coming with those tags
-     *
-     * @param string $pattern
-     * @param string $content
-     * @param string $string
-     *
-     * @return string
      */
     private function replace(string $pattern, string $content, string $string): string
     {
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($string) {
-                $match = isset($matches[1]) ? $matches[1] : '';
+                $match = $matches[1] ?? '';
                 $search = $matches[0];
                 $match = $this->convertExpression($match);
                 $string = sprintf($string, $match);

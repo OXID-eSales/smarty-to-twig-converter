@@ -14,7 +14,7 @@ class MathConverterTest extends FileConversionUnitTestCase
     /** @var MathConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new MathConverter();
         $this->templateNames = ['math'];

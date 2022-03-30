@@ -18,7 +18,7 @@ class OxstyleConverterTest extends TestCase
     /** @var OxstyleConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxstyleConverter();
     }

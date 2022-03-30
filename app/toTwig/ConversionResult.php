@@ -11,32 +11,18 @@ namespace toTwig;
  */
 class ConversionResult
 {
-    /** @var string */
-    private $originalTemplate;
-
-    /** @var string */
-    private $convertedTemplate;
-
-    /** @var string */
-    private $diff;
+    private ?string $originalTemplate = null;
+    private ?string $convertedTemplate = null;
+    private ?string $diff = null;
 
     /** @var string[] */
-    private $appliedConverters = [];
+    private array $appliedConverters = [];
 
-
-    /**
-     * @return string|null
-     */
     public function getOriginalTemplate(): ?string
     {
         return $this->originalTemplate;
     }
 
-    /**
-     * @param string $originalTemplate
-     *
-     * @return ConversionResult
-     */
     public function setOriginalTemplate(string $originalTemplate): self
     {
         $this->originalTemplate = $originalTemplate;
@@ -44,19 +30,11 @@ class ConversionResult
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getConvertedTemplate(): ?string
     {
         return $this->convertedTemplate;
     }
 
-    /**
-     * @param string $convertedTemplate
-     *
-     * @return ConversionResult
-     */
     public function setConvertedTemplate(string $convertedTemplate): self
     {
         $this->convertedTemplate = $convertedTemplate;
@@ -64,19 +42,11 @@ class ConversionResult
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDiff(): ?string
     {
         return $this->diff;
     }
 
-    /**
-     * @param string $diff
-     *
-     * @return ConversionResult
-     */
     public function setDiff(string $diff): self
     {
         $this->diff = $diff;
@@ -92,11 +62,6 @@ class ConversionResult
         return $this->appliedConverters;
     }
 
-    /**
-     * @param string $appliedConverter
-     *
-     * @return ConversionResult
-     */
     public function addAppliedConverter(string $appliedConverter): self
     {
         $this->appliedConverters[] = $appliedConverter;
@@ -104,9 +69,6 @@ class ConversionResult
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasAppliedConverters(): bool
     {
         return !empty($this->appliedConverters);

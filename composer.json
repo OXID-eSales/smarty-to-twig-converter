@@ -4,25 +4,32 @@
     "description": "A script to convert smarty template engine to twig",
     "license": "MIT",
     "require": {
-        "php": "^7.1",
-        "symfony/console": "~2.1",
-        "symfony/filesystem": "~2.1",
-        "symfony/finder": "~2.1",
-        "sebastian/diff": "2.*",
-        "phpunit/phpunit": "^6",
-        "doctrine/dbal": "^2.9",
-        "phpunit/dbunit": "3.*",
+        "php": "^7.4 || ^8.0",
+        "symfony/console": "^5.0.4",
+        "symfony/filesystem": "^5.0.4",
+        "symfony/finder": "^5.0.4",
+        "sebastian/diff": "^4.0.4",
+        "doctrine/dbal": "^2.13",
         "ext-dom": "*"
     },
     "require-dev": {
         "oxid-esales/coding-standards": "^v3.0.5",
+        "phpunit/phpunit": "^9.1.1",
         "ext-pdo": "*"
     },
     "autoload": {
         "psr-0": { "toTwig\\": "app/" }
     },
     "autoload-dev": {
-        "psr-4": { "toTwig\\Tests\\": "tests/" }
+        "psr-4": {
+            "toTwig\\Tests\\": "tests/",
+            "Doctrine\\Tests\\": "vendor/doctrine/dbal/tests/Doctrine/Tests"
+        }
     },
-    "bin": ["toTwig"]
+    "bin": ["toTwig"],
+    "config": {
+        "preferred-install": {
+            "doctrine/dbal": "source"
+        }
+    }
 }

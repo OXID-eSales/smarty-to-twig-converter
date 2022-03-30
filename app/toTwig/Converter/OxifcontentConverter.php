@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class OxifcontentConverter extends ConverterAbstract
 {
+    protected string $name = 'oxifcontent';
+    protected string $description = 'Convert oxifcontent to twig';
+    protected int $priority = 50;
 
-    protected $name = 'oxifcontent';
-    protected $description = 'Convert oxifcontent to twig';
-    protected $priority = 50;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $assignVar = null;
@@ -38,11 +32,6 @@ class OxifcontentConverter extends ConverterAbstract
         return ($assignVar ? "{% set $assignVar %}" : '') . $content . ($assignVar ? "{% endset %}" : '');
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceEndOxifcontent(string $content): string
     {
         $search = $this->getClosingTagPattern('oxifcontent');
@@ -51,12 +40,6 @@ class OxifcontentConverter extends ConverterAbstract
         return preg_replace($search, $replace, $content);
     }
 
-    /**
-     * @param string $pattern
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceOxifcontent(string $pattern, string $content): string
     {
         return preg_replace_callback(

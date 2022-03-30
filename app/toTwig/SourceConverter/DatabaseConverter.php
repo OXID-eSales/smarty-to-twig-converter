@@ -7,7 +7,6 @@
 namespace toTwig\SourceConverter;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
 use toTwig\Converter\ConverterAbstract;
 
 /**
@@ -15,12 +14,10 @@ use toTwig\Converter\ConverterAbstract;
  */
 class DatabaseConverter extends SourceConverter
 {
-
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
     /** @var string[] */
-    private $columns = [
+    private array $columns = [
         'oxactions.OXLONGDESC',
         'oxactions.OXLONGDESC_1',
         'oxcontents.OXCONTENT',
@@ -29,14 +26,11 @@ class DatabaseConverter extends SourceConverter
 
     /**
      * DatabaseConverter constructor.
-     *
-     * @param string $databaseUrl
      */
-    public function __construct(string $databaseUrl)
+    public function __construct(Connection $connection)
     {
         parent::__construct();
-
-        $this->connection = DriverManager::getConnection(['url' => $databaseUrl]);
+        $this->connection = $connection;
     }
 
     /**
@@ -81,7 +75,7 @@ class DatabaseConverter extends SourceConverter
         $rows = $queryBuilder->execute()->fetchAll();
 
         $changed = [];
-        foreach ($rows as $key => $row) {
+        foreach ($rows as $row) {
             $changed += $this->convertRow($table, $column, $primaryKey, $row, $dryRun, $diff, $converters);
         }
 
@@ -131,13 +125,6 @@ class DatabaseConverter extends SourceConverter
         return $changed;
     }
 
-    /**
-     * @param string $table
-     * @param string $column
-     * @param string $primaryKey
-     * @param string $primaryKeyValue
-     * @param string $newValue
-     */
     private function updateRow(
         string $table,
         string $column,

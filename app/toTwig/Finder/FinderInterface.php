@@ -16,11 +16,5 @@ namespace toTwig\Finder;
  */
 interface FinderInterface
 {
-
-    /**
-     * @param string $dir
-     *
-     * @return void
-     */
     public function setDir(string $dir): void;
 }

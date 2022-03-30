@@ -17,7 +17,7 @@ class OxhasrightsConverterTest extends FileConversionUnitTestCase
     /** @var OxhasrightsConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxhasrightsConverter();
         $this->templateNames = ['oxhasrights'];

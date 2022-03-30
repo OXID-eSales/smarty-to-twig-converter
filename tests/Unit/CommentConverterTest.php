@@ -21,7 +21,7 @@ class CommentConverterTest extends FileConversionUnitTestCase
     /** @var CommentConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new CommentConverter();
         $this->templateNames = ['comment'];

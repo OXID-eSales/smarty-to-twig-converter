@@ -11,14 +11,13 @@ namespace toTwig\Converter;
  */
 class SectionConverter extends ConverterAbstract
 {
-
-    protected $name = 'section';
-    protected $description = 'Convert smarty {section} to twig {for}';
-    protected $priority = 20;
+    protected string $name = 'section';
+    protected string $description = 'Convert smarty {section} to twig {for}';
+    protected int $priority = 20;
 
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
-    private $replacements = [
+    private array $replacements = [
         '\$smarty\.section.*\.index' => 'loop.index0',
         '\$smarty\.section.*\.iteration' => 'loop.index',
         '\$smarty\.section.*\.first' => 'loop.first',
@@ -27,10 +26,6 @@ class SectionConverter extends ConverterAbstract
 
     /**
      * Function converts smarty {section} tags to twig {for}
-     *
-     * @param string $content
-     *
-     * @return null|string|string[]
      */
     public function convert(string $content): string
     {
@@ -46,10 +41,6 @@ class SectionConverter extends ConverterAbstract
 
     /**
      * Function converts opening tag of smarty {section} to twig {for}
-     *
-     * @param string $content
-     *
-     * @return null|string|string[]
      */
     private function replaceSectionOpeningTag(string $content): string
     {
@@ -72,10 +63,6 @@ class SectionConverter extends ConverterAbstract
 
     /**
      * Function converts closing tag of smarty {section} to twig {for}
-     *
-     * @param string $content
-     *
-     * @return null|string|string[]
      */
     private function replaceSectionClosingTag(string $content): string
     {

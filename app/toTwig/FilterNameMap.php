@@ -13,7 +13,6 @@ namespace toTwig;
  */
 class FilterNameMap
 {
-
     const NAME_MAP = [
         'smartwordwrap' => 'smart_wordwrap',
         'date_format' => 'date_format',
@@ -35,13 +34,8 @@ class FilterNameMap
         'oxescape' => 'escape'
     ];
 
-    /**
-     * @param string $filterName
-     *
-     * @return string
-     */
     public static function getConvertedFilterName(string $filterName): string
     {
-        return isset(self::NAME_MAP[$filterName]) ? self::NAME_MAP[$filterName] : $filterName;
+        return self::NAME_MAP[$filterName] ?? $filterName;
     }
 }

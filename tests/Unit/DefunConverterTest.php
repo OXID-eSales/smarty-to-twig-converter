@@ -15,7 +15,7 @@ class DefunConverterTest extends TestCase
     /** @var DefunConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new DefunConverter();
     }

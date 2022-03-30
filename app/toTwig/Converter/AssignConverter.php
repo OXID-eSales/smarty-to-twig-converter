@@ -16,16 +16,10 @@ namespace toTwig\Converter;
  */
 class AssignConverter extends ConverterAbstract
 {
+    protected string $name = 'assign';
+    protected string $description = "Convert smarty {assign} to twig {% set foo = 'foo' %}";
+    protected int $priority = 100;
 
-    protected $name = 'assign';
-    protected $description = "Convert smarty {assign} to twig {% set foo = 'foo' %}";
-    protected $priority = 100;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('assign');

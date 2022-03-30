@@ -33,9 +33,6 @@ class Application extends BaseApplication
         $this->add(new ConvertCommand());
     }
 
-    /**
-     * @return string
-     */
     public function getLongVersion(): string
     {
         return parent::getLongVersion() . ' by <comment>sankar</comment>';

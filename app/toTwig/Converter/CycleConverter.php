@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class CycleConverter extends ConverterAbstract
 {
+    protected string $name = 'cycle';
+    protected string $description = "Convert smarty {cycle} to twig function {{ smarty_cycle() }}";
+    protected int $priority = 100;
 
-    protected $name = 'cycle';
-    protected $description = "Convert smarty {cycle} to twig function {{ smarty_cycle() }}";
-    protected $priority = 100;
-
-    /**
-     * @param string $content
-     *
-     * @return null|string|string[]
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('cycle');
@@ -40,19 +34,13 @@ class CycleConverter extends ConverterAbstract
                 $valuesArray = $this->extractValuesArray($attributes);
                 $extraParameters = $this->extractAdditionalParametersArray($attributes);
                 $argumentsString = $this->composeArgumentsString($valuesArray, $extraParameters);
-                $twigTag = $this->getTag($argumentsString, $assignVar);
 
-                return $twigTag;
+                return $this->getTag($argumentsString, $assignVar);
             },
             $content
         );
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return array
-     */
     private function extractValuesArray(array $attributes): array
     {
         $valuesArray = [];
@@ -68,11 +56,6 @@ class CycleConverter extends ConverterAbstract
         return $valuesArray;
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return string
-     */
     private function extractAssignVariableName(array $attributes): ?string
     {
         $assignVar = null;
@@ -83,11 +66,6 @@ class CycleConverter extends ConverterAbstract
         return $assignVar;
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return array
-     */
     private function extractAdditionalParametersArray(array $attributes): array
     {
         $extraParameters = [];
@@ -103,12 +81,6 @@ class CycleConverter extends ConverterAbstract
         return $extraParameters;
     }
 
-    /**
-     * @param array $valuesArray
-     * @param array $extraParameters
-     *
-     * @return string
-     */
     private function composeArgumentsString(array $valuesArray, array $extraParameters): string
     {
         $argumentsString = "";
@@ -126,14 +98,9 @@ class CycleConverter extends ConverterAbstract
     }
 
     /**
-     * In twig we have to use different syntax, when we want to use assignment in cycle
-     *
-     * @param string $argumentsString
-     * @param mixed  $assignVar
-     *
-     * @return string
+     * In Twig we have to use different syntax, when we want to use assignment in cycle
      */
-    private function getTag($argumentsString, $assignVar = false): string
+    private function getTag(string $argumentsString, ?string $assignVar = null): string
     {
         if ($assignVar) {
             $twigTag = "{% set $assignVar = smarty_cycle($argumentsString) %}";

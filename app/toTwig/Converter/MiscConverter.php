@@ -16,14 +16,13 @@ namespace toTwig\Converter;
  */
 class MiscConverter extends ConverterAbstract
 {
-
-    protected $name = 'misc';
-    protected $description = 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
-    protected $priority = 52;
+    protected string $name = 'misc';
+    protected string $description = 'Convert smarty general tags like {ldelim} {rdelim} {literal} {strip}';
+    protected int $priority = 52;
 
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
-    private $replacements;
+    private array $replacements;
 
     /**
      * MiscConverter constructor.
@@ -40,11 +39,6 @@ class MiscConverter extends ConverterAbstract
         ];
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         foreach ($this->replacements as $k => $v) {

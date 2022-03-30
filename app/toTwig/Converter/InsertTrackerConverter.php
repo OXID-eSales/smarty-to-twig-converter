@@ -13,14 +13,13 @@ namespace toTwig\Converter;
  */
 class InsertTrackerConverter extends ConverterAbstract
 {
+    protected string $name = 'oxid_tracker';
+    protected string $description = 'Convert insert oxid_tracker to twig insert_tracker';
+    protected int $priority = 110;
 
-    protected $name = 'oxid_tracker';
-    protected $description = 'Convert insert oxid_tracker to twig insert_tracker';
-    protected $priority = 110;
-
-    protected $pattern;
-    protected $string = '{{ insert_tracker(:vars) }}';
-    protected $attrName = 'name';
+    protected string $pattern;
+    protected string $string = '{{ insert_tracker(:vars) }}';
+    protected string $attrName = 'name';
 
     /**
      * InsertTrackerConverter constructor.
@@ -30,11 +29,6 @@ class InsertTrackerConverter extends ConverterAbstract
         $this->pattern = $this->getOpeningTagPattern('insert');
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->pattern;

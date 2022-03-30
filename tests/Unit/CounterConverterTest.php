@@ -15,7 +15,7 @@ class CounterConverterTest extends TestCase
     /** @var CounterConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new CounterConverter();
     }

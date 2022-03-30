@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class CaptureConverter extends ConverterAbstract
 {
+    protected string $name = 'capture';
+    protected string $description = 'Converts Smarty Capture into Twig';
+    protected int $priority = 100;
 
-    protected $name = 'capture';
-    protected $description = 'Converts Smarty Capture into Twig';
-    protected $priority = 100;
-
-    /**
-     * @param string $content
-     *
-     * @return mixed|string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('capture');
@@ -51,11 +45,6 @@ class CaptureConverter extends ConverterAbstract
         return $this->stripClosingTag($strippedOpeningTag);
     }
 
-    /**
-     * @param string $strippedOpeningTag
-     *
-     * @return string
-     */
     private function stripClosingTag(string $strippedOpeningTag): string
     {
         $pattern = $this->getClosingTagPattern('capture');

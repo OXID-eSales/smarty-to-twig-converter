@@ -11,12 +11,11 @@ namespace toTwig\Converter;
  */
 class OxidIncludeDynamicConverter extends IncludeConverter
 {
+    protected string $name = 'oxid_include_dynamic';
+    protected string $description = "Convert smarty {oxid_include_dynamic} to twig function {% include_dynamic %}";
+    protected int $priority = 100;
 
-    protected $name = 'oxid_include_dynamic';
-    protected $description = "Convert smarty {oxid_include_dynamic} to twig function {% include_dynamic %}";
-    protected $priority = 100;
-
-    protected $string = '{% include_dynamic :template :with :vars %}';
+    protected string $string = '{% include_dynamic :template :with :vars %}';
 
     /**
      * OxidIncludeDynamicConverter constructor.

@@ -13,24 +13,18 @@ namespace toTwig\Converter;
  */
 class DefunConverter extends ConverterAbstract
 {
-
-    protected $name = 'defun';
-    protected $description = "Convert Smarty2 defun to macro";
-    protected $priority = 50;
+    protected string $name = 'defun';
+    protected string $description = "Convert Smarty2 defun to macro";
+    protected int $priority = 50;
 
     //list of arguments passed to macro
-    private $arguments;
+    private ?string $arguments = null;
 
     //string to replace smarty call to macro
-    private $twigCallToMacro = '{% import _self as self %}{{ self.:macroName(:arguments) }}';
-    private $macroName;
+    private string $twigCallToMacro = '{% import _self as self %}{{ self.:macroName(:arguments) }}';
+    private ?string $macroName = null;
 
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $content = $this->replaceOpeningTag($content);
@@ -40,11 +34,6 @@ class DefunConverter extends ConverterAbstract
         return $content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceOpeningTag(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('defun');
@@ -68,12 +57,7 @@ class DefunConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    private function replaceCallToMacro($content): string
+    private function replaceCallToMacro(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('fun');
 
@@ -96,11 +80,6 @@ class DefunConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceClosingTag(string $content): string
     {
         $pattern = $this->getClosingTagPattern('defun');
@@ -123,10 +102,6 @@ class DefunConverter extends ConverterAbstract
 
     /**
      * Extract parameters from attributes. Defun uses all attributes, except name as parameters.
-     *
-     * @param array $attr
-     *
-     * @return string
      */
     private function getParameters(array $attr): string
     {
@@ -143,10 +118,8 @@ class DefunConverter extends ConverterAbstract
 
     /**
      * Similar to parameters, but we use variables defined outside macros
-     *
-     * @param array $attr
      */
-    private function setArguments(array $attr)
+    private function setArguments(array $attr): void
     {
         $arguments = '';
         foreach ($attr as $parameterName => $variableName) {
@@ -159,12 +132,6 @@ class DefunConverter extends ConverterAbstract
         $this->arguments = $arguments;
     }
 
-    /**
-     * @param string $variable
-     * @param string $variableName
-     *
-     * @return string
-     */
     private function concatVariablesNames(string $variable, string $variableName): string
     {
         if ($variable == '') {

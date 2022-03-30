@@ -25,10 +25,9 @@ use toTwig\Finder\FinderInterface;
  */
 class FileConverter extends SourceConverter
 {
-
-    private $finder;
-    private $dir;
-    private $outputExtension;
+    private Finder $finder;
+    private ?string $dir = null;
+    private string $outputExtension;
 
     /**
      * FileConverter constructor.
@@ -91,11 +90,6 @@ class FileConverter extends SourceConverter
         return $changed;
     }
 
-    /**
-     * @param Finder $finder
-     *
-     * @return FileConverter
-     */
     public function setFinder(Finder $finder): self
     {
         $this->finder = $finder;
@@ -103,9 +97,6 @@ class FileConverter extends SourceConverter
         return $this;
     }
 
-    /**
-     * @return Finder
-     */
     public function getFinder(): Finder
     {
         if ($this->finder instanceof FinderInterface && $this->dir !== null) {
@@ -115,19 +106,11 @@ class FileConverter extends SourceConverter
         return $this->finder;
     }
 
-    /**
-     * @param string $dir
-     */
     public function setDir(string $dir): void
     {
         $this->dir = $dir;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return FileConverter
-     */
     public function setPath(string $path): self
     {
         if (is_file($path)) {
@@ -140,11 +123,6 @@ class FileConverter extends SourceConverter
         return $this;
     }
 
-    /**
-     * @param string $outputExtension
-     *
-     * @return FileConverter
-     */
     public function setOutputExtension(string $outputExtension): self
     {
         $this->outputExtension = $outputExtension;
@@ -152,12 +130,7 @@ class FileConverter extends SourceConverter
         return $this;
     }
 
-    /**
-     * @param SplFileInfo $file
-     *
-     * @return string
-     */
-    public function getConvertedFilename(SplFileInfo $file)
+    public function getConvertedFilename(SplFileInfo $file): string
     {
         $filename = $file->getRealpath();
 

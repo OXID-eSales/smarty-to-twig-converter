@@ -24,9 +24,15 @@ abstract class FileConversionTestCase extends TestCase
     /** @var string */
     protected $templateDirectory;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->unlinkConvertedFiles();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
         $this->unlinkConvertedFiles();
     }
 
@@ -108,11 +114,5 @@ abstract class FileConversionTestCase extends TestCase
                 unlink($twigTemplatePath);
             }
         }
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        $this->unlinkConvertedFiles();
     }
 }

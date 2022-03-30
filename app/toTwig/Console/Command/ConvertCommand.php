@@ -11,6 +11,7 @@
 
 namespace toTwig\Console\Command;
 
+use Doctrine\DBAL\DriverManager;
 use DOMDocument;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
@@ -32,14 +33,9 @@ use toTwig\SourceConverter\FileConverter;
  */
 class ConvertCommand extends Command
 {
+    protected Converter $converter;
+    protected ConfigInterface $defaultConfig;
 
-    protected $converter;
-    protected $defaultConfig;
-
-    /**
-     * @param Converter       $converter
-     * @param ConfigInterface $config
-     */
     public function __construct(Converter $converter = null, ConfigInterface $config = null)
     {
         $this->converter = $converter ?: new Converter();
@@ -115,7 +111,7 @@ EOF
             );
     }
 
-    private function getDefinitions()
+    private function getDefinitions(): array
     {
         return [
             new InputOption(
@@ -185,16 +181,10 @@ EOF
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
-     *
      * @see Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         try {
             $this->checkInputConstraints($input);
         } catch (InvalidArgumentException $exception) {
@@ -230,10 +220,7 @@ EOF
         return empty($changed) ? 0 : 1;
     }
 
-    /**
-     * @param InputInterface $input
-     */
-    private function checkInputConstraints(InputInterface $input)
+    private function checkInputConstraints(InputInterface $input): void
     {
         if ($input->getOption('path') && $input->getOption('database')) {
             throw new InvalidOptionException(
@@ -251,15 +238,9 @@ EOF
         }
     }
 
-    /**
-     * @param InputInterface $input
-     *
-     * @return ConfigInterface
-     */
     private function getConfig(InputInterface $input): ConfigInterface
     {
         if ($input->getOption('config')) {
-            $config = null;
             foreach ($this->converter->getConfigs() as $config) {
                 if ($config->getName() == $input->getOption('config')) {
                     return $config;
@@ -280,12 +261,7 @@ EOF
         }
     }
 
-    /**
-     * @param InputInterface $input
-     *
-     * @return Config
-     */
-    private function buildConfig(InputInterface $input)
+    private function buildConfig(InputInterface $input): Config
     {
         $config = $this->defaultConfig;
 
@@ -308,7 +284,8 @@ EOF
                 ->setPath($path)
                 ->setOutputExtension($input->getOption('ext'));
         } elseif ($databaseUrl = $input->getOption('database')) {
-            $sourceConverter = new DatabaseConverter($databaseUrl);
+            $connection = DriverManager::getConnection(['url' => $databaseUrl]);
+            $sourceConverter = new DatabaseConverter($connection);
             if ($input->getOption('database-columns')) {
                 $sourceConverter->filterColumns(explode(',', $input->getOption('database-columns')));
             }
@@ -348,11 +325,6 @@ EOF
         }
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param array           $changed
-     */
     private function outputXml(InputInterface $input, OutputInterface $output, array $changed): void
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -382,9 +354,6 @@ EOF
         $output->write($dom->saveXML());
     }
 
-    /**
-     * @return string
-     */
     protected function getConvertersHelp(): string
     {
         $converters = '';
@@ -416,9 +385,6 @@ EOF
         return $converters;
     }
 
-    /**
-     * @return string
-     */
     protected function getConfigsHelp(): string
     {
         $configs = '';

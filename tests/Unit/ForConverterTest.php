@@ -23,7 +23,7 @@ class ForConverterTest extends TestCase
     /** @var ForConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new ForConverter();
     }

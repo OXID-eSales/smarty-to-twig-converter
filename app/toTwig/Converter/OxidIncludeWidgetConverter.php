@@ -11,9 +11,8 @@ namespace toTwig\Converter;
  */
 class OxidIncludeWidgetConverter extends AbstractSingleTagConverter
 {
-
-    protected $name = 'oxid_include_widget';
-    protected $description = 'Convert smarty {oxid_include_widget} to twig {{ include_widget() }}';
-    protected $priority = 100;
-    protected $convertedName = 'include_widget';
+    protected string $name = 'oxid_include_widget';
+    protected string $description = 'Convert smarty {oxid_include_widget} to twig {{ include_widget() }}';
+    protected int $priority = 100;
+    protected ?string $convertedName = 'include_widget';
 }

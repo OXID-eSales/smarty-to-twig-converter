@@ -11,9 +11,8 @@ namespace toTwig\Converter;
  */
 class OxgetseourlConverter extends AbstractSingleTagConverter
 {
-
-    protected $name = 'oxgetseourl';
-    protected $convertedName = 'seo_url';
-    protected $description = "Convert smarty {oxgetseourl} to twig function {{ seo_url() }}";
-    protected $priority = 100;
+    protected string $name = 'oxgetseourl';
+    protected ?string $convertedName = 'seo_url';
+    protected string $description = "Convert smarty {oxgetseourl} to twig function {{ seo_url() }}";
+    protected int $priority = 100;
 }

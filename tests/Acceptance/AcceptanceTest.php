@@ -11,7 +11,7 @@ use toTwig\Tests\FileConversionTestCase;
 class AcceptanceTest extends FileConversionTestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->templateDirectory = dirname(__FILE__) . '/';
         $this->templateNames = ['basket', 'comment', 'order', 'payment', 'thankyou', 'user'];

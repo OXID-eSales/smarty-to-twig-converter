@@ -11,9 +11,8 @@ namespace toTwig\Converter;
  */
 abstract class AbstractSingleTagConverter extends ConverterAbstract
 {
-
-    protected $mandatoryFields = [];
-    protected $convertedName = null;
+    protected array $mandatoryFields = [];
+    protected ?string $convertedName = null;
 
     /**
      * AbstractSingleTagConverter constructor.
@@ -37,7 +36,7 @@ abstract class AbstractSingleTagConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $match = isset($matches[1]) ? $matches[1] : '';
+                $match = $matches[1] ?? '';
                 $attributes = $this->extractAttributes($match);
 
                 $arguments = [];

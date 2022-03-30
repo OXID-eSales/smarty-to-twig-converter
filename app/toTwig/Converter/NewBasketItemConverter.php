@@ -18,14 +18,13 @@ namespace toTwig\Converter;
  */
 class NewBasketItemConverter extends ConverterAbstract
 {
+    protected string $name = 'oxid_newbasketitem';
+    protected string $description = 'Convert insert oxid_newbasketitem to twig new_basket_item';
+    protected int $priority = 110;
 
-    protected $name = 'oxid_newbasketitem';
-    protected $description = 'Convert insert oxid_newbasketitem to twig new_basket_item';
-    protected $priority = 110;
-
-    protected $pattern;
-    protected $string = '{{ insert_new_basket_item(:vars) }}';
-    protected $attrName = 'name';
+    protected string $pattern;
+    protected string $string = '{{ insert_new_basket_item(:vars) }}';
+    protected string $attrName = 'name';
 
     /**
      * NewBasketItemConverter constructor.
@@ -35,11 +34,6 @@ class NewBasketItemConverter extends ConverterAbstract
         $this->pattern = $this->getOpeningTagPattern('insert');
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->pattern;

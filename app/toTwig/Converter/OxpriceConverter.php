@@ -11,10 +11,9 @@ namespace toTwig\Converter;
  */
 class OxpriceConverter extends AbstractSingleTagConverter
 {
-
-    protected $name = 'oxprice';
-    protected $description = "Convert smarty {oxprice} to twig function {{ format_price() }}";
-    protected $priority = 100;
-    protected $convertedName = 'format_price';
-    protected $mandatoryFields = ['price'];
+    protected string $name = 'oxprice';
+    protected string $description = "Convert smarty {oxprice} to twig function {{ format_price() }}";
+    protected int $priority = 100;
+    protected ?string $convertedName = 'format_price';
+    protected array $mandatoryFields = ['price'];
 }

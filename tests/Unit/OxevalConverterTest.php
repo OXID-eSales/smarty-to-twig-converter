@@ -18,7 +18,7 @@ class OxevalConverterTest extends TestCase
     /** @var OxevalConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxevalConverter();
     }

@@ -19,7 +19,6 @@ use toTwig\SourceConverter\SourceConverter;
  */
 interface ConfigInterface
 {
-
     /**
      * Returns the name of the configuration.
      *
@@ -43,12 +42,10 @@ interface ConfigInterface
      *
      * @return ConverterAbstract[] A level or a list of converter names
      */
-    public function getConverters();
+    public function getConverters(): array;
 
     /**
      * Adds an instance of a custom converter.
-     *
-     * @param ConverterAbstract $converter
      */
     public function addCustomConverter(ConverterAbstract $converter): void;
 
@@ -59,25 +56,8 @@ interface ConfigInterface
      */
     public function getCustomConverters(): array;
 
-    /**
-     * @param SourceConverter $converter
-     *
-     * @return ConfigInterface
-     */
     public function setSourceConverter(SourceConverter $converter): self;
-
-    /**
-     * @return SourceConverter
-     */
     public function getSourceConverter(): SourceConverter;
-
-    /**
-     * @return bool
-     */
     public function isDryRun(): bool;
-
-    /**
-     * @return bool
-     */
     public function isDiff(): bool;
 }

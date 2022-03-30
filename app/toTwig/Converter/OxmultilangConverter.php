@@ -11,9 +11,8 @@ namespace toTwig\Converter;
  */
 class OxmultilangConverter extends AbstractSingleTagConverter
 {
-
-    protected $name = 'oxmultilang';
-    protected $description = "Convert smarty {oxmultilang} to twig {{ translate }}";
-    protected $priority = 100;
-    protected $convertedName = 'translate';
+    protected string $name = 'oxmultilang';
+    protected string $description = "Convert smarty {oxmultilang} to twig {{ translate }}";
+    protected int $priority = 100;
+    protected ?string $convertedName = 'translate';
 }

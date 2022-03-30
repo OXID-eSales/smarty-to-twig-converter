@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class MathConverter extends ConverterAbstract
 {
+    protected string $name = 'math';
+    protected string $description = "Convert smarty math to twig";
+    protected int $priority = 1000;
 
-    protected $name = 'math';
-    protected $description = "Convert smarty math to twig";
-    protected $priority = 1000;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('math');
@@ -57,10 +51,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Get string with pattern to be replaced by preg_replace.
-     *
-     * @param array $replace
-     *
-     * @return string
      */
     private function getStringForPregReplace(array $replace): string
     {
@@ -73,12 +63,6 @@ class MathConverter extends ConverterAbstract
         return $string;
     }
 
-    /**
-     * @param array $attr
-     * @param array $vars
-     *
-     * @return mixed|null|string|string[]
-     */
     private function translateEquationTemplate(array $attr, array $vars): string
     {
         $equationTemplate = $this->sanitizeVariableName($attr['equation']);
@@ -95,11 +79,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace named args in string
-     *
-     * @param string $string
-     * @param array  $args
-     *
-     * @return string Formated string
      */
     protected function mathEquationSprintf(string $string, array $args): string
     {
@@ -122,10 +101,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace variations of round. Order in which functions are called is important.
-     *
-     * @param string $equationTemplate
-     *
-     * @return string Formated string
      */
     protected function mathAllVariationsOfRoundSprintf(string $equationTemplate): string
     {
@@ -138,10 +113,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace abs function in equation
-     *
-     * @param string $string
-     *
-     * @return null|string|string[]
      */
     protected function mathAbsSprintf(string $string): string
     {
@@ -161,10 +132,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace ceil function in equation
-     *
-     * @param string $string
-     *
-     * @return null|string|string[]
      */
     protected function mathCeilSprintf(string $string): string
     {
@@ -184,10 +151,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace floor function in equation
-     *
-     * @param string $string
-     *
-     * @return null|string|string[]
      */
     protected function mathFloorSprintf(string $string): string
     {
@@ -207,10 +170,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace pow function in equation
-     *
-     * @param string $string
-     *
-     * @return null|string|string[]
      */
     protected function mathPowSprintf(string $string): string
     {
@@ -230,10 +189,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace rand function in equation
-     *
-     * @param string $string
-     *
-     * @return null|string|string[]
      */
     protected function mathRandSprintf(string $string): string
     {
@@ -253,10 +208,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace round function in equation
-     *
-     * @param string $string
-     *
-     * @return null|string|string[]
      */
     protected function mathRoundSprintf(string $string): string
     {
@@ -276,11 +227,6 @@ class MathConverter extends ConverterAbstract
 
     /**
      * Replace format function in equation
-     *
-     * @param string $string
-     * @param array  $args
-     *
-     * @return null|string|string[]
      */
     protected function mathFormatSprintf(string $string, array $args): string
     {
@@ -299,11 +245,6 @@ class MathConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param array $attr
-     *
-     * @return string
-     */
     private function getAssignAttribute(array $attr): string
     {
         $assign = '';

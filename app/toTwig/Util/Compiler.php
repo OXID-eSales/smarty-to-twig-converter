@@ -11,6 +11,7 @@
 
 namespace toTwig\Util;
 
+use Phar;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -20,18 +21,14 @@ use Symfony\Component\Finder\Finder;
  */
 class Compiler
 {
-
-    /**
-     * @param string $pharFile
-     */
-    public function compile($pharFile = 'toTwig.phar')
+    public function compile(string $pharFile = 'toTwig.phar'): void
     {
         if (file_exists($pharFile)) {
             unlink($pharFile);
         }
 
-        $phar = new \Phar($pharFile, 0, 'toTwig.phar');
-        $phar->setSignatureAlgorithm(\Phar::SHA1);
+        $phar = new Phar($pharFile, 0, 'toTwig.phar');
+        $phar->setSignatureAlgorithm(Phar::SHA1);
 
         $phar->startBuffering();
 
@@ -57,9 +54,9 @@ class Compiler
     /**
      * Remove the shebang from the file before add it to the PHAR file.
      *
-     * @param \Phar $phar PHAR instance
+     * @param Phar $phar PHAR instance
      */
-    protected function addStConverter(\Phar $phar)
+    protected function addStConverter(Phar $phar): void
     {
         $content = file_get_contents(__DIR__ . '/../../../toTwig');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
@@ -67,19 +64,13 @@ class Compiler
         $phar->addFromString('toTwig', $content);
     }
 
-    /**
-     * @return string
-     */
-    protected function getStub()
+    protected function getStub(): string
     {
         return "#!/usr/bin/env php
         <?php Phar::mapPhar('toTwig.phar'); require 'phar://toTwig.phar/toTwig'; __HALT_COMPILER();";
     }
 
-    /**
-     * @return string
-     */
-    protected function getLicense()
+    protected function getLicense(): string
     {
         return '
     /**
@@ -92,10 +83,7 @@ class Compiler
      */';
     }
 
-    /**
-     * @return array
-     */
-    protected function getFiles()
+    protected function getFiles(): array
     {
         $iterator = Finder::create()->files()->exclude('tests')->name('*.php')->in(array('vendor', 'lib'));
 

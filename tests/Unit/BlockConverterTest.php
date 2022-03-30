@@ -18,7 +18,7 @@ class BlockConverterTest extends TestCase
     /** @var BlockConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new BlockConverter();
     }

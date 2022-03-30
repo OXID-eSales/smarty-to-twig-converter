@@ -22,20 +22,16 @@ use toTwig\Converter\ConverterAbstract;
  */
 class Converter
 {
-
     const VERSION = '0.1-DEV';
 
     /** @var ConverterAbstract[] */
-    protected $converters = [];
+    protected array $converters = [];
 
     /** @var ConfigInterface[] */
-    protected $configs = [];
+    protected array $configs = [];
 
-    /** @var Differ */
-    protected $diff;
-
-    /** @var SourceConverter */
-    private $sourceConverter;
+    protected Differ $diff;
+    private SourceConverter $sourceConverter;
 
     /**
      * Converter constructor.
@@ -59,12 +55,7 @@ class Converter
         }
     }
 
-    /**
-     * @param string $class
-     *
-     * @return bool
-     */
-    private function isInstantiable($class): bool
+    private function isInstantiable(string $class): bool
     {
         try {
             $reflectionClass = new \ReflectionClass($class);
@@ -76,9 +67,6 @@ class Converter
         return $isInstantiable;
     }
 
-    /**
-     * @param array $converters
-     */
     public function registerCustomConverters(array $converters): void
     {
         foreach ($converters as $converter) {
@@ -86,9 +74,6 @@ class Converter
         }
     }
 
-    /**
-     * @param ConverterAbstract $converter
-     */
     public function addConverter(ConverterAbstract $converter): void
     {
         $this->converters[] = $converter;
@@ -96,10 +81,8 @@ class Converter
 
     /**
      * @param string[] $converters
-     *
-     * @return mixed
      */
-    public function filterConverters(array $converters)
+    public function filterConverters(array $converters): void
     {
         $converters = array_map('trim', $converters);
 
@@ -151,9 +134,6 @@ class Converter
         }
     }
 
-    /**
-     * @param ConfigInterface $config
-     */
     public function addConfig(ConfigInterface $config): void
     {
         $this->configs[] = $config;
@@ -184,8 +164,6 @@ class Converter
 
     /**
      * sortConverters
-     *
-     * @return void
      */
     private function sortConverters(): void
     {
@@ -201,10 +179,7 @@ class Converter
         );
     }
 
-    /**
-     * @param SourceConverter $converter
-     */
-    public function setSourceConverter(SourceConverter $converter)
+    public function setSourceConverter(SourceConverter $converter): void
     {
         $this->sourceConverter = $converter;
     }

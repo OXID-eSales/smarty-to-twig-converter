@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class OxinputhelpConverter extends ConverterAbstract
 {
+    protected string $name = 'oxinputhelp';
+    protected string $description = "Convert smarty {oxinputhelp} to twig include with specified file path and parameters";
+    protected int $priority = 100;
 
-    protected $name = 'oxinputhelp';
-    protected $description = "Convert smarty {oxinputhelp} to twig include with specified file path and parameters";
-    protected $priority = 100;
-
-    /**
-     * @param string $content
-     *
-     * @return mixed|string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('oxinputhelp');

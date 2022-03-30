@@ -14,7 +14,7 @@ class InsertTrackerConverterTest extends FileConversionUnitTestCase
     /** @var InsertTrackerConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new InsertTrackerConverter();
         $this->templateNames = ['insert-tracker'];

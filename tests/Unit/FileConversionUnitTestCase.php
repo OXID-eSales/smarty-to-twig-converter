@@ -15,7 +15,7 @@ use toTwig\Tests\FileConversionTestCase;
  */
 class FileConversionUnitTestCase extends FileConversionTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->templateDirectory = dirname(__FILE__) . '/UnitTestTemplates/';
         parent::setUp();

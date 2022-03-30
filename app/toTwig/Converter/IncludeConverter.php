@@ -16,14 +16,13 @@ namespace toTwig\Converter;
  */
 class IncludeConverter extends ConverterAbstract
 {
+    protected string $name = 'include';
+    protected string $description = 'Convert smarty include to twig include';
+    protected int $priority = 100;
 
-    protected $name = 'include';
-    protected $description = 'Convert smarty include to twig include';
-    protected $priority = 100;
-
-    protected $pattern;
-    protected $string = '{% include :template :with :vars %}';
-    protected $attrName = 'file';
+    protected string $pattern;
+    protected string $string = '{% include :template :with :vars %}';
+    protected string $attrName = 'file';
 
     /**
      * IncludeConverter constructor.
@@ -33,11 +32,6 @@ class IncludeConverter extends ConverterAbstract
         $this->pattern = $this->getOpeningTagPattern('include');
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->pattern;

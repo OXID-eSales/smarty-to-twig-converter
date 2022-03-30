@@ -15,7 +15,7 @@ class CaptureConverterTest extends TestCase
     /** @var CaptureConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new CaptureConverter();
     }

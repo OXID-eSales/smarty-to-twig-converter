@@ -16,25 +16,19 @@ namespace toTwig\Converter;
  */
 class ForConverter extends ConverterAbstract
 {
-
-    protected $name = 'for';
-    protected $description = 'Convert foreach/foreachelse to twig';
-    protected $priority = 50;
+    protected string $name = 'for';
+    protected string $description = 'Convert foreach/foreachelse to twig';
+    protected int $priority = 50;
 
     // Lookup tables for performing some token
     // replacements not addressed in the grammar.
-    private $replacements = [
+    private array $replacements = [
         'smarty\.foreach.*\.index' => 'loop.index0',
         'smarty\.foreach.*\.iteration' => 'loop.index',
         'smarty\.foreach.*\.first' => 'loop.first',
         'smarty\.foreach.*\.last' => 'loop.last',
     ];
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $content = $this->replaceFor($content);
@@ -48,11 +42,6 @@ class ForConverter extends ConverterAbstract
         return $content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceEndForEach(string $content): string
     {
         $search = $this->getClosingTagPattern('foreach');
@@ -61,11 +50,6 @@ class ForConverter extends ConverterAbstract
         return preg_replace($search, $replace, $content);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceForEachElse(string $content): string
     {
         $search = $this->getOpeningTagPattern('foreachelse');
@@ -74,11 +58,6 @@ class ForConverter extends ConverterAbstract
         return preg_replace($search, $replace, $content);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceFor(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('foreach');
@@ -110,10 +89,6 @@ class ForConverter extends ConverterAbstract
      * {foreach $arrayVar as $itemVar}
      * or
      * {foreach $arrayVar as $keyVar=>$itemVar}
-     *
-     * @param array $mcs
-     *
-     * @return array
      */
     private function getReplaceArgumentsForSmarty3(array $mcs): array
     {
@@ -139,10 +114,6 @@ class ForConverter extends ConverterAbstract
      * Returns array of replace arguments for foreach function in smarty 2
      * For example:
      * {foreach from=$myArray key="myKey" item="myItem"}
-     *
-     * @param array $matches
-     *
-     * @return array
      */
     private function getReplaceArgumentsForSmarty2(array $matches): array
     {

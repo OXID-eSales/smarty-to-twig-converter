@@ -13,16 +13,10 @@ namespace toTwig\Converter;
  */
 class GetRequestVariablesConverter extends ConverterAbstract
 {
+    protected string $name = 'get_request_variables';
+    protected string $description = 'Access php request variables using getters. Only $_COOKIE and $_GET are accessible';
+    protected int $priority = 50;
 
-    protected $name = 'get_request_variables';
-    protected $description = 'Access php request variables using getters. Only $_COOKIE and $_GET are accessible';
-    protected $priority = 50;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $convertedCookieGetter = $this->convertCookie($content);
@@ -31,11 +25,6 @@ class GetRequestVariablesConverter extends ConverterAbstract
         return $convertedGetters;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function convertCookie(string $content): string
     {
         $pattern = '/\$smarty\.cookies\.([a-zA-Z0-9]+)/';
@@ -44,11 +33,6 @@ class GetRequestVariablesConverter extends ConverterAbstract
         return $this->convertGetter($content, $pattern, $getterName);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function convertGet(string $content): string
     {
         $pattern = '/\$smarty\.get\.([a-zA-Z0-9]+)/';
@@ -57,21 +41,12 @@ class GetRequestVariablesConverter extends ConverterAbstract
         return $this->convertGetter($content, $pattern, $getterName);
     }
 
-    /**
-     * @param string $content
-     * @param string $pattern
-     * @param string $getterName
-     *
-     * @return string
-     */
     private function convertGetter(string $content, string $pattern, string $getterName): string
     {
         return preg_replace_callback(
             $pattern,
             function ($matches) use ($getterName) {
-                $search = str_replace($matches[0], $getterName . '("' . $matches[1] . '")', $matches[0]);
-
-                return $search;
+                return str_replace($matches[0], $getterName . '("' . $matches[1] . '")', $matches[0]);
             },
             $content
         );

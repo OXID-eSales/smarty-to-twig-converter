@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class BlockConverter extends ConverterAbstract
 {
+    protected string $name = 'block';
+    protected string $description = 'Convert block to twig';
+    protected int $priority = 50;
 
-    protected $name = 'block';
-    protected $description = 'Convert block to twig';
-    protected $priority = 50;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $content = $this->replaceBlock($content);
@@ -31,11 +25,6 @@ class BlockConverter extends ConverterAbstract
         return $content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceEndBlock(string $content): string
     {
         $search = $this->getClosingTagPattern('block');
@@ -44,11 +33,6 @@ class BlockConverter extends ConverterAbstract
         return preg_replace($search, $replace, $content);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceBlock(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('block');
@@ -66,11 +50,6 @@ class BlockConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param array $attr
-     *
-     * @return string
-     */
     private function getSanitizedName(array $attr): string
     {
         if (isset($attr['name'])) {
@@ -82,12 +61,6 @@ class BlockConverter extends ConverterAbstract
         return $name;
     }
 
-    /**
-     * @param string $name
-     * @param array  $attr
-     *
-     * @return string
-     */
     private function getBlockOpeningTag(string $name, array $attr): string
     {
         $block = sprintf("{%% block %s %%}", trim($name, '"'));
@@ -98,11 +71,6 @@ class BlockConverter extends ConverterAbstract
         return $block;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceExtends(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('extends');
@@ -120,11 +88,6 @@ class BlockConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceParent(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('$smarty.block.parent');

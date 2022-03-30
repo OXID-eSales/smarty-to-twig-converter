@@ -6,11 +6,8 @@
 
 namespace toTwig\Tests\SourceConverter;
 
-use PDO;
-use PHPUnit\DbUnit\Database\Connection;
-use PHPUnit\DbUnit\DataSet\IDataSet;
-use PHPUnit\DbUnit\TestCaseTrait;
-use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\Tests\DbalFunctionalTestCase;
 use toTwig\ConversionResult;
 use toTwig\Converter\VariableConverter;
 use toTwig\SourceConverter\DatabaseConverter;
@@ -18,46 +15,44 @@ use toTwig\SourceConverter\DatabaseConverter;
 /**
  * Class DatabaseConverterTest
  */
-class DatabaseConverterTest extends TestCase
+class DatabaseConverterTest extends DbalFunctionalTestCase
 {
+    const DATABASE_PATH = __DIR__ . '/_datasets/init.db';
+    const FIXTURES_PATH = __DIR__ . '/_datasets/fixtures.sql';
 
-    use TestCaseTrait;
-
-    /** @var PDO */
-    static private $pdo = null;
-
-    /** @var Connection */
-    private $connection = null;
-
-    /** @var string */
-    private $databasePath = __DIR__ . '/_datasets/init.db';
-
-    private $databasePathBackup = __DIR__ . '/_datasets/init.db.bak';
+    private AbstractSchemaManager $schemaManager;
 
     /**
      * Performs operation returned by getSetUpOperation().
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+        $this->schemaManager = $this->connection->getSchemaManager();
+        $this->prepareDatabase();
+    }
 
-        if (!file_exists($this->databasePathBackup)) {
-            copy($this->databasePath, $this->databasePathBackup);
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if (file_exists(self::DATABASE_PATH)) {
+            unlink(self::DATABASE_PATH);
         }
+    }
 
-        $this->databaseTester = null;
-
-        $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
-        $this->getDatabaseTester()->setDataSet($this->getDataSet());
-        $this->getDatabaseTester()->onSetUp();
+    private function prepareDatabase(): void
+    {
+        $this->schemaManager->dropAndCreateDatabase(self::DATABASE_PATH);
+        $this->connection->executeStatement(file_get_contents(self::FIXTURES_PATH));
     }
 
     /**
      * @covers \toTwig\SourceConverter\DatabaseConverter::convert
      */
-    public function testConvert()
+    public function testConvert(): void
     {
-        $databaseConverter = new DatabaseConverter("sqlite:///$this->databasePath");
+        $databaseConverter = new DatabaseConverter($this->connection);
 
         $databaseConverter->setColumns(['table_a.column_a', 'table_a.column_b', 'table_b.column_c']);
         $changed = $databaseConverter->convert(false, false, [new VariableConverter()]);
@@ -67,17 +62,47 @@ class DatabaseConverterTest extends TestCase
         // Compare ConversionResult objects
         $this->assertEquals($expected, $changed);
 
-        $dataset = $this->connection->createDataSet(['table_a', 'table_b']);
-        $expectedDataset = $this->createXMLDataSet(__DIR__ . '/_datasets/expectedConvert.xml');
+        // Check table_a
+        $result = $this->connection->fetchAllAssociative("SELECT * FROM table_a");
+        $expected = [
+            [
+                'id' => '1',
+                'column_a' => 'Plain text A',
+                'column_b' => 'Plain text B',
+                'column_c' => 'Plain text C'
+            ],
+            [
+                'id' => '2',
+                'column_a' => '{{ varA }}',
+                'column_b' => '{{ varB }}',
+                'column_c' => '[{$varC}]'
+            ],
+            [
+                'id' => '3',
+                'column_a' => '{{ varA }}',
+                'column_b' => null,
+                'column_c' => '[{$varC}]'
+            ],
+        ];
+        $this->assertEquals($expected, $result);
 
-        // Compare database sets
-        $this->assertDataSetsEqual($expectedDataset, $dataset);
+        // Check table_b
+        $result = $this->connection->fetchAllAssociative("SELECT * FROM table_b");
+        $expected = [
+            [
+                'id' => '2',
+                'column_a' => '[{$varA}]',
+                'column_b' => '[{$varB}]',
+                'column_c' => '{{ varC }}'
+            ],
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     /**
      * @return ConversionResult[]
      */
-    private function convertProviderExpectedConversionResults()
+    private function convertProviderExpectedConversionResults(): array
     {
         $tableAcolumnAid2 = new ConversionResult();
         $tableAcolumnAid2
@@ -103,22 +128,20 @@ class DatabaseConverterTest extends TestCase
             ->setConvertedTemplate('{{ varC }}')
             ->addAppliedConverter('variable');
 
-        $expected = [
+        return [
             'table_a.column_a(id:2)' => $tableAcolumnAid2,
             'table_a.column_a(id:3)' => $tableAcolumnAid3,
             'table_a.column_b(id:2)' => $tableAcolumnBid2,
             'table_b.column_c(id:2)' => $tableBcolumnCid2
         ];
-
-        return $expected;
     }
 
     /**
      * @covers \toTwig\SourceConverter\DatabaseConverter::convert
      */
-    public function testConvertDiff()
+    public function testConvertDiff(): void
     {
-        $databaseConverter = new DatabaseConverter("sqlite:///$this->databasePath");
+        $databaseConverter = new DatabaseConverter($this->connection);
 
         $databaseConverter->setColumns(['table_a.column_a']);
         $changed = $databaseConverter->convert(true, true, [new VariableConverter()]);
@@ -131,19 +154,21 @@ class DatabaseConverterTest extends TestCase
     /**
      * @return ConversionResult[]
      */
-    private function convertDiffProviderExpectedConversionResults()
+    private function convertDiffProviderExpectedConversionResults(): array
     {
         $columnAid2 = new ConversionResult();
         $columnAid2
             ->setOriginalTemplate('[{$varA}]')
             ->setConvertedTemplate('{{ varA }}')
             ->setDiff(
-                '      <error>---</error> Original
+                <<<'DIFF'
+      <error>---</error> Original
       <info>+++</info> New
       @@ @@
       <error>-</error>[{$varA}]
       <info>+</info>{{ varA }}
-      '
+      
+DIFF
             )
             ->addAppliedConverter('variable');
 
@@ -152,30 +177,29 @@ class DatabaseConverterTest extends TestCase
             ->setOriginalTemplate('[{$varA}]')
             ->setConvertedTemplate('{{ varA }}')
             ->setDiff(
-                '      <error>---</error> Original
+                <<<'DIFF'
+      <error>---</error> Original
       <info>+++</info> New
       @@ @@
       <error>-</error>[{$varA}]
       <info>+</info>{{ varA }}
-      '
+      
+DIFF
             )
             ->addAppliedConverter('variable');
 
-
-        $expected = [
+        return [
             'table_a.column_a(id:2)' => $columnAid2,
             'table_a.column_a(id:3)' => $columnAid3,
         ];
-
-        return $expected;
     }
 
     /**
      * @covers \toTwig\SourceConverter\DatabaseConverter::convert
      */
-    public function testConvertDryRun()
+    public function testConvertDryRun(): void
     {
-        $databaseConverter = new DatabaseConverter("sqlite:///$this->databasePath");
+        $databaseConverter = new DatabaseConverter($this->connection);
 
         $databaseConverter->setColumns(['table_a.column_a']);
         $changed = $databaseConverter->convert(true, false, [new VariableConverter()]);
@@ -185,17 +209,29 @@ class DatabaseConverterTest extends TestCase
         // Compare ConversionResult objects
         $this->assertEquals($expected, $changed);
 
-        $dataset = $this->connection->createDataSet(['table_a', 'table_b']);
-        $expectedDataset = $this->createXMLDataSet(__DIR__ . '/_datasets/initial.xml');
-
-        // Compare database sets
-        $this->assertDataSetsEqual($expectedDataset, $dataset);
+        // Make sure db stays unaffected
+        $result = $this->connection->fetchAllAssociative("SELECT table_a.id, table_a.column_a FROM table_a");
+        $expected = [
+            [
+                'id' => '1',
+                'column_a' => 'Plain text A'
+            ],
+            [
+                'id' => '2',
+                'column_a' => '[{$varA}]'
+            ],
+            [
+                'id' => '3',
+                'column_a' => '[{$varA}]'
+            ],
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     /**
      * @return ConversionResult[]
      */
-    private function convertDryRunProviderExpectedConversionResults()
+    private function convertDryRunProviderExpectedConversionResults(): array
     {
         $columnAid2 = new ConversionResult();
         $columnAid2
@@ -209,66 +245,9 @@ class DatabaseConverterTest extends TestCase
             ->setConvertedTemplate('{{ varA }}')
             ->addAppliedConverter('variable');
 
-
-        $expected = [
+        return [
             'table_a.column_a(id:2)' => $columnAid2,
             'table_a.column_a(id:3)' => $columnAid3,
         ];
-
-        return $expected;
-    }
-
-    /**
-     * Returns the test database connection.
-     *
-     * @return Connection
-     */
-    protected function getConnection()
-    {
-        if ($this->connection === null) {
-            if (self::$pdo == null) {
-                self::$pdo = new PDO("sqlite:$this->databasePath");
-            }
-
-            $this->connection = $this->createDefaultDBConnection(self::$pdo);
-        }
-
-        return $this->connection;
-    }
-
-    /**
-     * Returns the test dataset.
-     *
-     * @return IDataSet
-     */
-    protected function getDataSet()
-    {
-        $dataSet = $this->createXMLDataSet(__DIR__ . '/_datasets/initial.xml');
-
-        return $dataSet;
-    }
-
-    /**
-     * Performs operation returned by getTearDownOperation().
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        if (file_exists($this->databasePathBackup)) {
-            if (copy($this->databasePathBackup, $this->databasePath)) {
-                unlink($this->databasePathBackup);
-            }
-        }
-
-        $this->getDatabaseTester()->setTearDownOperation($this->getTearDownOperation());
-        $this->getDatabaseTester()->setDataSet($this->getDataSet());
-        $this->getDatabaseTester()->onTearDown();
-
-        /*
-         * Destroy the tester after the test is run to keep DB connections
-         * from piling up.
-         */
-        $this->databaseTester = null;
     }
 }

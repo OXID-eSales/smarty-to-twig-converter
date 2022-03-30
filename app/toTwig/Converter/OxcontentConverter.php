@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class OxcontentConverter extends ConverterAbstract
 {
+    protected string $name = 'oxcontent';
+    protected string $description = "Convert smarty {oxcontent} to twig function {% include 'content::...' %}";
+    protected int $priority = 100;
 
-    protected $name = 'oxcontent';
-    protected $description = "Convert smarty {oxcontent} to twig function {% include 'content::...' %}";
-    protected $priority = 100;
-
-    /**
-     * @param string $content
-     *
-     * @return null|string|string[]
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('oxcontent');
@@ -72,11 +66,6 @@ class OxcontentConverter extends ConverterAbstract
         );
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return string
-     */
     private function extractAssignVariableName(array $attributes): ?string
     {
         $assignVar = null;

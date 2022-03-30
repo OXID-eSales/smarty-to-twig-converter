@@ -16,15 +16,10 @@ namespace toTwig\Converter;
  */
 class CommentConverter extends ConverterAbstract
 {
-    protected $name = 'comment';
-    protected $description = 'Convert smarty comments [{* *}] to twig {# #}';
-    protected $priority = 2000;
+    protected string $name = 'comment';
+    protected string $description = 'Convert smarty comments [{* *}] to twig {# #}';
+    protected int $priority = 2000;
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = '#\[{\*(.*)\*}]#isU';

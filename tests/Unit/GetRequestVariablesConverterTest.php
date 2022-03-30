@@ -15,7 +15,7 @@ class GetRequestVariablesConverterTest extends TestCase
     /** @var GetRequestVariablesConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new GetRequestVariablesConverter();
     }

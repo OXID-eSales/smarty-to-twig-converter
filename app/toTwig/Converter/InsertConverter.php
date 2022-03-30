@@ -11,12 +11,11 @@ namespace toTwig\Converter;
  */
 class InsertConverter extends IncludeConverter
 {
+    protected string $name = 'insert';
+    protected string $description = 'Convert smarty insert to twig include';
 
-    protected $name = 'insert';
-    protected $description = 'Convert smarty insert to twig include';
-
-    protected $string = '{% include :template :with :vars %}';
-    protected $attrName = 'name';
+    protected string $string = '{% include :template :with :vars %}';
+    protected string $attrName = 'name';
 
     /**
      * InsertConverter constructor.

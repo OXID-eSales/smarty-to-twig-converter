@@ -11,11 +11,10 @@ namespace toTwig\Converter;
  */
 class OxmailtoConverter extends AbstractSingleTagConverter
 {
+    protected string $name = 'oxmailto';
+    protected ?string $convertedName = 'mailto';
+    protected string $description = "Convert smarty {oxmailto} to twig function {{ mailto() }}";
+    protected int $priority = 100;
 
-    protected $name = 'oxmailto';
-    protected $convertedName = 'mailto';
-    protected $description = "Convert smarty {oxmailto} to twig function {{ mailto() }}";
-    protected $priority = 100;
-
-    protected $mandatoryFields = ['address'];
+    protected array $mandatoryFields = ['address'];
 }

@@ -11,6 +11,7 @@
 
 namespace toTwig\Converter;
 
+use SplFileInfo;
 use toTwig\FilterNameMap;
 
 /**
@@ -18,27 +19,26 @@ use toTwig\FilterNameMap;
  */
 abstract class ConverterAbstract
 {
-
     /**
      * @var string Name of the converter.
      *
      * The name must be all lowercase and without any spaces.
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string Description of the converter.
      *
      * A short one-line description of what the converter does.
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var int Priority of the converter.
      *
      * The default priority is 0 and higher priorities are executed first.
      */
-    protected $priority = 0;
+    protected int $priority = 0;
 
     /**
      * Fixes a file.
@@ -52,39 +52,29 @@ abstract class ConverterAbstract
         return $content;
     }
 
-    /**
-     * @return int
-     */
     public function getPriority(): int
     {
         return $this->priority;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-
     /**
      * Returns true if the file is supported by this converter.
      *
-     * @param \SplFileInfo $file
+     * @param SplFileInfo $file
      *
      * @return Boolean true if the file is supported by this converter, false otherwise
      */
-    public function supports(\SplFileInfo $file): bool
+    public function supports(SplFileInfo $file): bool
     {
         return true;
     }
@@ -98,10 +88,6 @@ abstract class ConverterAbstract
      *   $matches[0] contains a string with full matched tag i.e.'[{tagName foo="bar" something="somevalue"}]'
      *   $matches[1] should contain a string with all other configuration coming with a tag i.e.
      *   'foo = "bar" something="somevalue"'
-     *
-     * @param string $tagName
-     *
-     * @return string
      */
     protected function getOpeningTagPattern(string $tagName): string
     {
@@ -110,10 +96,6 @@ abstract class ConverterAbstract
 
     /**
      * Get closing tag pattern: [{/tagName}]
-     *
-     * @param string $tagName
-     *
-     * @return string
      */
     protected function getClosingTagPattern(string $tagName): string
     {
@@ -152,10 +134,6 @@ abstract class ConverterAbstract
 
     /**
      * Sanitize variable, remove $,' or " from string
-     *
-     * @param string $string
-     *
-     * @return mixed
      */
     protected function sanitizeVariableName(string $string): string
     {
@@ -164,10 +142,6 @@ abstract class ConverterAbstract
 
     /**
      * Sanitize value, remove $,' or " from string
-     *
-     * @param string $string
-     *
-     * @return string
      */
     protected function sanitizeValue(string $string): string
     {
@@ -244,10 +218,6 @@ abstract class ConverterAbstract
      * For example:
      *   smarty: [{ foo($bar)}]
      *   twig:   {{ foo(bar) }]
-     *
-     * @param string $string
-     *
-     * @return string
      */
     private function convertFunctionArguments(string $string): string
     {
@@ -273,10 +243,6 @@ abstract class ConverterAbstract
      * For example:
      *   smarty: [{ "foo"|smarty_bar) }]
      *   twig:   {{ "foo"|twig_bar }}
-     *
-     * @param string $string
-     *
-     * @return string
      */
     private function convertFilters(string $string): string
     {
@@ -314,10 +280,6 @@ abstract class ConverterAbstract
      *   $matches[1] should contain a string with first part of an expression i.e. $a
      *   $matches[2] should contain a string with one of following characters: +, -, >, <, *, /, %, &&, ||
      *   $matches[3] should contain a string with second part of an expression i.e. $b
-     *
-     * @param string $expression
-     *
-     * @return string
      */
     protected function convertExpression(string $expression): string
     {
@@ -346,11 +308,6 @@ abstract class ConverterAbstract
      *   $args = ['key' => 'foo', 'value' => 'bar']
      *
      * return '{% set 'foo' = 'bar' %}'
-     *
-     * @param string $string
-     * @param array  $args
-     *
-     * @return string
      */
     protected function replaceNamedArguments(string $string, array $args): string
     {
@@ -370,10 +327,6 @@ abstract class ConverterAbstract
 
     /**
      * Replace multiple spaces in string with single space
-     *
-     * @param string $string
-     *
-     * @return string
      */
     protected function removeMultipleSpaces(string $string): string
     {
@@ -383,11 +336,6 @@ abstract class ConverterAbstract
     /**
      * Converts associative php array to twig array
      * ['a' => 1, 'b' => 2]  ==>>  "{ a: 1, b: 2 }"
-     *
-     * @param array $array
-     * @param array $skippedKeys
-     *
-     * @return string
      */
     protected function convertArrayToAssocTwigArray(array $array, array $skippedKeys): string
     {
@@ -407,44 +355,22 @@ abstract class ConverterAbstract
         return sprintf("{ %s }", implode(", ", $pairs));
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
     protected function rawString(string $string): string
     {
         return trim($string, '\'"');
     }
 
-    /**
-     * @param string $templateName
-     *
-     * @return string
-     */
     protected function convertFileExtension(string $templateName): string
     {
         return preg_replace('/\.tpl/', '.html.twig', $templateName);
     }
 
-    /**
-     * @param array $matches
-     *
-     * @return array
-     */
     protected function getAttributes(array $matches): array
     {
         $match = $this->getPregReplaceCallbackMatch($matches);
-        $attr = $this->extractAttributes($match);
-
-        return $attr;
+        return $this->extractAttributes($match);
     }
 
-    /**
-     * @param array $matches
-     *
-     * @return string
-     */
     protected function getPregReplaceCallbackMatch(array $matches): string
     {
         if (!isset($matches[1]) && $matches[0]) {
@@ -458,10 +384,6 @@ abstract class ConverterAbstract
 
     /**
      * Used in InsertTrackerConverter nad IncludeConverter
-     *
-     * @param array $attr
-     *
-     * @return string
      */
     protected function getOptionalReplaceVariables(array $attr): string
     {

@@ -12,7 +12,6 @@
 namespace toTwig\SourceConverter;
 
 use SebastianBergmann\Diff\Differ;
-use SplFileInfo;
 use toTwig\ConversionResult;
 use toTwig\Converter\ConverterAbstract;
 
@@ -21,9 +20,7 @@ use toTwig\Converter\ConverterAbstract;
  */
 abstract class SourceConverter
 {
-
-    /** @var Differ */
-    private $diff;
+    private Differ $diff;
 
     /**
      * SourceConverter constructor.
@@ -72,17 +69,11 @@ abstract class SourceConverter
         return $result;
     }
 
-    /**
-     * @param string $old
-     * @param string $new
-     *
-     * @return string
-     */
     protected function stringDiff(string $old, string $new): string
     {
         $diff = $this->diff->diff($old, $new);
 
-        $diff = implode(
+        return implode(
             PHP_EOL,
             array_map(
                 function ($string) {
@@ -99,7 +90,5 @@ abstract class SourceConverter
                 explode(PHP_EOL, $diff)
             )
         );
-
-        return $diff;
     }
 }

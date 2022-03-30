@@ -23,7 +23,7 @@ class AssignConverterTest extends TestCase
     /** @var AssignConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new AssignConverter();
     }

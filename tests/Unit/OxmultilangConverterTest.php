@@ -18,7 +18,7 @@ class OxmultilangConverterTest extends TestCase
     /** @var OxmultilangConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxmultilangConverter();
     }

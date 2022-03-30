@@ -6,8 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0] - Unreleased
 
+### Added
+- Support for PHP 8
+- Missing property type declarations
+- Missing method return type declarations
+
 ### Removed
 - Support for `assign_adv` plugin
+- Redundant parameters and return types annotations
 
 ## [1.0.1] - 2020-05-20
 

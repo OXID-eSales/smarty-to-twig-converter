@@ -6,6 +6,7 @@
 
 namespace toTwig\Tests\Config;
 
+use Doctrine\DBAL\DriverManager;
 use toTwig\Config\Config;
 use PHPUnit\Framework\TestCase;
 use toTwig\Converter\AssignConverter;
@@ -95,7 +96,8 @@ class ConfigTest extends TestCase
     public function testSourceConverter()
     {
         $config = new Config();
-        $databaseConverter = new DatabaseConverter('sqlite://:memory:');
+        $connection = DriverManager::getConnection(['url' => 'sqlite://:memory:']);
+        $databaseConverter = new DatabaseConverter($connection);
         $config->setSourceConverter($databaseConverter);
 
         $this->assertEquals($databaseConverter, $config->getSourceConverter());

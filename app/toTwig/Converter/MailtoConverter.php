@@ -11,10 +11,9 @@ namespace toTwig\Converter;
  */
 class MailtoConverter extends AbstractSingleTagConverter
 {
+    protected string $name = 'mailto';
+    protected string $description = "Convert smarty {mailto} to twig function {{ mailto() }}";
+    protected int $priority = 100;
 
-    protected $name = 'mailto';
-    protected $description = "Convert smarty {mailto} to twig function {{ mailto() }}";
-    protected $priority = 100;
-
-    protected $mandatoryFields = ['address'];
+    protected array $mandatoryFields = ['address'];
 }

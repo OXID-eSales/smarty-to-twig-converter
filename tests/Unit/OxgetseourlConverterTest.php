@@ -17,7 +17,7 @@ class OxgetseourlConverterTest extends FileConversionUnitTestCase
     /** @var OxgetseourlConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxgetseourlConverter();
         $this->templateNames = ['oxgetseourl'];

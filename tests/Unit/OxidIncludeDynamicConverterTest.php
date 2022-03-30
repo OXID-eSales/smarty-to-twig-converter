@@ -17,7 +17,7 @@ class OxidIncludeDynamicConverterTest extends FileConversionUnitTestCase
     /** @var OxidIncludeDynamicConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxidIncludeDynamicConverter();
         $this->templateNames = ['oxid-include-dynamic'];

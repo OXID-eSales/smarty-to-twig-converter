@@ -18,7 +18,7 @@ class OxmailtoConverterTest extends TestCase
     /** @var OxmailtoConverter */
     protected $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new OxmailtoConverter();
     }

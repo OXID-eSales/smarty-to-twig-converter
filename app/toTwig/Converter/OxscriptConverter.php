@@ -11,17 +11,11 @@ namespace toTwig\Converter;
  */
 class OxscriptConverter extends AbstractSingleTagConverter
 {
+    protected string $name = 'oxscript';
+    protected string $description = "Convert smarty {oxscript} to twig function {{ script() }}";
+    protected int $priority = 100;
+    protected ?string $convertedName = 'script';
 
-    protected $name = 'oxscript';
-    protected $description = "Convert smarty {oxscript} to twig function {{ script() }}";
-    protected $priority = 100;
-    protected $convertedName = 'script';
-
-    /**
-     * @param string $content
-     *
-     * @return null|string|string[]
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern($this->name);

@@ -13,16 +13,10 @@ namespace toTwig\Converter;
  */
 class OxevalConverter extends ConverterAbstract
 {
+    protected string $name = 'oxeval';
+    protected string $description = 'Converts oxeval function into Twig\'s template_from_string';
+    protected int $priority = 1000;
 
-    protected $name = 'oxeval';
-    protected $description = 'Converts oxeval function into Twig\'s template_from_string';
-    protected $priority = 1000;
-
-    /**
-     * @param string $content
-     *
-     * @return mixed|string
-     */
     public function convert(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('oxeval');

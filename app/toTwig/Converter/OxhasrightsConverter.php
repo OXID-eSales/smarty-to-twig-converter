@@ -11,16 +11,10 @@ namespace toTwig\Converter;
  */
 class OxhasrightsConverter extends ConverterAbstract
 {
+    protected string $name = 'oxhasrights';
+    protected string $description = 'Convert oxhasrights to twig';
+    protected int $priority = 50;
 
-    protected $name = 'oxhasrights';
-    protected $description = 'Convert oxhasrights to twig';
-    protected $priority = 50;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $content = $this->replaceOxhasrights($content);
@@ -29,11 +23,6 @@ class OxhasrightsConverter extends ConverterAbstract
         return $content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceEndOxhasrights(string $content): string
     {
         $search = $this->getClosingTagPattern('oxhasrights');
@@ -42,11 +31,6 @@ class OxhasrightsConverter extends ConverterAbstract
         return preg_replace($search, $replace, $content);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     private function replaceOxhasrights(string $content): string
     {
         $pattern = $this->getOpeningTagPattern('oxhasrights');

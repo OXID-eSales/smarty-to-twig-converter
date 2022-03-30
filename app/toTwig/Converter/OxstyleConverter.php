@@ -11,9 +11,8 @@ namespace toTwig\Converter;
  */
 class OxstyleConverter extends AbstractSingleTagConverter
 {
-
-    protected $name = 'oxstyle';
-    protected $convertedName = 'style';
-    protected $description = "Convert smarty {oxstyle} to twig function {{ style() }}";
-    protected $priority = 100;
+    protected string $name = 'oxstyle';
+    protected ?string $convertedName = 'style';
+    protected string $description = "Convert smarty {oxstyle} to twig function {{ style() }}";
+    protected int $priority = 100;
 }

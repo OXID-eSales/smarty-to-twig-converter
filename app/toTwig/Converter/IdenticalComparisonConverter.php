@@ -13,16 +13,10 @@ namespace toTwig\Converter;
  */
 class IdenticalComparisonConverter extends ConverterAbstract
 {
+    protected string $name = 'identical_comparison_converter';
+    protected string $description = 'Convert php "===" to twig "is same as()"';
+    protected int $priority = 49;
 
-    protected $name = 'identical_comparison_converter';
-    protected $description = 'Convert php "===" to twig "is same as()"';
-    protected $priority = 49;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         /**
@@ -40,9 +34,7 @@ class IdenticalComparisonConverter extends ConverterAbstract
         return preg_replace_callback(
             $pattern,
             function ($matches) {
-                $search = str_replace($matches[0], ' is same as(' . $matches[1] . ')', $matches[0]);
-
-                return $search;
+                return str_replace($matches[0], ' is same as(' . $matches[1] . ')', $matches[0]);
             },
             $content
         );

@@ -16,16 +16,10 @@ namespace toTwig\Converter;
  */
 class VariableConverter extends ConverterAbstract
 {
+    protected string $name = 'variable';
+    protected string $description = 'Convert smarty variable {$var.name} to twig {{ var.name }}';
+    protected int $priority = 10;
 
-    protected $name = 'variable';
-    protected $description = 'Convert smarty variable {$var.name} to twig {{ var.name }}';
-    protected $priority = 10;
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
     public function convert(string $content): string
     {
         $pattern = '/\[\{([^{}]+)?\}\]/';
@@ -35,9 +29,7 @@ class VariableConverter extends ConverterAbstract
             function ($matches) {
                 $search = $matches[0];
                 $match = $this->convertExpression($matches[1]);
-                $search = str_replace($search, '{{ ' . $match . ' }}', $search);
-
-                return $search;
+                return str_replace($search, '{{ ' . $match . ' }}', $search);
             },
             $content
         );
