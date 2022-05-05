@@ -1,0 +1,21 @@
+name: Development
+
+on: [ push, pull_request ]
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                php: [ '7.4', '8.0' ]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the tool
+              uses: actions/checkout@v3
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+            - name: Install dependencies
+              run: composer install
+            - name: Run unit tests
+              run: ./vendor/bin/phpunit tests
