@@ -555,7 +555,7 @@ Converter name: `misc`
 
 ### OXID custom extensions
 
-#### oxcontent =\> include content
+#### oxcontent =\> include_content
 
 Converter name: `oxcontent`
 
@@ -563,7 +563,7 @@ Smarty:\
 `[{oxcontent ident='oxregisteremail'}]`
 
 Twig:\
-`{% include 'content::ident::oxregisteremail' %}`
+`{% include_content 'oxregisteremail' %}`
 
 #### oxeval =\> include(template\_from\_string())
 

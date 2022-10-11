@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support for `assign_adv` plugin
 - Redundant parameters and return types annotations
 
+### Changed
+- `oxcontent` is now converted to `include_content` tag
+
 ## [1.0.1] - 2020-05-20
 
 ### Changed

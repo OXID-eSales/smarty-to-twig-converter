@@ -14,9 +14,7 @@ use toTwig\Converter\OxcontentConverter;
  */
 class OxcontentConverterTest extends TestCase
 {
-
-    /** @var OxcontentConverter */
-    protected $converter;
+    protected OxcontentConverter $converter;
 
     public function setUp(): void
     {
@@ -24,14 +22,11 @@ class OxcontentConverterTest extends TestCase
     }
 
     /**
-     * @covers       \toTwig\Converter\OxcontentConverter::convert
+     * @covers \toTwig\Converter\OxcontentConverter::convert
      *
      * @dataProvider provider
-     *
-     * @param $smarty
-     * @param $twig
      */
-    public function testThatAssignIsConverted($smarty, $twig)
+    public function testThatAssignIsConverted(string $smarty, string $twig): void
     {
         // Test the above cases
         $this->assertSame(
@@ -40,36 +35,18 @@ class OxcontentConverterTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function provider()
+    public function provider(): array
     {
         return [
             // Base usage
             [
                 "[{oxcontent ident='oxregisteremail'}]",
-                "{% include 'content::ident::oxregisteremail' %}"
-            ],
-            // With additional parameters
-            [
-                "[{oxcontent ident='oxregisteremail' field='customfield'}]",
-                "{% include 'content::ident::oxregisteremail?field=customfield' %}"
-            ],
-            // Value converting and assign
-            [
-                "[{oxcontent ident='oxregisteremail' assign=\$var}]",
-                "{% set var = include('content::ident::oxregisteremail') %}"
+                "{% include_content 'oxregisteremail' %}"
             ],
             // As assignment
             [
-                "[{oxcontent ident='oxregisteremail' field='customfield' assign=\$var}]",
-                "{% set var = include('content::ident::oxregisteremail?field=customfield') %}"
-            ],
-            // With spaces
-            [
-                "[{ oxcontent ident='oxregisteremail' }]",
-                "{% include 'content::ident::oxregisteremail' %}"
+                "[{oxcontent ident='oxregisteremail' assign=\$var}]",
+                "{% set var = content('oxregisteremail') %}"
             ],
         ];
     }
@@ -77,7 +54,7 @@ class OxcontentConverterTest extends TestCase
     /**
      * @covers \toTwig\Converter\OxcontentConverter::getName
      */
-    public function testThatHaveExpectedName()
+    public function testThatHaveExpectedName(): void
     {
         $this->assertEquals('oxcontent', $this->converter->getName());
     }
@@ -85,7 +62,7 @@ class OxcontentConverterTest extends TestCase
     /**
      * @covers \toTwig\Converter\OxcontentConverter::getDescription
      */
-    public function testThatHaveDescription()
+    public function testThatHaveDescription(): void
     {
         $this->assertNotEmpty($this->converter->getDescription());
     }
