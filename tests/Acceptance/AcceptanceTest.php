@@ -14,7 +14,7 @@ class AcceptanceTest extends FileConversionTestCase
     public function setUp(): void
     {
         $this->templateDirectory = dirname(__FILE__) . '/';
-        $this->templateNames = ['basket', 'comment', 'order', 'payment', 'thankyou', 'user'];
+        $this->templateNames = ['basket', 'comment', 'order', 'payment', 'thankyou', 'user', 'recommlist'];
         parent::setUp();
     }
 }

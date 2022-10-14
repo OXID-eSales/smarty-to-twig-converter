@@ -1,0 +1,57 @@
+{# {{ script({ add: "$('a.js-external').attr('target', '_blank');", dynamic: __oxid_include_dynamic }) }} #}
+{% capture append = "oxidBlock_content" %}
+    {% if oView.getActiveRecommList() %}
+        {% set _actvrecommlist = oView.getActiveRecommList() %}
+        {% set recommendation_head = "LIST_BY"|translate %}
+        {% set recommendation_head = _actvrecommlist.oxrecommlists__oxtitle.value|cat(" <span>(")|cat(recommendation_head)|cat(" ")|cat(_actvrecommlist->oxrecommlists__oxauthor->value)|cat(")</span>") %}
+        {% set rsslinks = oView.getRssLinks() %}
+        <h1 class="page-header">{{ recommendation_head }}
+
+        {% set rsslinks = oView.getRssLinks() %}
+
+        {% if rsslinks.recommlistarts %}
+            <a class="rss js-external" id="rssRecommListProducts" href="{{ rsslinks.recommlistarts.link }}" title="{{ rsslinks.recommlistarts.title }}">
+                <img src="{{ oViewConf.getImageUrl('rss.png') }}" alt="{{ rsslinks.recommlistarts.title }}">
+                <span class="FXgradOrange corners glowShadow">{{ rsslinks.recommlistarts.title }}</span>
+            </a>
+        {% endif %}
+
+        </h1>
+        <div class="listRefine clear bottomRound">
+            {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigation()} %}
+        </div>
+
+        {% block recommendations_desc %}
+            <div>
+                <div class="clear">
+                    <div>
+                        {{ _actvrecommlist.oxrecommlists__oxdesc.value }}
+                    </div>
+                    {% if oView.isReviewActive() %}
+                    <div class="rating clear">
+                        {% include "widget/reviews/rating.html.twig" with {itemid: "recommid="|cat(_actvrecommlist.getId()), sRateUrl: oViewConf.getSelfLink()|cat("cl=recommlist")} %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}
+        {# List types: grid|line #}
+        {% include "widget/product/list.html.twig" with {type: "line", listId: "productList", products: oView.getArticleList(), recommid: _actvrecommlist.getId()} %}
+        {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigation(), place: "bottom"} %}
+        {% if oView.isReviewActive() %}
+        <div class="widgetBox reviews">
+            <h4>{{ translate({ ident: "WRITE_PRODUCT_REVIEW" }) }}</h4>
+            {% include "widget/reviews/reviews.html.twig" %}
+        </div>
+        {% endif %}
+    {% else %}
+
+        {% set hitsfor = "HITS_FOR"|translate %}
+        {% set recommendation_head = oView.getArticleCount()|cat(" ")|cat(hitsfor)|cat(" &quot;")|cat(oView->getSearchForHtml())|cat("&quot;") %}
+
+        <h1 class="page-header">{{ recommendation_head }}</h1>
+        {% include "page/recommendations/inc/list.html.twig" %}
+    {% endif %}
+    {{ insert_tracker() }}
+{% endcapture %}
+{% include "layout/page.html.twig" with {sidebar: "Left"} %}
