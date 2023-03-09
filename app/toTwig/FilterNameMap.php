@@ -17,7 +17,7 @@ class FilterNameMap
         'smartwordwrap' => 'smart_wordwrap',
         'date_format' => 'date_format',
         'oxaddparams' => 'add_url_parameters',
-        'oxaddslashes' => 'add_slashes',
+        'oxaddslashes' => 'addslashes',
         'oxenclose' => 'enclose',
         'oxfilesize' => 'file_size',
         'oxformattime' => 'format_time',
