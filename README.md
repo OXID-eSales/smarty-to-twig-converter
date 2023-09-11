@@ -45,8 +45,22 @@ It also can work with databases:
 The `--database` parameter gets [database doctrine-like
 URL](https://www.doctrine-project.org/projects/doctrine-dbal/en/2.9/reference/configuration.html#connecting-using-a-url).
 Converter by default converts following tables columns:
-`oxactions.OXLONGDESC`, `oxactions.OXLONGDESC_1`,
-`oxcontents.OXCONTENT`, `oxcontents.OXCONTENT_1`.
+- oxactions.OXLONGDESC
+- oxactions.OXLONGDESC_1
+- oxactions.OXLONGDESC_2
+- oxactions.OXLONGDESC_3
+- oxcontents.OXCONTENT
+- oxcontents.OXCONTENT_1
+- oxcontents.OXCONTENT_2
+- oxcontents.OXCONTENT_3
+- oxartextends.OXLONGDESC
+- oxartextends.OXLONGDESC_1
+- oxartextends.OXLONGDESC_2
+- oxartextends.OXLONGDESC_3
+- oxcategories.OXLONGDESC
+- oxcategories.OXLONGDESC
+- oxcategories.OXLONGDESC_2
+- oxcategories.OXLONGDESC_3
 
 The `--database-columns` option lets you choose tables columns to be
 converted (the table column names has to be specified in

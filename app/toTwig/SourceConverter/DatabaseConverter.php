@@ -20,8 +20,20 @@ class DatabaseConverter extends SourceConverter
     private array $columns = [
         'oxactions.OXLONGDESC',
         'oxactions.OXLONGDESC_1',
+        'oxactions.OXLONGDESC_2',
+        'oxactions.OXLONGDESC_3',
         'oxcontents.OXCONTENT',
-        'oxcontents.OXCONTENT_1'
+        'oxcontents.OXCONTENT_1',
+        'oxcontents.OXCONTENT_2',
+        'oxcontents.OXCONTENT_3',
+        'oxartextends.OXLONGDESC',
+        'oxartextends.OXLONGDESC_1',
+        'oxartextends.OXLONGDESC_2',
+        'oxartextends.OXLONGDESC_3',
+        'oxcategories.OXLONGDESC',
+        'oxcategories.OXLONGDESC_1',
+        'oxcategories.OXLONGDESC_2',
+        'oxcategories.OXLONGDESC_3',
     ];
 
     /**
