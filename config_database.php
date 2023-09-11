@@ -4,9 +4,19 @@
  * See LICENSE file for license details.
  */
 
-$sourceConverter = new \toTwig\SourceConverter\DatabaseConverter('mysql://root:123@localhost/oxideshop');
+use OxidEsales\Eshop\Core\DatabaseProvider;
 
-$sourceConverter->setColumns(['oxactions.OXLONGDESC', 'oxcontents.OXCONTENT']);
+require "/var/www/source/bootstrap.php";
+
+$db = DatabaseProvider::getDb();
+$db->setFetchMode($db::FETCH_MODE_ASSOC);
+
+$sourceConverter = new \toTwig\SourceConverter\DatabaseConverter($db->getPublicConnection());
+
+$sourceConverter->setColumns([
+    'oxactions.OXLONGDESC',
+    'oxcontents.OXCONTENT'
+]);
 
 return \toTwig\Config\Config::create()
     ->setSourceConverter($sourceConverter);
