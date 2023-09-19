@@ -13,10 +13,10 @@ $db->setFetchMode($db::FETCH_MODE_ASSOC);
 
 $sourceConverter = new \toTwig\SourceConverter\DatabaseConverter($db->getPublicConnection());
 
-$sourceConverter->setColumns([
-    'oxactions.OXLONGDESC',
-    'oxcontents.OXCONTENT'
-]);
+//$sourceConverter->setColumns([
+//    'oxactions.OXLONGDESC',
+//    'oxcontents.OXCONTENT'
+//]);
 
 return \toTwig\Config\Config::create()
     ->setSourceConverter($sourceConverter);
