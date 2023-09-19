@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support for PHP 8
 - Missing property type declarations
 - Missing method return type declarations
+- More fields converted by default by database conversion
 
 ### Removed
 - Support for `assign_adv` plugin
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Use correct addslashes filter [PR-1](https://github.com/OXID-eSales/smarty-to-twig-converter/pull/1)
+- Default database config example is using the shop connection now
 
 ## [1.0.1] - 2020-05-20
 
