@@ -24,14 +24,14 @@ class CaptureConverter extends ConverterAbstract
                 $attr = $this->getAttributes($matches);
                 if (isset($attr['name'])) {
                     $attr['name'] = $this->sanitizeVariableName($attr['name']);
-                    $string = '{% capture name = ":name" %}';
-                } elseif (isset($attr['append'])) {
+                    $string = '{% set :name %}';
+                } /*elseif (isset($attr['append'])) {
                     $attr['append'] = $this->sanitizeVariableName($attr['append']);
                     $string = '{% capture append = ":append" %}';
                 } elseif (isset($attr['assign'])) {
                     $attr['assign'] = $this->sanitizeVariableName($attr['assign']);
                     $string = '{% capture assign = ":assign" %}';
-                } else {
+                } */ else {
                     return $matches[0];
                 }
 
@@ -48,7 +48,7 @@ class CaptureConverter extends ConverterAbstract
     private function stripClosingTag(string $strippedOpeningTag): string
     {
         $pattern = $this->getClosingTagPattern('capture');
-        $string = '{% endcapture %}';
+        $string = '{% endset %}';
 
         return preg_replace_callback(
             $pattern,

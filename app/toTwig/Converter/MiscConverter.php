@@ -34,8 +34,8 @@ class MiscConverter extends ConverterAbstract
             $this->getOpeningTagPattern('rdelim') => '',
             $this->getOpeningTagPattern('literal') => '{# literal #}',
             $this->getClosingTagPattern('literal') => '{# /literal #}',
-            $this->getOpeningTagPattern('strip') => '{% spaceless %}',
-            $this->getClosingTagPattern('strip') => '{% endspaceless %}',
+            $this->getOpeningTagPattern('strip') => '{% apply spaceless %}',
+            $this->getClosingTagPattern('strip') => '{% endapply %}',
         ];
     }
 

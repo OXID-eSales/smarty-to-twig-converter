@@ -28,6 +28,8 @@ class IfConverter extends ConverterAbstract
         $content = preg_replace($this->getClosingTagPattern('if'), "{% endif %}", $content);
         // Replace smarty {else} to its twig analogue
         $content = preg_replace($this->getOpeningTagPattern('else'), "{% else %}", $content);
+        $content = preg_replace('/if not empty\((.*?)\)/', 'if $1 is not empty', $content);
+        $content = preg_replace('/if empty\((.*?)\)/', 'if $1 is empty', $content);
 
         return $content;
     }
