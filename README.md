@@ -119,7 +119,7 @@ It can be created using `toTwig\Config\Config::create()` static method.
     should be filtered with `|raw` before echoing. You can check if all necessary 
     variables are escaped using web browser's inspector tool.
     Instead of using `raw` filter to echo variable holding a template, you 
-    can use `template_from_string` function.  More on it in the [documentation](https://twig.symfony.com/doc/1.x/functions/template_from_string.html).
+    can use `template_from_string` function.  More on it in the [documentation](https://twig.symfony.com/doc/3.x/functions/template_from_string.html).
     
     Smarty:
     ```smarty
