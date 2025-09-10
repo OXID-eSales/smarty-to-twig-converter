@@ -7,6 +7,7 @@
 use OxidEsales\Eshop\Core\DatabaseProvider;
 
 require "/var/www/source/bootstrap.php";
+require __DIR__ . '/vendor/autoload.php';
 
 $db = DatabaseProvider::getDb();
 $db->setFetchMode($db::FETCH_MODE_ASSOC);
