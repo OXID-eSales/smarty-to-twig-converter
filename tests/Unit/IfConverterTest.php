@@ -145,6 +145,15 @@ class IfConverterTest extends TestCase
                 // which is invalid Twig syntax).
                 "[{if \$x|replace:\"http\":\"https\"}]foo[{/if}]",
                 "{% if x|replace({\"http\": \"https\"}) %}foo{% endif %}"
+            ],
+            [
+                // Mixed-content string literal (non-whitespace + whitespace) in a filter argument must
+                // be preserved as a whole (issue: convertFilters regex only recognises "\"\s+\"" as a
+                // quoted segment, so a mixed literal like "; " falls through to the single-char branch
+                // [^\s}|]* which stops at the inner space — the match ends at ";, dropping the trailing
+                // `"` and the space from the match altogether and corrupting the emitted argument).
+                "[{if \$x|cat:\"; \"}]foo[{/if}]",
+                "{% if x|cat(\"; \") %}foo{% endif %}"
             ]
         ];
     }

@@ -249,7 +249,7 @@ abstract class ConverterAbstract
     private function convertFilters(string $string): string
     {
         return preg_replace_callback(
-            '/\|@?(?:\w+)(?:\:|\b)(?:"\s+"|\'\s+\'|[^\s}|])*/',
+            '/\|@?(?:\w+)(?:\:|\b)(?:"(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\'|[^\s}|])*/',
             function ($matches) {
                 $expression = $matches[0];
                 $expression = ltrim($expression, "|");
