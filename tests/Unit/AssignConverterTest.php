@@ -67,6 +67,14 @@ class AssignConverterTest extends TestCase
             [
                 "[{assign var=\"template_title\" value=\"MY_WISH_LIST\"|oxmultilangassign}]",
                 "{% set template_title = \"MY_WISH_LIST\"|translate %}"
+            ],
+            [
+                // Mixed-content string literal inside a filter argument of an assign's value must be
+                // preserved (issue: extractAttributes' repetition group has the same "\"\s+\"" flaw
+                // as convertFilters — the attribute-value parser aborts on the space in a literal
+                // like "; ", truncating the value before convertFilters ever sees it).
+                "[{assign var=\"sBtnStyle\" value=\$x|cat:\"; \"}]",
+                "{% set sBtnStyle = x|cat(\"; \") %}"
             ]
         ];
     }
