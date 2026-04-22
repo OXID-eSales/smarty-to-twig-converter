@@ -119,6 +119,12 @@ class IfConverterTest extends TestCase
                 // Function argument containing a comma must not be split (issue: convertFunctionArguments explodes on "," without quote-awareness).
                 "[{if \$viewConf->getShopUrl(\"shop, demo\", false)}]foo[{/if}]",
                 "{% if viewConf.getShopUrl(\"shop, demo\", false) %}foo{% endif %}"
+            ],
+            [
+                // Multiple leading parentheses in a token must all be preserved (issue: sanitizeValue ltrim's
+                // every leading "(" but re-attaches only one, unbalancing the expression).
+                "[{if (((\$foo)))}]bar[{/if}]",
+                "{% if (((foo))) %}bar{% endif %}"
             ]
         ];
     }

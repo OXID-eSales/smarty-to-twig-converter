@@ -194,9 +194,11 @@ abstract class ConverterAbstract
             }
         }
 
-        // Handle "($var"
+        // Handle "($var" — preserve every leading "(" (ltrim would strip them all and
+        // only one would be re-attached, unbalancing expressions like "((($foo)))").
         if ($string[0] == "(") {
-            return "(" . $this->sanitizeValue(ltrim($string, "("));
+            $openCount = strspn($string, "(");
+            return str_repeat("(", $openCount) . $this->sanitizeValue(substr($string, $openCount));
         }
 
         // Handle "!$var"
