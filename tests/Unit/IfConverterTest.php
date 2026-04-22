@@ -138,6 +138,13 @@ class IfConverterTest extends TestCase
                 // was passed through verbatim, producing a non-existent "|sprintf(...)" in Twig).
                 "[{if \$link|sprintf:\"pattern\"}]foo[{/if}]",
                 "{% if link|format(\"pattern\") %}foo{% endif %}"
+            ],
+            [
+                // Twig's "replace" filter requires a hash as its single argument, not two positional
+                // arguments (issue: "|replace:\"a\":\"b\"" was emitted as "|replace(\"a\", \"b\")"
+                // which is invalid Twig syntax).
+                "[{if \$x|replace:\"http\":\"https\"}]foo[{/if}]",
+                "{% if x|replace({\"http\": \"https\"}) %}foo{% endif %}"
             ]
         ];
     }

@@ -265,6 +265,12 @@ abstract class ConverterAbstract
 
                 $convertedFilterName = FilterNameMap::getConvertedFilterName($value);
 
+                // Twig's "replace" filter expects a single hash argument, unlike Smarty's two
+                // positional arguments. Rewrite "|replace:\"a\":\"b\"" to "|replace({\"a\": \"b\"})".
+                if ($convertedFilterName === 'replace' && count($parts) === 2) {
+                    return '|replace({' . $parts[0] . ': ' . $parts[1] . '})';
+                }
+
                 return "|$convertedFilterName" . (!empty($parts) ? ("(" . implode(", ", $parts) . ")") : "");
             },
             $string
