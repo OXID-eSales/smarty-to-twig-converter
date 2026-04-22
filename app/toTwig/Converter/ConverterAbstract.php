@@ -227,7 +227,7 @@ abstract class ConverterAbstract
                 $expression = $matches[0];
                 $expression = rtrim(ltrim($expression, "("), ")");
 
-                $parts = explode(",", $expression);
+                $parts = $this->splitRespectingQuotes($expression, ",");
                 foreach ($parts as &$part) {
                     $part = $this->sanitizeValue($part);
                 }
@@ -252,7 +252,7 @@ abstract class ConverterAbstract
                 $expression = $matches[0];
                 $expression = ltrim($expression, "|");
 
-                $parts = explode(":", $expression);
+                $parts = $this->splitRespectingQuotes($expression, ":");
 
                 $value = array_shift($parts);
                 $value = ltrim($value, "@");
@@ -267,6 +267,47 @@ abstract class ConverterAbstract
             },
             $string
         );
+    }
+
+    /**
+     * Split an expression on the given separator, ignoring occurrences inside single- or double-quoted
+     * string literals and inside balanced parentheses/brackets. Preserves the behaviour of explode() for
+     * inputs that contain no quotes or brackets (including empty-segment handling for trailing separators).
+     */
+    private function splitRespectingQuotes(string $input, string $separator): array
+    {
+        $parts = [];
+        $current = '';
+        $inSingle = false;
+        $inDouble = false;
+        $depth = 0;
+        $length = strlen($input);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $input[$i];
+
+            if (!$inDouble && $char === "'") {
+                $inSingle = !$inSingle;
+            } elseif (!$inSingle && $char === '"') {
+                $inDouble = !$inDouble;
+            } elseif (!$inSingle && !$inDouble) {
+                if ($char === '(' || $char === '[') {
+                    $depth++;
+                } elseif ($char === ')' || $char === ']') {
+                    $depth--;
+                } elseif ($char === $separator && $depth === 0) {
+                    $parts[] = $current;
+                    $current = '';
+                    continue;
+                }
+            }
+
+            $current .= $char;
+        }
+
+        $parts[] = $current;
+
+        return $parts;
     }
 
     /**

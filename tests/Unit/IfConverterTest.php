@@ -109,6 +109,16 @@ class IfConverterTest extends TestCase
                 {% elseif (foo and bar) or foo and (bar or (foo and bar)) %}
                     foo
                 {% endif %}"
+            ],
+            [
+                // Filter argument containing a colon must not be split (issue: convertFilters explodes on ":" without quote-awareness).
+                "[{if \$x|cat:\"color:#\"}]foo[{/if}]",
+                "{% if x|cat(\"color:#\") %}foo{% endif %}"
+            ],
+            [
+                // Function argument containing a comma must not be split (issue: convertFunctionArguments explodes on "," without quote-awareness).
+                "[{if \$viewConf->getShopUrl(\"shop, demo\", false)}]foo[{/if}]",
+                "{% if viewConf.getShopUrl(\"shop, demo\", false) %}foo{% endif %}"
             ]
         ];
     }
