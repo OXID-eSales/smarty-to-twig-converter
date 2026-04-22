@@ -132,6 +132,12 @@ class IfConverterTest extends TestCase
                 // "media/" into "media / ").
                 "[{if \$oConfig->getPictureUrl(\"media/\")}]foo[{/if}]",
                 "{% if oConfig.getPictureUrl(\"media/\") %}foo{% endif %}"
+            ],
+            [
+                // Smarty's "sprintf" filter maps to Twig's "format" filter (issue: unmapped filter name
+                // was passed through verbatim, producing a non-existent "|sprintf(...)" in Twig).
+                "[{if \$link|sprintf:\"pattern\"}]foo[{/if}]",
+                "{% if link|format(\"pattern\") %}foo{% endif %}"
             ]
         ];
     }

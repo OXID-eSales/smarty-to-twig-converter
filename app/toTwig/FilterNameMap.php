@@ -31,7 +31,8 @@ class FilterNameMap
         'strip_tags' => 'striptags',
         'oxupper' => 'upper',
         'oxlower' => 'lower',
-        'oxescape' => 'escape'
+        'oxescape' => 'escape',
+        'sprintf' => 'format'
     ];
 
     public static function getConvertedFilterName(string $filterName): string
