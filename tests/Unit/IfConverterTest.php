@@ -125,6 +125,13 @@ class IfConverterTest extends TestCase
                 // every leading "(" but re-attaches only one, unbalancing the expression).
                 "[{if (((\$foo)))}]bar[{/if}]",
                 "{% if (((foo))) %}bar{% endif %}"
+            ],
+            [
+                // Slashes inside string literals must not be treated as division operators by
+                // convertExpression (issue: operator-spacing regex matches "/" inside quotes, turning
+                // "media/" into "media / ").
+                "[{if \$oConfig->getPictureUrl(\"media/\")}]foo[{/if}]",
+                "{% if oConfig.getPictureUrl(\"media/\") %}foo{% endif %}"
             ]
         ];
     }

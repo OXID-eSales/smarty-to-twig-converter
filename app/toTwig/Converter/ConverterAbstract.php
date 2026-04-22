@@ -328,6 +328,19 @@ abstract class ConverterAbstract
     {
         $expression = $this->convertFilters($expression);
 
+        // Mask quoted string literals so that operator characters ("/", "+", "-", "*", "%")
+        // occurring inside them are preserved verbatim and not surrounded by spaces.
+        $literals = [];
+        $expression = preg_replace_callback(
+            '/"(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\'/',
+            function ($match) use (&$literals) {
+                $key = "\x00L" . count($literals) . "\x00";
+                $literals[$key] = $match[0];
+                return $key;
+            },
+            $expression
+        );
+
         $expression = preg_replace_callback(
             "/(\S+)(\+|-(?!>)|\*|\/|%|&&|\|\|)(\S+)/",
             function ($matches) {
@@ -335,6 +348,10 @@ abstract class ConverterAbstract
             },
             $expression
         );
+
+        if (!empty($literals)) {
+            $expression = strtr($expression, $literals);
+        }
 
         $parts = explode(" ", $expression);
         foreach ($parts as &$part) {
