@@ -27,6 +27,9 @@
         }
     },
     "bin": ["toTwig"],
+    "scripts": {
+        "tests": "vendor/bin/phpunit tests"
+    },
     "config": {
         "preferred-install": {
             "doctrine/dbal": "source"
