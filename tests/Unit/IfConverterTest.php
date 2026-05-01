@@ -109,6 +109,51 @@ class IfConverterTest extends TestCase
                 {% elseif (foo and bar) or foo and (bar or (foo and bar)) %}
                     foo
                 {% endif %}"
+            ],
+            [
+                // Filter argument containing a colon must not be split (issue: convertFilters explodes on ":" without quote-awareness).
+                "[{if \$x|cat:\"color:#\"}]foo[{/if}]",
+                "{% if x|cat(\"color:#\") %}foo{% endif %}"
+            ],
+            [
+                // Function argument containing a comma must not be split (issue: convertFunctionArguments explodes on "," without quote-awareness).
+                "[{if \$viewConf->getShopUrl(\"shop, demo\", false)}]foo[{/if}]",
+                "{% if viewConf.getShopUrl(\"shop, demo\", false) %}foo{% endif %}"
+            ],
+            [
+                // Multiple leading parentheses in a token must all be preserved (issue: sanitizeValue ltrim's
+                // every leading "(" but re-attaches only one, unbalancing the expression).
+                "[{if (((\$foo)))}]bar[{/if}]",
+                "{% if (((foo))) %}bar{% endif %}"
+            ],
+            [
+                // Slashes inside string literals must not be treated as division operators by
+                // convertExpression (issue: operator-spacing regex matches "/" inside quotes, turning
+                // "media/" into "media / ").
+                "[{if \$oConfig->getPictureUrl(\"media/\")}]foo[{/if}]",
+                "{% if oConfig.getPictureUrl(\"media/\") %}foo{% endif %}"
+            ],
+            [
+                // Smarty's "sprintf" filter maps to Twig's "format" filter (issue: unmapped filter name
+                // was passed through verbatim, producing a non-existent "|sprintf(...)" in Twig).
+                "[{if \$link|sprintf:\"pattern\"}]foo[{/if}]",
+                "{% if link|format(\"pattern\") %}foo{% endif %}"
+            ],
+            [
+                // Twig's "replace" filter requires a hash as its single argument, not two positional
+                // arguments (issue: "|replace:\"a\":\"b\"" was emitted as "|replace(\"a\", \"b\")"
+                // which is invalid Twig syntax).
+                "[{if \$x|replace:\"http\":\"https\"}]foo[{/if}]",
+                "{% if x|replace({\"http\": \"https\"}) %}foo{% endif %}"
+            ],
+            [
+                // Mixed-content string literal (non-whitespace + whitespace) in a filter argument must
+                // be preserved as a whole (issue: convertFilters regex only recognises "\"\s+\"" as a
+                // quoted segment, so a mixed literal like "; " falls through to the single-char branch
+                // [^\s}|]* which stops at the inner space — the match ends at ";, dropping the trailing
+                // `"` and the space from the match altogether and corrupting the emitted argument).
+                "[{if \$x|cat:\"; \"}]foo[{/if}]",
+                "{% if x|cat(\"; \") %}foo{% endif %}"
             ]
         ];
     }

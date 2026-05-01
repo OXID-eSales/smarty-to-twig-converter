@@ -114,7 +114,7 @@ abstract class ConverterAbstract
         //Initialize variables
         $attr = $pairs = [];
         $pattern = '/(?:([\w:\-]+)\s*=\s*)?'
-                   . '((?:".*?"|\'.*?\'|(?:[$\w\->():]+))(?:[\|]?(?:\'\s+\'|"\s+"|[^\s}]|(}(?!])))*))/';
+                   . '((?:".*?"|\'.*?\'|(?:[$\w\->():]+))(?:[\|]?(?:\'(?:[^\'\\\\]|\\\\.)*\'|"(?:[^"\\\\]|\\\\.)*"|[^\s}]|(}(?!])))*))/';
 
         // Lets grab all the key/value pairs using a regular expression
         preg_match_all($pattern, $string, $attr);
@@ -194,9 +194,11 @@ abstract class ConverterAbstract
             }
         }
 
-        // Handle "($var"
+        // Handle "($var" — preserve every leading "(" (ltrim would strip them all and
+        // only one would be re-attached, unbalancing expressions like "((($foo)))").
         if ($string[0] == "(") {
-            return "(" . $this->sanitizeValue(ltrim($string, "("));
+            $openCount = strspn($string, "(");
+            return str_repeat("(", $openCount) . $this->sanitizeValue(substr($string, $openCount));
         }
 
         // Handle "!$var"
@@ -227,7 +229,7 @@ abstract class ConverterAbstract
                 $expression = $matches[0];
                 $expression = rtrim(ltrim($expression, "("), ")");
 
-                $parts = explode(",", $expression);
+                $parts = $this->splitRespectingQuotes($expression, ",");
                 foreach ($parts as &$part) {
                     $part = $this->sanitizeValue($part);
                 }
@@ -247,12 +249,12 @@ abstract class ConverterAbstract
     private function convertFilters(string $string): string
     {
         return preg_replace_callback(
-            '/\|@?(?:\w+)(?:\:|\b)(?:"\s+"|\'\s+\'|[^\s}|])*/',
+            '/\|@?(?:\w+)(?:\:|\b)(?:"(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\'|[^\s}|])*/',
             function ($matches) {
                 $expression = $matches[0];
                 $expression = ltrim($expression, "|");
 
-                $parts = explode(":", $expression);
+                $parts = $this->splitRespectingQuotes($expression, ":");
 
                 $value = array_shift($parts);
                 $value = ltrim($value, "@");
@@ -263,10 +265,57 @@ abstract class ConverterAbstract
 
                 $convertedFilterName = FilterNameMap::getConvertedFilterName($value);
 
+                // Twig's "replace" filter expects a single hash argument, unlike Smarty's two
+                // positional arguments. Rewrite "|replace:\"a\":\"b\"" to "|replace({\"a\": \"b\"})".
+                if ($convertedFilterName === 'replace' && count($parts) === 2) {
+                    return '|replace({' . $parts[0] . ': ' . $parts[1] . '})';
+                }
+
                 return "|$convertedFilterName" . (!empty($parts) ? ("(" . implode(", ", $parts) . ")") : "");
             },
             $string
         );
+    }
+
+    /**
+     * Split an expression on the given separator, ignoring occurrences inside single- or double-quoted
+     * string literals and inside balanced parentheses/brackets. Preserves the behaviour of explode() for
+     * inputs that contain no quotes or brackets (including empty-segment handling for trailing separators).
+     */
+    private function splitRespectingQuotes(string $input, string $separator): array
+    {
+        $parts = [];
+        $current = '';
+        $inSingle = false;
+        $inDouble = false;
+        $depth = 0;
+        $length = strlen($input);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $input[$i];
+
+            if (!$inDouble && $char === "'") {
+                $inSingle = !$inSingle;
+            } elseif (!$inSingle && $char === '"') {
+                $inDouble = !$inDouble;
+            } elseif (!$inSingle && !$inDouble) {
+                if ($char === '(' || $char === '[') {
+                    $depth++;
+                } elseif ($char === ')' || $char === ']') {
+                    $depth--;
+                } elseif ($char === $separator && $depth === 0) {
+                    $parts[] = $current;
+                    $current = '';
+                    continue;
+                }
+            }
+
+            $current .= $char;
+        }
+
+        $parts[] = $current;
+
+        return $parts;
     }
 
     /**
@@ -285,6 +334,19 @@ abstract class ConverterAbstract
     {
         $expression = $this->convertFilters($expression);
 
+        // Mask quoted string literals so that operator characters ("/", "+", "-", "*", "%")
+        // occurring inside them are preserved verbatim and not surrounded by spaces.
+        $literals = [];
+        $expression = preg_replace_callback(
+            '/"(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\'/',
+            function ($match) use (&$literals) {
+                $key = "\x00L" . count($literals) . "\x00";
+                $literals[$key] = $match[0];
+                return $key;
+            },
+            $expression
+        );
+
         $expression = preg_replace_callback(
             "/(\S+)(\+|-(?!>)|\*|\/|%|&&|\|\|)(\S+)/",
             function ($matches) {
@@ -292,6 +354,10 @@ abstract class ConverterAbstract
             },
             $expression
         );
+
+        if (!empty($literals)) {
+            $expression = strtr($expression, $literals);
+        }
 
         $parts = explode(" ", $expression);
         foreach ($parts as &$part) {
