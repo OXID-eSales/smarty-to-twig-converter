@@ -309,22 +309,28 @@ EOF
         $i = 1;
         foreach ($changed as $id => $conversionResult) {
             $output->write(sprintf('%4d) %s', $i++, $id));
-            if ($input->hasOption('verbose')) {
-                sprintf(
+            if ($output->isVerbose()) {
+                $output->write(sprintf(
                     ' (<comment>%s</comment>)',
                     implode(', ', $conversionResult->getAppliedConverters())
-                );
-                if ($input->getOption('diff')) {
-                    $output->writeln('');
-                    $output->writeln('<comment>      ---------- begin diff ----------</comment>');
-                    $output->writeln($conversionResult->getDiff());
-                    $output->writeln('<comment>      ---------- end diff ----------</comment>');
-                }
+                ));
+            }
+            // The diff is only computed with --diff and has always been shown without --verbose
+            if ($input->getOption('diff')) {
+                $output->writeln('');
+                $output->writeln('<comment>      ---------- begin diff ----------</comment>');
+                $output->writeln($conversionResult->getDiff());
+                $output->writeln('<comment>      ---------- end diff ----------</comment>');
             }
             $output->writeln('');
         }
     }
 
+    /**
+     * @param InputInterface     $input
+     * @param OutputInterface    $output
+     * @param ConversionResult[] $changed
+     */
     private function outputXml(InputInterface $input, OutputInterface $output, array $changed): void
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -335,9 +341,9 @@ EOF
 
             $fileXML->setAttribute('id', $i++);
             $fileXML->setAttribute('name', $file);
-            if ($input->getOption('verbose')) {
+            if ($output->isVerbose()) {
                 $fileXML->appendChild($appliedConvertersXML = $dom->createElement('applied_converters'));
-                foreach ($fixResult['appliedConverters'] as $appliedConverter) {
+                foreach ($fixResult->getAppliedConverters() as $appliedConverter) {
                     $appliedConvertersXML->appendChild($appliedConverterXML = $dom->createElement('applied_converter'));
                     $appliedConverterXML->setAttribute('name', $appliedConverter);
                 }
@@ -345,7 +351,7 @@ EOF
                 if ($input->getOption('diff')) {
                     $fileXML->appendChild($diffXML = $dom->createElement('diff'));
 
-                    $diffXML->appendChild($dom->createCDATASection($fixResult['diff']));
+                    $diffXML->appendChild($dom->createCDATASection((string) $fixResult->getDiff()));
                 }
             }
         }
