@@ -9,6 +9,7 @@ namespace toTwig\Tests\SourceConverter;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use toTwig\ConversionResult;
+use toTwig\Converter\BlockConverter;
 use toTwig\Converter\VariableConverter;
 use toTwig\Finder\DefaultFinder;
 use toTwig\SourceConverter\FileConverter;
@@ -163,6 +164,26 @@ class FileConverterTest extends TestCase
         ;
 
         $this->assertEquals(['example.tpl' => $expectedResult], $changed);
+    }
+
+    /**
+     * @covers \toTwig\SourceConverter\FileConverter::convert
+     */
+    public function testConvertWarnsAboutDuplicateBlocks()
+    {
+        $fileConverter = new FileConverter();
+
+        $fileConverter->setDir(__DIR__ . '/_templates_duplicate_block');
+        $fileConverter->setOutputExtension('.html.twig');
+        $changed = $fileConverter->convert(true, false, [new BlockConverter()]);
+
+        $this->assertSame(
+            [
+                "Block 'giftwrapping' is defined 2 times (lines 1, 2); Twig will not compile this template."
+                . ' Rename all but one occurrence.'
+            ],
+            $changed['order.tpl']->getWarnings()
+        );
     }
 
     /**

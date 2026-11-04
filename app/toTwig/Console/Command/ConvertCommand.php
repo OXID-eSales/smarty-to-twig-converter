@@ -322,6 +322,11 @@ EOF
                 }
             }
             $output->writeln('');
+
+            // Always shown: the template will not compile until these are fixed by hand
+            foreach ($conversionResult->getWarnings() as $warning) {
+                $output->writeln(sprintf('      <error>WARNING</error> %s', $warning));
+            }
         }
     }
 
@@ -335,6 +340,12 @@ EOF
 
             $fileXML->setAttribute('id', $i++);
             $fileXML->setAttribute('name', $file);
+            if ($fixResult->hasWarnings()) {
+                $fileXML->appendChild($warningsXML = $dom->createElement('warnings'));
+                foreach ($fixResult->getWarnings() as $warning) {
+                    $warningsXML->appendChild($dom->createElement('warning', htmlspecialchars($warning)));
+                }
+            }
             if ($input->getOption('verbose')) {
                 $fileXML->appendChild($appliedConvertersXML = $dom->createElement('applied_converters'));
                 foreach ($fixResult['appliedConverters'] as $appliedConverter) {
