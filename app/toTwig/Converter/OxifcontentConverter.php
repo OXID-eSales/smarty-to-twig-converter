@@ -47,8 +47,15 @@ class OxifcontentConverter extends ConverterAbstract
             function ($matches) {
                 $attributes = $this->getAttributes($matches);
                 $key = isset($attributes['ident']) ? 'ident' : 'oxid';
-                $value = ($key == 'ident') ? $attributes['ident'] : $attributes['oxid'];
-                $set = $attributes['object'] ? (' set ' . $this->rawString($attributes['object'])) : '';
+                $value = $attributes[$key] ?? null;
+
+                // Tags without ident/oxid cannot be expressed in twig - keep the source untouched
+                if ($value === null) {
+                    return $matches[0];
+                }
+
+                $object = $attributes['object'] ?? '';
+                $set = $object ? (' set ' . $this->rawString($object)) : '';
 
                 return sprintf("{%% ifcontent %s %s%s %%}", $key, $this->sanitizeValue($value), $set);
             },

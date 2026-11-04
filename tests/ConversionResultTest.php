@@ -27,6 +27,22 @@ class ConversionResultTest extends TestCase
         $this->assertNull($conversionResult->getDiff());
         $this->assertEmpty($conversionResult->getAppliedConverters());
         $this->assertFalse($conversionResult->hasAppliedConverters());
+        $this->assertEmpty($conversionResult->getWarnings());
+        $this->assertFalse($conversionResult->hasWarnings());
+    }
+
+    /**
+     * @covers \toTwig\ConversionResult::addWarning
+     * @covers \toTwig\ConversionResult::getWarnings
+     * @covers \toTwig\ConversionResult::hasWarnings
+     */
+    public function testWarnings()
+    {
+        $conversionResult = new ConversionResult();
+        $conversionResult->addWarning('first')->addWarning('second');
+
+        $this->assertEquals(['first', 'second'], $conversionResult->getWarnings());
+        $this->assertTrue($conversionResult->hasWarnings());
     }
 
     /**

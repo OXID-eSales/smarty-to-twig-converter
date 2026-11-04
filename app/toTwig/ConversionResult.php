@@ -18,6 +18,9 @@ class ConversionResult
     /** @var string[] */
     private array $appliedConverters = [];
 
+    /** @var string[] */
+    private array $warnings = [];
+
     public function getOriginalTemplate(): ?string
     {
         return $this->originalTemplate;
@@ -72,5 +75,27 @@ class ConversionResult
     public function hasAppliedConverters(): bool
     {
         return !empty($this->appliedConverters);
+    }
+
+    /**
+     * Problems in the converted template the converter could not resolve on its own.
+     *
+     * @return string[]
+     */
+    public function getWarnings(): array
+    {
+        return $this->warnings;
+    }
+
+    public function addWarning(string $warning): self
+    {
+        $this->warnings[] = $warning;
+
+        return $this;
+    }
+
+    public function hasWarnings(): bool
+    {
+        return !empty($this->warnings);
     }
 }

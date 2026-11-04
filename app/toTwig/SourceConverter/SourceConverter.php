@@ -14,6 +14,7 @@ namespace toTwig\SourceConverter;
 use SebastianBergmann\Diff\Differ;
 use toTwig\ConversionResult;
 use toTwig\Converter\ConverterAbstract;
+use toTwig\Util\DuplicateBlockDetector;
 
 /**
  * Class SourceConverter
@@ -61,6 +62,10 @@ abstract class SourceConverter
         }
 
         $result->setConvertedTemplate($convertedTemplate);
+
+        foreach ((new DuplicateBlockDetector())->getWarnings($convertedTemplate) as $warning) {
+            $result->addWarning($warning);
+        }
 
         if ($diff) {
             $result->setDiff($this->stringDiff($templateToConvert, $convertedTemplate));
