@@ -65,6 +65,17 @@ class OxifcontentConverterTest extends TestCase
             [
                 "[{ oxifcontent ident=\"TOBASKET\" object=\"aObject\" }]\nfoo\n[{ /oxifcontent }]",
                 "{% ifcontent ident \"TOBASKET\" set aObject %}\nfoo\n{% endifcontent %}"
+            ],
+            // Without an object attribute
+            [
+                "[{oxifcontent ident=\"TOBASKET\"}]\nfoo\n[{/oxifcontent}]",
+                "{% ifcontent ident \"TOBASKET\" %}\nfoo\n{% endifcontent %}"
+            ],
+            // Neither ident nor oxid (e.g. html escaped attributes in database content):
+            // the opening tag is kept as is instead of raising an error
+            [
+                "[{oxifcontent ident=&quot;oxagb&quot; object=&quot;oCont&quot;}]\nfoo\n[{/oxifcontent}]",
+                "[{oxifcontent ident=&quot;oxagb&quot; object=&quot;oCont&quot;}]\nfoo\n{% endifcontent %}"
             ]
         ];
     }
