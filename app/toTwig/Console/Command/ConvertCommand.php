@@ -36,7 +36,7 @@ class ConvertCommand extends Command
     protected Converter $converter;
     protected ConfigInterface $defaultConfig;
 
-    public function __construct(Converter $converter = null, ConfigInterface $config = null)
+    public function __construct(?Converter $converter = null, ?ConfigInterface $config = null)
     {
         $this->converter = $converter ?: new Converter();
         $this->converter->registerBuiltInConverters();
